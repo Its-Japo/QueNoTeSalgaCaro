@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.quenotesalgacaro.ui.view.Screens.HomeScreen
 import com.example.quenotesalgacaro.ui.view.Screens.LoginScreen
+import com.example.quenotesalgacaro.ui.view.Screens.RegisterScreen
 
 
 @Composable
@@ -23,6 +24,9 @@ fun Navigation(modifier: Modifier = Modifier) {
         }
         composable(NavigationState.HomeScreen.route) {
             HomeScreen(navController = navController)
+        }
+        composable(NavigationState.RegisterScreen.route) {
+            RegisterScreen(navController = navController)
         }
 
     }

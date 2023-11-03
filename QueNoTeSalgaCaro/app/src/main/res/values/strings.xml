@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">QueNoTeSalgaCaro</string>
+    <string name="app_name">Que No Te Salga Caro</string>
+    <string name="loginScreenTitle">Iniciar Sesión</string>
+    <string name="registerScreenTitle">Registrarse</string>
+    <string name="loginButton">Iniciar Sesión</string>
+    <string name="registerButton">Registrarse</string>
+    <string name="email">Correo Electrónico</string>
+    <string name="password">Contraseña</string>
 </resources>
