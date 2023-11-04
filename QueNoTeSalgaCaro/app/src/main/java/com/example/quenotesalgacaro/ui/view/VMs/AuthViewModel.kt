@@ -1,17 +1,19 @@
 package com.example.quenotesalgacaro.ui.view.VMs
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.quenotesalgacaro.data.repository.FireBaseAuthRepository
+import com.example.quenotesalgacaro.data.repository.FirebaseAuthRepository
+import com.example.quenotesalgacaro.data.repository.FirebaseFirestoreRepository
 import com.example.quenotesalgacaro.ui.view.UiStates.LoginUiState
 import com.example.quenotesalgacaro.ui.view.UiStates.RegisterUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 
-class AuthViewModel(private val firebaseAuthRepository: FireBaseAuthRepository = FireBaseAuthRepository()) : ViewModel() {
+class AuthViewModel(
+    private val firebaseAuthRepository: FirebaseAuthRepository = FirebaseAuthRepository(),
+    private val fireabaseFirestoreRepository: FirebaseFirestoreRepository = FirebaseFirestoreRepository()
+) : ViewModel() {
     private val _loginUiState = MutableStateFlow<LoginUiState>(LoginUiState())
     val loginUiState: MutableStateFlow<LoginUiState> = _loginUiState
 
@@ -37,6 +39,10 @@ class AuthViewModel(private val firebaseAuthRepository: FireBaseAuthRepository =
                 val user = firebaseAuthRepository.registerNewUser(email, password)
                 _registerUiState.value = RegisterUiState(success = user != null, user = user)
 
+
+                if (user != null) {
+                    fireabaseFirestoreRepository.registerNewUser(user, password)
+                }
 
             } catch (e: Exception) {
                 _registerUiState.value = RegisterUiState(error = e.localizedMessage ?: "Registration failed")
