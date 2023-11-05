@@ -16,15 +16,20 @@ import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 
 @Composable
 fun Navigation(
+    modifier: Modifier = Modifier,
     authViewModel: AuthViewModel,
-    modifier: Modifier = Modifier
+    isUserLoggedIn: Boolean = authViewModel.loginUiState.value.user != null
 )
 {
     val navController = rememberNavController()
     NavHost(
+        modifier = modifier,
         navController = navController,
-        startDestination = NavigationState.LoginScreen.route,
-        modifier = modifier
+        startDestination = if (isUserLoggedIn) {
+            NavigationState.HomeScreen.route
+        } else {
+            NavigationState.LoginScreen.route
+        }
     ) {
         composable(NavigationState.LoginScreen.route) {
             LoginScreen(navController = navController, viewModel = authViewModel)

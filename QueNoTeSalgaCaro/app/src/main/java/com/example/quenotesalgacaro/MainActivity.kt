@@ -20,11 +20,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             QueNoTeSalgaCaroTheme {
                 val authViewModel: AuthViewModel = viewModel()
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Navigation(authViewModel)
+                    Navigation(authViewModel = authViewModel)
                 }
             }
         }
@@ -36,6 +37,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun GreetingPreview() {
     QueNoTeSalgaCaroTheme {
-        Navigation(AuthViewModel())
+        Navigation(authViewModel = AuthViewModel())
     }
 }

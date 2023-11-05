@@ -1,5 +1,7 @@
 package com.example.quenotesalgacaro.ui.view.vms
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quenotesalgacaro.data.repository.FirebaseAuthRepository
@@ -20,6 +22,16 @@ class AuthViewModel(
 
     private val _registerUiState = MutableStateFlow<RegisterUiState>(RegisterUiState())
     val registerUiState: MutableStateFlow<RegisterUiState> = _registerUiState
+
+    private val _authState = MutableLiveData<Boolean>()
+    val authState: LiveData<Boolean> = _authState
+
+    init {
+        val user = firebaseAuthRepository.getCurrentUser()
+        if (user != null) {
+            _loginUiState.value = LoginUiState(user = user, success = true)
+        }
+    }
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
@@ -49,6 +61,8 @@ class AuthViewModel(
             firebaseAuthRepository.deleteUser()
         }
     }
+
+    fun getCurrentUser() = firebaseAuthRepository.getCurrentUser()
 
     fun register(email: String, password: String) {
         viewModelScope.launch {
