@@ -1,5 +1,4 @@
-package com.example.quenotesalgacaro.ui.view.Screens
-
+package com.example.quenotesalgacaro.ui.view.screens
 
 import android.annotation.SuppressLint
 import android.widget.Toast
@@ -25,49 +24,48 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.example.quenotesalgacaro.R
-import com.example.quenotesalgacaro.ui.view.VMs.AuthViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.quenotesalgacaro.R
 import com.example.quenotesalgacaro.navigation.TopBar
+import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 import kotlinx.coroutines.flow.collectLatest
-
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(
+fun RegisterScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     viewModel: AuthViewModel = viewModel()
 ) {
+
     val usernameState = remember { mutableStateOf(TextFieldValue()) }
     val passwordState = remember { mutableStateOf(TextFieldValue()) }
 
     val context = LocalContext.current
-
     LaunchedEffect(Unit) {
-        viewModel.loginUiState.collectLatest { loginUiState ->
-            if (loginUiState.user != null) {
-                Toast.makeText(context, "Usuario logueado", Toast.LENGTH_SHORT).show()
-                navController.navigate("HomeScreen") {
-                    popUpTo("LoginScreen") { inclusive = true }
+        viewModel.registerUiState.collectLatest { registerUiState ->
+            if (registerUiState.user != null) {
+                Toast.makeText(context, "Usuario registrado", Toast.LENGTH_SHORT).show()
+                navController.navigate("LoginScreen") {
+                    popUpTo("RegisterScreen") { inclusive = true }
                 }
-            } else if (loginUiState.error != null) {
-                Toast.makeText(context, "Error al loguear usuario: ${loginUiState.error}", Toast.LENGTH_SHORT).show()
+            } else if (registerUiState.error != null) {
+                Toast.makeText(context, "Error al registrar usuario: ${registerUiState.error}", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     Scaffold(
         topBar = {
-            TopBar(title = "Login", navController = navController, auth = viewModel.loginUiState.value.user != null)
+            TopBar(title = "Registrarse", navController = navController, auth = viewModel.loginUiState.value.user != null)
         },
         bottomBar = {
             Button(
                 onClick = {
-                    navController.navigate("RegisterScreen") {
-                        popUpTo("LoginScreen") { inclusive = true }
+                    navController.navigate("LoginScreen") {
+                        popUpTo("RegisterScreen") { inclusive = true }
                     }
                 },
                 modifier = modifier
@@ -75,7 +73,7 @@ fun LoginScreen(
                     .padding(20.dp),
             ) {
                 Text(
-                    text = "¿No tienes cuenta? Regístrate",
+                    text = "¿Ya tienes cuenta? Inicia sesión",
                 )
             }
         }
@@ -120,10 +118,10 @@ fun LoginScreen(
                     .fillMaxWidth()
                     .padding(20.dp),
                 onClick = {
-                viewModel.login(usernameState.value.text, passwordState.value.text)
+                    viewModel.register(usernameState.value.text, passwordState.value.text)
 
-            }) {
-                Text("Login")
+                }) {
+                Text("¡Registrarme!")
             }
 
         }

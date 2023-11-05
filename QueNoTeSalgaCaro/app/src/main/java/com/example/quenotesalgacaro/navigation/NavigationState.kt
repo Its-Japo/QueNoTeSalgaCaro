@@ -6,5 +6,6 @@ sealed class NavigationState(val route: String) {
     object RegisterScreen: NavigationState("RegisterScreen")
     object HomeScreen: NavigationState("HomeScreen")
     object SettingsScreen: NavigationState("SettingsScreen")
+    object AccountScreen: NavigationState("AccountScreen")
 
 }

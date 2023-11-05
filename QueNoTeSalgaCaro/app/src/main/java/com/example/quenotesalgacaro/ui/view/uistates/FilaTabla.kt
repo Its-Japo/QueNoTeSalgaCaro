@@ -1,4 +1,4 @@
-package com.example.quenotesalgacaro.ui.view.UiStates
+package com.example.quenotesalgacaro.ui.view.uistates
 
 data class FilaTabla(
     val dia : String,

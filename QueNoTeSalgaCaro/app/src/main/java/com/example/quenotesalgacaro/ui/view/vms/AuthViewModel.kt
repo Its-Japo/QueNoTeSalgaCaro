@@ -1,11 +1,11 @@
-package com.example.quenotesalgacaro.ui.view.VMs
+package com.example.quenotesalgacaro.ui.view.vms
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quenotesalgacaro.data.repository.FirebaseAuthRepository
 import com.example.quenotesalgacaro.data.repository.FirebaseFirestoreRepository
-import com.example.quenotesalgacaro.ui.view.UiStates.LoginUiState
-import com.example.quenotesalgacaro.ui.view.UiStates.RegisterUiState
+import com.example.quenotesalgacaro.ui.view.uistates.LoginUiState
+import com.example.quenotesalgacaro.ui.view.uistates.RegisterUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -14,6 +14,7 @@ class AuthViewModel(
     private val firebaseAuthRepository: FirebaseAuthRepository = FirebaseAuthRepository(),
     private val fireabaseFirestoreRepository: FirebaseFirestoreRepository = FirebaseFirestoreRepository()
 ) : ViewModel() {
+
     private val _loginUiState = MutableStateFlow<LoginUiState>(LoginUiState())
     val loginUiState: MutableStateFlow<LoginUiState> = _loginUiState
 
@@ -29,6 +30,13 @@ class AuthViewModel(
             } catch (e: Exception) {
                 _loginUiState.value = LoginUiState(error = e.localizedMessage ?: "Login failed")
             }
+        }
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            firebaseAuthRepository.signOut()
+            _loginUiState.value = LoginUiState()
         }
     }
 

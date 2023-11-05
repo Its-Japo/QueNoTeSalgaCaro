@@ -1,4 +1,4 @@
-package com.example.quenotesalgacaro.ui.view.UiStates
+package com.example.quenotesalgacaro.ui.view.uistates
 
 import com.google.firebase.auth.FirebaseUser
 

@@ -6,11 +6,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.quenotesalgacaro.ui.view.Screens.HomeScreen
-import com.example.quenotesalgacaro.ui.view.Screens.LoginScreen
-import com.example.quenotesalgacaro.ui.view.Screens.RegisterScreen
-import com.example.quenotesalgacaro.ui.view.Screens.SettingsScreen
-import com.example.quenotesalgacaro.ui.view.VMs.AuthViewModel
+import com.example.quenotesalgacaro.ui.view.screens.AccountScreen
+import com.example.quenotesalgacaro.ui.view.screens.HomeScreen
+import com.example.quenotesalgacaro.ui.view.screens.LoginScreen
+import com.example.quenotesalgacaro.ui.view.screens.RegisterScreen
+import com.example.quenotesalgacaro.ui.view.screens.SettingsScreen
+import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 
 
 @Composable
@@ -36,6 +37,9 @@ fun Navigation(
         }
         composable(NavigationState.SettingsScreen.route) {
             SettingsScreen(navController = navController)
+        }
+        composable(NavigationState.AccountScreen.route) {
+            AccountScreen(navController = navController, viewModel = authViewModel)
         }
 
     }

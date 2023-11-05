@@ -1,4 +1,4 @@
-package com.example.quenotesalgacaro.ui.view.Screens
+package com.example.quenotesalgacaro.ui.view.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.quenotesalgacaro.navigation.TopBar
-import com.example.quenotesalgacaro.ui.view.Composables.ButtonBar
+import com.example.quenotesalgacaro.ui.view.composables.ButtonBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -35,7 +35,7 @@ fun SettingsScreen(
        Column (
            modifier = modifier.padding(0.dp, 60.dp, 0.dp, 0.dp)
        ){
-           ButtonBar(text = "Account", onClick = { /*TODO*/ })
+           ButtonBar(text = "Account", onClick = { navController.navigate("AccountScreen") })
            ButtonBar(text = "Wallets", onClick = { /*TODO*/ })
            ButtonBar(text = "Budgets", onClick = { /*TODO*/ })
            ButtonBar(text = "Funds", onClick = { /*TODO*/ })

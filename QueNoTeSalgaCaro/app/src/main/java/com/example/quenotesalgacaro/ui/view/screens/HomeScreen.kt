@@ -1,4 +1,4 @@
-package com.example.quenotesalgacaro.ui.view.Screens
+package com.example.quenotesalgacaro.ui.view.screens
 
 import android.annotation.SuppressLint
 import android.widget.Toast
@@ -39,8 +39,8 @@ import androidx.navigation.NavController
 import com.example.quenotesalgacaro.R
 import com.example.quenotesalgacaro.navigation.BottomBar
 import com.example.quenotesalgacaro.navigation.TopBar
-import com.example.quenotesalgacaro.ui.view.UiStates.FilaTabla
-import com.example.quenotesalgacaro.ui.view.VMs.AuthViewModel
+import com.example.quenotesalgacaro.ui.view.uistates.FilaTabla
+import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
