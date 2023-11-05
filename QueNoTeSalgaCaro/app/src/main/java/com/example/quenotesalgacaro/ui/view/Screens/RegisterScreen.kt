@@ -61,7 +61,9 @@ fun RegisterScreen(
         bottomBar = {
             Button(
                 onClick = {
-                    navController.navigate("LoginScreen")
+                    navController.navigate("LoginScreen") {
+                        popUpTo("RegisterScreen") { inclusive = true }
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()

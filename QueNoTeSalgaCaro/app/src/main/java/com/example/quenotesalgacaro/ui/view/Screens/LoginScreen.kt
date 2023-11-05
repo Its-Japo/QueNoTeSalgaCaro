@@ -49,7 +49,9 @@ fun LoginScreen(
         viewModel.loginUiState.collectLatest { loginUiState ->
             if (loginUiState.user != null) {
                 Toast.makeText(context, "Usuario logueado", Toast.LENGTH_SHORT).show()
-                navController.navigate("HomeScreen")
+                navController.navigate("HomeScreen") {
+                    popUpTo("LoginScreen") { inclusive = true }
+                }
             } else if (loginUiState.error != null) {
                 Toast.makeText(context, "Error al loguear usuario: ${loginUiState.error}", Toast.LENGTH_SHORT).show()
             }
@@ -63,7 +65,9 @@ fun LoginScreen(
         bottomBar = {
             Button(
                 onClick = {
-                    navController.navigate("RegisterScreen")
+                    navController.navigate("RegisterScreen") {
+                        popUpTo("LoginScreen") { inclusive = true }
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
