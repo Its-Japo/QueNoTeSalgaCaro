@@ -32,4 +32,18 @@ class FirebaseAuthRepository {
             }
         }
     }
+
+    suspend fun signOut() {
+        return withContext(Dispatchers.IO) {
+            try {
+                firebaseAuth.signOut()
+            } catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    fun getCurrentUser(): FirebaseUser? {
+        return firebaseAuth.currentUser
+    }
 }
