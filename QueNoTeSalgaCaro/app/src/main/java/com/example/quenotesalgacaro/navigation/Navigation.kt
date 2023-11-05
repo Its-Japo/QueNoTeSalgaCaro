@@ -10,10 +10,15 @@ import com.example.quenotesalgacaro.ui.view.Screens.HomeScreen
 import com.example.quenotesalgacaro.ui.view.Screens.LoginScreen
 import com.example.quenotesalgacaro.ui.view.Screens.RegisterScreen
 import com.example.quenotesalgacaro.ui.view.Screens.SettingsScreen
+import com.example.quenotesalgacaro.ui.view.VMs.AuthViewModel
 
 
 @Composable
-fun Navigation(modifier: Modifier = Modifier) {
+fun Navigation(
+    authViewModel: AuthViewModel,
+    modifier: Modifier = Modifier
+)
+{
     val navController = rememberNavController()
     NavHost(
         navController = navController,
@@ -21,13 +26,13 @@ fun Navigation(modifier: Modifier = Modifier) {
         modifier = modifier
     ) {
         composable(NavigationState.LoginScreen.route) {
-            LoginScreen(navController = navController)
+            LoginScreen(navController = navController, viewModel = authViewModel)
         }
         composable(NavigationState.HomeScreen.route) {
-            HomeScreen(navController = navController)
+            HomeScreen(navController = navController, viewModel = authViewModel)
         }
         composable(NavigationState.RegisterScreen.route) {
-            RegisterScreen(navController = navController)
+            RegisterScreen(navController = navController, viewModel = authViewModel)
         }
         composable(NavigationState.SettingsScreen.route) {
             SettingsScreen(navController = navController)

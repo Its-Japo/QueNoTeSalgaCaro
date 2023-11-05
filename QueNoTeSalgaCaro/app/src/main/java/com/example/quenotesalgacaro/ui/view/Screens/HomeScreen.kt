@@ -43,16 +43,17 @@ import com.example.quenotesalgacaro.ui.view.UiStates.FilaTabla
 import com.example.quenotesalgacaro.ui.view.VMs.AuthViewModel
 
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: AuthViewModel
 ) {
     Scaffold(
         topBar = {
-            TopBar(title = "Home", navController = navController)
+            TopBar(title = "Home", navController = navController, auth = viewModel.loginUiState.value.user != null)
         },
         bottomBar = {
             BottomBar()

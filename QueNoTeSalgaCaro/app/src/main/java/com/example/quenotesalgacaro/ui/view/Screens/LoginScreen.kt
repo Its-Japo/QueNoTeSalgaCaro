@@ -33,7 +33,7 @@ import com.example.quenotesalgacaro.navigation.TopBar
 import kotlinx.coroutines.flow.collectLatest
 
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
@@ -61,7 +61,7 @@ fun LoginScreen(
 
     Scaffold(
         topBar = {
-            TopBar(title = "Login", navController = navController)
+            TopBar(title = "Login", navController = navController, auth = viewModel.loginUiState.value.user != null)
         },
         bottomBar = {
             Button(

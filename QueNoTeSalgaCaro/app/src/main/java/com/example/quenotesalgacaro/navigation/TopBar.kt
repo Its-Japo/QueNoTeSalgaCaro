@@ -21,7 +21,7 @@ import androidx.navigation.NavController
 fun TopBar(
     title: String,
     navController: NavController,
-    Auth: Boolean = true
+    auth: Boolean = false
 ) {
     TopAppBar(
         title = {
@@ -42,7 +42,7 @@ fun TopBar(
             }
         },
         actions = {
-            if (Auth) {
+            if (auth) {
                 IconButton(onClick = {
                     navController.navigate("SettingsScreen")
                 }) {

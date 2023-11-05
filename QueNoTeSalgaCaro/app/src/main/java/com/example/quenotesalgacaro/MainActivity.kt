@@ -10,20 +10,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.quenotesalgacaro.navigation.Navigation
 import com.example.quenotesalgacaro.ui.theme.QueNoTeSalgaCaroTheme
+import com.example.quenotesalgacaro.ui.view.VMs.AuthViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             QueNoTeSalgaCaroTheme {
-                // A surface container using the 'background' color from the theme
+                val authViewModel: AuthViewModel = viewModel()
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Navigation()
+                    Navigation(authViewModel)
                 }
             }
         }
@@ -35,6 +37,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun GreetingPreview() {
     QueNoTeSalgaCaroTheme {
-        Navigation()
+        Navigation(AuthViewModel())
     }
 }

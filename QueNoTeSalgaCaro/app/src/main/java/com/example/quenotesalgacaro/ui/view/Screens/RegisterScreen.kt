@@ -31,7 +31,7 @@ import com.example.quenotesalgacaro.navigation.TopBar
 import com.example.quenotesalgacaro.ui.view.VMs.AuthViewModel
 import kotlinx.coroutines.flow.collectLatest
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
@@ -59,7 +59,7 @@ fun RegisterScreen(
 
     Scaffold(
         topBar = {
-            TopBar(title = "Registrarse", navController = navController)
+            TopBar(title = "Registrarse", navController = navController, auth = viewModel.loginUiState.value.user != null)
         },
         bottomBar = {
             Button(
