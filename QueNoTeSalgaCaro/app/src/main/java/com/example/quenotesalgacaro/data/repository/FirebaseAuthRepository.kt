@@ -43,6 +43,16 @@ class FirebaseAuthRepository {
         }
     }
 
+    suspend fun deleteUser() {
+        return withContext(Dispatchers.IO) {
+            try {
+                firebaseAuth.currentUser?.delete()
+            } catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
     fun getCurrentUser(): FirebaseUser? {
         return firebaseAuth.currentUser
     }

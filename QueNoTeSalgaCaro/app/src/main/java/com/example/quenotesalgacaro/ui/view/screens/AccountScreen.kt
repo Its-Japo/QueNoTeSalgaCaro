@@ -89,7 +89,12 @@ fun AccountScreen(
                     Text(text = "Cerrar Sesión")
                 }
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        viewModel.deleteUser()
+                        navController.navigate("LoginScreen") {
+                            popUpTo("HomeScreen") { inclusive = true }
+                        }
+                    },
                     modifier = modifier
                         .weight(1f)
                         .padding(20.dp),

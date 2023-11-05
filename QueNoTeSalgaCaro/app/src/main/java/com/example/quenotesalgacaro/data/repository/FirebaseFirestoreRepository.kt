@@ -30,6 +30,23 @@ class FirebaseFirestoreRepository {
         }
     }
 
+    suspend fun deleteUser(user: FirebaseUser?) {
+        return withContext(Dispatchers.IO) {
+            try {
+                firebaseFirestore.collection("users").document(user?.uid ?: "")
+                    .delete()
+                    .addOnSuccessListener {
+                        println("User deleted successfully")
+                    }
+                    .addOnFailureListener {
+                        println("Error deleting user")
+                    }
+            } catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
 
 
 }

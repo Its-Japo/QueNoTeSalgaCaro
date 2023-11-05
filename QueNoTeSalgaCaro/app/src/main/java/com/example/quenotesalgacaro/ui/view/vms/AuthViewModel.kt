@@ -40,6 +40,16 @@ class AuthViewModel(
         }
     }
 
+    fun deleteUser() {
+        _loginUiState.value = LoginUiState()
+        viewModelScope.launch {
+            fireabaseFirestoreRepository.deleteUser(
+                firebaseAuthRepository.getCurrentUser()
+            )
+            firebaseAuthRepository.deleteUser()
+        }
+    }
+
     fun register(email: String, password: String) {
         viewModelScope.launch {
             _registerUiState.value = RegisterUiState(loading = true)
