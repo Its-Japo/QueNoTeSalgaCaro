@@ -3,6 +3,7 @@ package com.example.quenotesalgacaro.navigation
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -17,7 +18,11 @@ import androidx.navigation.NavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(title: String, navController: NavController) {
+fun TopBar(
+    title: String,
+    navController: NavController,
+    Auth: Boolean = true
+) {
     TopAppBar(
         title = {
             Text(
@@ -32,6 +37,16 @@ fun TopBar(title: String, navController: NavController) {
             if (navController.previousBackStackEntry != null) {
                 IconButton(onClick = { navController.navigateUp() }) {
                     Icon(imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = null)
+                }
+            }
+        },
+        actions = {
+            if (Auth) {
+                IconButton(onClick = {
+                    navController.navigate("SettingsScreen")
+                }) {
+                    Icon(imageVector = Icons.Outlined.Settings,
                         contentDescription = null)
                 }
             }

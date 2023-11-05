@@ -36,6 +36,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun RegisterScreen(
     navController: NavHostController,
+    modifier: Modifier = Modifier,
     viewModel: AuthViewModel = viewModel()
 ) {
 
@@ -47,7 +48,9 @@ fun RegisterScreen(
         viewModel.registerUiState.collectLatest { registerUiState ->
             if (registerUiState.user != null) {
                 Toast.makeText(context, "Usuario registrado", Toast.LENGTH_SHORT).show()
-                navController.navigate("LoginScreen")
+                navController.navigate("LoginScreen") {
+                    popUpTo("RegisterScreen") { inclusive = true }
+                }
             } else if (registerUiState.error != null) {
                 Toast.makeText(context, "Error al registrar usuario: ${registerUiState.error}", Toast.LENGTH_SHORT).show()
             }
@@ -65,7 +68,7 @@ fun RegisterScreen(
                         popUpTo("RegisterScreen") { inclusive = true }
                     }
                 },
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(20.dp),
             ) {
@@ -76,14 +79,14 @@ fun RegisterScreen(
         }
     ){
         Column (
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .padding(10.dp, 60.dp, 10.dp, 10.dp),
         ) {
             Image (
                 painter = painterResource(id = R.drawable.profileicon),
                 contentDescription = "Logo",
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .height(300.dp)
                     .padding(16.dp)
@@ -95,7 +98,7 @@ fun RegisterScreen(
                 value = usernameState.value,
                 onValueChange = { usernameState.value = it },
                 label = { Text("Correo electrónico") },
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(20.dp),
                 singleLine = true
@@ -104,14 +107,14 @@ fun RegisterScreen(
                 value = passwordState.value,
                 onValueChange = { passwordState.value = it },
                 label = { Text("Contraseña") },
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(20.dp),
                 singleLine = true
             )
 
             Button(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(20.dp),
                 onClick = {

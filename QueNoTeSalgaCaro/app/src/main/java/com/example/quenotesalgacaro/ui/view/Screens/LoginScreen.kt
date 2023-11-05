@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun LoginScreen(
     navController: NavHostController,
+    modifier: Modifier = Modifier,
     viewModel: AuthViewModel = viewModel()
 ) {
     val usernameState = remember { mutableStateOf(TextFieldValue()) }
@@ -69,7 +70,7 @@ fun LoginScreen(
                         popUpTo("LoginScreen") { inclusive = true }
                     }
                 },
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(20.dp),
             ) {
@@ -80,14 +81,14 @@ fun LoginScreen(
         }
     ){
         Column (
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .padding(10.dp, 60.dp, 10.dp, 10.dp),
         ) {
             Image (
                 painter = painterResource(id = R.drawable.profileicon),
                 contentDescription = "Logo",
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .height(300.dp)
                     .padding(16.dp)
@@ -99,7 +100,7 @@ fun LoginScreen(
                 value = usernameState.value,
                 onValueChange = { usernameState.value = it },
                 label = { Text("Correo electrónico") },
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(20.dp),
                 singleLine = true
@@ -108,14 +109,14 @@ fun LoginScreen(
                 value = passwordState.value,
                 onValueChange = { passwordState.value = it },
                 label = { Text("Contraseña") },
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(20.dp),
                 singleLine = true
             )
 
             Button(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(20.dp),
                 onClick = {
