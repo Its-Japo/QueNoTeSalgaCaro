@@ -27,7 +27,7 @@ import com.example.quenotesalgacaro.ui.view.composables.ButtonBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FundsScreen(
+fun BudgetsScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
     viewModel: AuthViewModel = viewModel()
@@ -38,7 +38,7 @@ fun FundsScreen(
 
     Scaffold (
         topBar = {
-            TopBar(title = "Funds", navController = navController)
+            TopBar(title = "Budgets", navController = navController)
         },
         floatingActionButton = {
             FloatingActionButton(
@@ -60,3 +60,4 @@ fun FundsScreen(
     }
 
 }
+
