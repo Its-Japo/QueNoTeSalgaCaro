@@ -18,10 +18,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.quenotesalgacaro.R
 
 @Composable
-fun BottomBar(modifier: Modifier = Modifier) {
+fun BottomBar(
+    navController: NavController,
+    modifier: Modifier = Modifier
+) {
     Spacer(modifier = modifier.height(1.dp)
         .fillMaxWidth()
         .padding(20.dp, 0.dp, 20.dp, 0.dp)
@@ -66,7 +70,9 @@ fun BottomBar(modifier: Modifier = Modifier) {
         }
 
         IconButton(
-            onClick = { /*TODO*/ },
+            onClick = {
+                navController.navigate("AddTransactionScreen")
+            },
             modifier = Modifier
                 .width(60.dp)
                 .height(60.dp)
