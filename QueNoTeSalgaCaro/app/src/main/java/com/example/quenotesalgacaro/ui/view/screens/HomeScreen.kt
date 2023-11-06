@@ -58,7 +58,10 @@ fun HomeScreen(
             TopBar(title = stringResource(id = R.string.app_name), navController = navController, auth = viewModel.loginUiState.value.user != null)
         },
         bottomBar = {
-            BottomBar()
+            BottomBar(
+                navController = navController,
+                modifier = modifier
+            )
         }
     ) {
         val context = LocalContext.current

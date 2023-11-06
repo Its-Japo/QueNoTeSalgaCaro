@@ -12,6 +12,7 @@ import com.example.quenotesalgacaro.ui.view.screens.HomeScreen
 import com.example.quenotesalgacaro.ui.view.screens.LoginScreen
 import com.example.quenotesalgacaro.ui.view.screens.RegisterScreen
 import com.example.quenotesalgacaro.ui.view.screens.SettingsScreen
+import com.example.quenotesalgacaro.ui.view.screens.AddTransactionScreen
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 
 
@@ -49,6 +50,9 @@ fun Navigation(
         }
         composable(NavigationState.FundsScreen.route) {
             FundsScreen(navController = navController, viewModel = authViewModel)
+        }
+        composable(NavigationState.AddTransactionScreen.route) {
+            AddTransactionScreen(navController = navController, viewModel = authViewModel)
         }
 
     }
