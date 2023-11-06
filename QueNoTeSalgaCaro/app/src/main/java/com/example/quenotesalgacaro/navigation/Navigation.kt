@@ -15,7 +15,10 @@ import com.example.quenotesalgacaro.ui.view.screens.RegisterScreen
 import com.example.quenotesalgacaro.ui.view.screens.SettingsScreen
 import com.example.quenotesalgacaro.ui.view.screens.WalletsScreen
 import com.example.quenotesalgacaro.ui.view.screens.AddTransactionScreen
+import com.example.quenotesalgacaro.ui.view.screens.CreateScreen
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
+import com.example.quenotesalgacaro.ui.view.vms.BudgetViewModel
+import com.example.quenotesalgacaro.ui.view.vms.WalletViewModel
 
 
 @Composable
@@ -61,6 +64,29 @@ fun Navigation(
         }
         composable(NavigationState.AddTransactionScreen.route) {
             AddTransactionScreen(navController = navController, viewModel = authViewModel)
+        }
+        composable(NavigationState.CreateScreen.route + "/{type}") { backstackEntry -> run {
+            val type = backstackEntry.arguments?.getString("type")
+            when (type) {
+                "wallet" -> CreateScreen(
+                    navController = navController,
+                    authViewModel = authViewModel,
+                    actionViewModel = WalletViewModel()
+                )
+
+                "budget" -> CreateScreen(
+                    navController = navController,
+                    authViewModel = authViewModel,
+                    actionViewModel = BudgetViewModel()
+                )
+
+                "fund" -> CreateScreen(
+                    navController = navController,
+                    authViewModel = authViewModel,
+                    actionViewModel = BudgetViewModel()
+                )
+            }
+        }
         }
 
     }

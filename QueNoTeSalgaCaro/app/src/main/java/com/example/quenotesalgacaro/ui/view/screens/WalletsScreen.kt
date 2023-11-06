@@ -42,7 +42,9 @@ fun WalletsScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /* Handle the click here */ },
+                onClick = {
+                    navController.navigate("CreateScreen/wallet")
+                },
             ) {
                 Text(text = "+", fontSize = 30.sp)
             }

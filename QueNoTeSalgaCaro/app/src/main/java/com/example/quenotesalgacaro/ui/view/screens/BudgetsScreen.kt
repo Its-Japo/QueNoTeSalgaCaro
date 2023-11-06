@@ -42,7 +42,9 @@ fun BudgetsScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /* Handle the click here */ },
+                onClick = {
+                    navController.navigate("CreateScreen/budget")
+                },
             ) {
                 Text(text = "+", fontSize = 30.sp)
             }

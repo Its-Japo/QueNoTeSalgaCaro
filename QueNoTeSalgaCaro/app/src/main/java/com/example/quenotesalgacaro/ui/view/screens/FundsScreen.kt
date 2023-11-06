@@ -42,7 +42,8 @@ fun FundsScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /* Handle the click here */ },
+                onClick = {
+                     navController.navigate("CreateScreen/fund")                },
             ) {
                 Text(text = "+", fontSize = 30.sp)
             }
@@ -53,7 +54,9 @@ fun FundsScreen(
             contentPadding = it,
         ) {
             items(items.size) { index ->
-                InfoBar(text = items[index], onClick = { /*TODO*/ })
+                InfoBar(
+                    text = items[index],
+                    onClick = { /*TODO*/ })
             }
         }
 
