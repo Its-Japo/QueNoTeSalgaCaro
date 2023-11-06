@@ -7,11 +7,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.quenotesalgacaro.ui.view.screens.AccountScreen
+import com.example.quenotesalgacaro.ui.view.screens.BudgetsScreen
 import com.example.quenotesalgacaro.ui.view.screens.FundsScreen
 import com.example.quenotesalgacaro.ui.view.screens.HomeScreen
 import com.example.quenotesalgacaro.ui.view.screens.LoginScreen
 import com.example.quenotesalgacaro.ui.view.screens.RegisterScreen
 import com.example.quenotesalgacaro.ui.view.screens.SettingsScreen
+import com.example.quenotesalgacaro.ui.view.screens.WalletsScreen
 import com.example.quenotesalgacaro.ui.view.screens.AddTransactionScreen
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 
@@ -50,6 +52,12 @@ fun Navigation(
         }
         composable(NavigationState.FundsScreen.route) {
             FundsScreen(navController = navController, viewModel = authViewModel)
+        }
+        composable(NavigationState.WalletsScreen.route) {
+            WalletsScreen(navController = navController, viewModel = authViewModel)
+        }
+        composable(NavigationState.BudgetsScreen.route) {
+            BudgetsScreen(navController = navController, viewModel = authViewModel)
         }
         composable(NavigationState.AddTransactionScreen.route) {
             AddTransactionScreen(navController = navController, viewModel = authViewModel)
