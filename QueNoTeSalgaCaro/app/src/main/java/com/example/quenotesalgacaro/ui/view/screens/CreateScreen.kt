@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,6 +25,7 @@ import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 import com.example.quenotesalgacaro.ui.view.vms.BudgetViewModel
 import com.example.quenotesalgacaro.ui.view.vms.FundViewModel
 import com.example.quenotesalgacaro.ui.view.vms.WalletViewModel
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,15 +50,17 @@ fun CreateScreen(
         }
     ){
         Column(
-            modifier = modifier.fillMaxWidth()
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(10.dp, 60.dp, 10.dp, 10.dp)
         ){
             TextField(
                 value = name.value,
                 onValueChange = { name.value = it },
                 label = { when (actionViewModel) {
-                    is WalletViewModel -> "Wallet Name"
-                    is BudgetViewModel -> "Budget Name"
-                    is FundViewModel -> "Fund Name"
+                    is WalletViewModel -> Text(text = "Wallet Name")
+                    is BudgetViewModel -> Text(text = "Budget Name")
+                    is FundViewModel -> Text(text = "Fund Name")
                 }},
                 modifier = modifier
                     .fillMaxWidth()
@@ -70,9 +74,9 @@ fun CreateScreen(
                     .padding(20.dp)
             ) {
                 when (actionViewModel) {
-                    is WalletViewModel -> "Create Wallet"
-                    is BudgetViewModel -> "Create Budget"
-                    is FundViewModel -> "Create Fund"
+                    is WalletViewModel -> Text(text = "Create Wallet")
+                    is BudgetViewModel -> Text(text = "Create Budget")
+                    is FundViewModel -> Text(text = "Create Fund")
                 }
             }
 
