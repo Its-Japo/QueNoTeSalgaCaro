@@ -38,7 +38,7 @@ fun SettingsScreen(
            ButtonBar(text = "Account", onClick = { navController.navigate("AccountScreen") })
            ButtonBar(text = "Wallets", onClick = { /*TODO*/ })
            ButtonBar(text = "Budgets", onClick = { /*TODO*/ })
-           ButtonBar(text = "Funds", onClick = { /*TODO*/ })
+           ButtonBar(text = "Funds", onClick = { navController.navigate("FundsScreen") })
            Spacer(modifier = modifier.height(60.dp))
            Spacer(modifier = modifier.height(1.dp)
                .padding(20.dp, 0.dp, 20.dp, 0.dp)

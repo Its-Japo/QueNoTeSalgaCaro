@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.quenotesalgacaro.ui.view.screens.AccountScreen
+import com.example.quenotesalgacaro.ui.view.screens.FundsScreen
 import com.example.quenotesalgacaro.ui.view.screens.HomeScreen
 import com.example.quenotesalgacaro.ui.view.screens.LoginScreen
 import com.example.quenotesalgacaro.ui.view.screens.RegisterScreen
@@ -45,6 +46,9 @@ fun Navigation(
         }
         composable(NavigationState.AccountScreen.route) {
             AccountScreen(navController = navController, viewModel = authViewModel)
+        }
+        composable(NavigationState.FundsScreen.route) {
+            FundsScreen(navController = navController, viewModel = authViewModel)
         }
 
     }
