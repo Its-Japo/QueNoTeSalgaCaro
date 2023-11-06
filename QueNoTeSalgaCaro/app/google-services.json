@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "622134313861",
+    "project_id": "quenotesalgacaro",
+    "storage_bucket": "quenotesalgacaro.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:622134313861:android:fea099bce0516f570a3aec",
+        "android_client_info": {
+          "package_name": "com.example.quenotesalgacaro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGgz1fqWW_lyLZ2Pvf4wKPB80yEy01u6A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

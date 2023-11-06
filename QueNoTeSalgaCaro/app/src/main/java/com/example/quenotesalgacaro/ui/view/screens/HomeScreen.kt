@@ -2,6 +2,7 @@ package com.example.quenotesalgacaro.ui.view.screens
 
 import android.annotation.SuppressLint
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.quenotesalgacaro.R
@@ -53,7 +55,7 @@ fun HomeScreen(
 ) {
     Scaffold(
         topBar = {
-            TopBar(title = "Home", navController = navController, auth = viewModel.loginUiState.value.user != null)
+            TopBar(title = stringResource(id = R.string.app_name), navController = navController, auth = viewModel.loginUiState.value.user != null)
         },
         bottomBar = {
             BottomBar()
@@ -84,7 +86,8 @@ fun HomeScreen(
             FilaTabla("9","Super","Q2000.00")
         )
         Column (
-            modifier = modifier.fillMaxWidth()
+            modifier = modifier
+                .fillMaxWidth()
                 .padding(10.dp, 60.dp, 10.dp, 84.dp),
         ) {
 
@@ -253,6 +256,11 @@ fun HomeScreen(
                         .padding(12.dp)
                 )
             }
+            Spacer(modifier = modifier.height(1.dp)
+                .fillMaxWidth()
+                .padding(20.dp, 0.dp, 20.dp, 0.dp)
+                .background(Color.Gray)
+            )
             LazyColumn(
                 modifier = modifier
                     .fillMaxWidth()

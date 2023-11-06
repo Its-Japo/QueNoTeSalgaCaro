@@ -61,7 +61,7 @@ fun LoginScreen(
 
     Scaffold(
         topBar = {
-            TopBar(title = "Login", navController = navController, auth = viewModel.loginUiState.value.user != null)
+            TopBar(title = "Iniciar Sesión", navController = navController, auth = viewModel.loginUiState.value.user != null)
         },
         bottomBar = {
             Button(

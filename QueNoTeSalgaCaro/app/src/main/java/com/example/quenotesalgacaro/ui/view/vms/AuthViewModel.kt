@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class AuthViewModel(
     private val firebaseAuthRepository: FirebaseAuthRepository = FirebaseAuthRepository(),
-    private val fireabaseFirestoreRepository: FirebaseFirestoreRepository = FirebaseFirestoreRepository()
+    private val firebaseFirestoreRepository: FirebaseFirestoreRepository = FirebaseFirestoreRepository()
 ) : ViewModel() {
 
     private val _loginUiState = MutableStateFlow<LoginUiState>(LoginUiState())
@@ -22,9 +22,6 @@ class AuthViewModel(
 
     private val _registerUiState = MutableStateFlow<RegisterUiState>(RegisterUiState())
     val registerUiState: MutableStateFlow<RegisterUiState> = _registerUiState
-
-    private val _authState = MutableLiveData<Boolean>()
-    val authState: LiveData<Boolean> = _authState
 
     init {
         val user = firebaseAuthRepository.getCurrentUser()
@@ -55,14 +52,12 @@ class AuthViewModel(
     fun deleteUser() {
         _loginUiState.value = LoginUiState()
         viewModelScope.launch {
-            fireabaseFirestoreRepository.deleteUser(
+            firebaseFirestoreRepository.deleteUser(
                 firebaseAuthRepository.getCurrentUser()
             )
             firebaseAuthRepository.deleteUser()
         }
     }
-
-    fun getCurrentUser() = firebaseAuthRepository.getCurrentUser()
 
     fun register(email: String, password: String) {
         viewModelScope.launch {
@@ -70,11 +65,10 @@ class AuthViewModel(
             try {
                 val user = firebaseAuthRepository.registerNewUser(email, password)
                 _registerUiState.value = RegisterUiState(success = user != null, user = user)
-
-
                 if (user != null) {
-                    fireabaseFirestoreRepository.registerNewUser(user, password)
+                    firebaseFirestoreRepository.registerNewUser(user, password)
                 }
+                _registerUiState.value = RegisterUiState()
 
             } catch (e: Exception) {
                 _registerUiState.value = RegisterUiState(error = e.localizedMessage ?: "Registration failed")

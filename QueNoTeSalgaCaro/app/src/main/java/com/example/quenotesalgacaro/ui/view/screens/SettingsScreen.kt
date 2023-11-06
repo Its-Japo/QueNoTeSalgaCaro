@@ -29,7 +29,7 @@ fun SettingsScreen(
 
     Scaffold (
         topBar = {
-            TopBar(title = "Settings", navController = navController)
+            TopBar(title = "Ajustes", navController = navController)
         }
     ) {
        Column (
