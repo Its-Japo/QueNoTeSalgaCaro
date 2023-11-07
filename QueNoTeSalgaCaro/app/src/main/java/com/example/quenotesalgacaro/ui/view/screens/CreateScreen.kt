@@ -1,5 +1,7 @@
 package com.example.quenotesalgacaro.ui.view.screens
 
+import DatePicker
+import WalletViewModel
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +12,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,7 +28,6 @@ import com.example.quenotesalgacaro.navigation.TopBar
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 import com.example.quenotesalgacaro.ui.view.vms.BudgetViewModel
 import com.example.quenotesalgacaro.ui.view.vms.FundViewModel
-import com.example.quenotesalgacaro.ui.view.vms.WalletViewModel
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -40,6 +43,10 @@ fun CreateScreen(
     val name = remember {
         mutableStateOf(TextFieldValue())
     }
+    val addWalletState = if (actionViewModel is WalletViewModel) {
+        actionViewModel.addWalletState.collectAsState().value
+    } else null
+
     Scaffold (
         topBar = {
             when (actionViewModel) {
@@ -64,11 +71,18 @@ fun CreateScreen(
                 }},
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(20.dp)
+                    .padding(20.dp),
+
             )
 
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    val loginState = authViewModel.loginUiState.value
+
+                    if (actionViewModel is WalletViewModel) {
+                        loginState.user?.let { it1 -> actionViewModel.addWallet(it1.uid, name.value.text) }
+                    }
+                },
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(20.dp)
@@ -79,8 +93,17 @@ fun CreateScreen(
                     is FundViewModel -> Text(text = "Create Fund")
                 }
             }
-
-
         }
+    }
+    LaunchedEffect(key1 = addWalletState) {
+        when (actionViewModel) {
+            is WalletViewModel -> {
+                if (addWalletState is UiState.Success<*>) {
+                    actionViewModel.fetchWallets(authViewModel.loginUiState.value.user!!.uid)
+                    navController.navigateUp()
+                }
+            }
+        }
+
     }
 }

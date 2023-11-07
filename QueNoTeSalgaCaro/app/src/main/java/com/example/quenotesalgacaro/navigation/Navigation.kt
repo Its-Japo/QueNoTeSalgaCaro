@@ -1,6 +1,7 @@
 package com.example.quenotesalgacaro.navigation
 
 
+import WalletViewModel
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
@@ -18,7 +19,7 @@ import com.example.quenotesalgacaro.ui.view.screens.AddTransactionScreen
 import com.example.quenotesalgacaro.ui.view.screens.CreateScreen
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 import com.example.quenotesalgacaro.ui.view.vms.BudgetViewModel
-import com.example.quenotesalgacaro.ui.view.vms.WalletViewModel
+
 
 
 @Composable
@@ -57,7 +58,7 @@ fun Navigation(
             FundsScreen(navController = navController, viewModel = authViewModel)
         }
         composable(NavigationState.WalletsScreen.route) {
-            WalletsScreen(navController = navController, viewModel = authViewModel)
+            WalletsScreen(navController = navController, authViewModel = authViewModel)
         }
         composable(NavigationState.BudgetsScreen.route) {
             BudgetsScreen(navController = navController, viewModel = authViewModel)
