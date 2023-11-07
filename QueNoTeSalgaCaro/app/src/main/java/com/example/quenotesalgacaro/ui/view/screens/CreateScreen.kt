@@ -1,6 +1,8 @@
 package com.example.quenotesalgacaro.ui.view.screens
 
+import BudgetViewModel
 import DatePicker
+import FundViewModel
 import WalletViewModel
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
@@ -26,8 +28,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.quenotesalgacaro.navigation.TopBar
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
-import com.example.quenotesalgacaro.ui.view.vms.BudgetViewModel
-import com.example.quenotesalgacaro.ui.view.vms.FundViewModel
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -45,7 +45,13 @@ fun CreateScreen(
     }
     val addWalletState = if (actionViewModel is WalletViewModel) {
         actionViewModel.addWalletState.collectAsState().value
-    } else null
+    } else if (actionViewModel is BudgetViewModel) {
+        actionViewModel.addBudgetState.collectAsState().value
+    } else if (actionViewModel is FundViewModel) {
+        actionViewModel.addFundState.collectAsState().value
+    } else {
+        null
+    }
 
     Scaffold (
         topBar = {
@@ -72,7 +78,6 @@ fun CreateScreen(
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(20.dp),
-
             )
 
             Button(
@@ -81,6 +86,10 @@ fun CreateScreen(
 
                     if (actionViewModel is WalletViewModel) {
                         loginState.user?.let { it1 -> actionViewModel.addWallet(it1.uid, name.value.text) }
+                    } else if (actionViewModel is BudgetViewModel) {
+                        loginState.user?.let { it1 -> actionViewModel.addBudget(it1.uid, name.value.text) }
+                    } else if (actionViewModel is FundViewModel) {
+                        loginState.user?.let { it1 -> actionViewModel.addFund(it1.uid, name.value.text) }
                     }
                 },
                 modifier = modifier
@@ -100,6 +109,18 @@ fun CreateScreen(
             is WalletViewModel -> {
                 if (addWalletState is UiState.Success<*>) {
                     actionViewModel.fetchWallets(authViewModel.loginUiState.value.user!!.uid)
+                    navController.navigateUp()
+                }
+            }
+            is BudgetViewModel -> {
+                if (addWalletState is UiState.Success<*>) {
+                    actionViewModel.fetchBudgets(authViewModel.loginUiState.value.user!!.uid)
+                    navController.navigateUp()
+                }
+            }
+            is FundViewModel -> {
+                if (addWalletState is UiState.Success<*>) {
+                    actionViewModel.fetchFunds(authViewModel.loginUiState.value.user!!.uid)
                     navController.navigateUp()
                 }
             }

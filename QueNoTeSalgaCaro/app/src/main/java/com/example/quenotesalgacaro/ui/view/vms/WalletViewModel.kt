@@ -18,7 +18,7 @@ class WalletViewModel(private val firestoreRepository: FirebaseFirestoreReposito
         viewModelScope.launch {
             _walletsFetchState.value = UiState.Loading
             try {
-                val result = firestoreRepository.getWallets(userId, "wallets")
+                val result = firestoreRepository.getSubcollection(userId, "wallets")
                 if (result.isSuccess) {
                     _walletsFetchState.value = UiState.Success(result.getOrThrow())
                 } else {

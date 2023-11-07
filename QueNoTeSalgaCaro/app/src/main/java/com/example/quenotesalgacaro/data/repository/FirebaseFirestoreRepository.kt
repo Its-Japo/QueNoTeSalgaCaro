@@ -53,7 +53,7 @@ class FirebaseFirestoreRepository {
         return withContext(Dispatchers.IO) {
             try {
                 firebaseFirestore.collection("users").document(uid?: "")
-                    .collection("wallets").document(name)
+                    .collection(collectionName).document(name)
                     .set(hashMapOf(
                         "name" to name
                     )).await()
@@ -66,7 +66,7 @@ class FirebaseFirestoreRepository {
 
     }
 
-    suspend fun getWallets(uid: String, collectionName: String): Result<List<Wallet>> {
+    suspend fun getSubcollection(uid: String, collectionName: String): Result<List<Wallet>> {
         return withContext(Dispatchers.IO) {
             try {
                 val snapshot = firebaseFirestore.collection("users").document(uid)

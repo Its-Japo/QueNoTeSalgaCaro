@@ -34,7 +34,7 @@ import com.example.quenotesalgacaro.data.networking.Wallet
 import com.example.quenotesalgacaro.ui.view.composables.ButtonBar
 
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WalletsScreen(
@@ -46,7 +46,7 @@ fun WalletsScreen(
     val walletsFetchState by walletViewModel.walletsFetchState.collectAsState()
     val user = authViewModel.loginUiState.value.user
 
-    // Fetch wallets when the user is first available or when the user changes.
+
     LaunchedEffect(user) {
         user?.let {
             walletViewModel.fetchWallets(it.uid)
