@@ -47,7 +47,7 @@ fun BottomBar(
         ) {
             Icon(
                 painter = painterResource(
-                    id = R.drawable.homeicon
+                    id = R.drawable.home_icon
                 ),
                 contentDescription = "Home",
                 tint = MaterialTheme.colorScheme.onSurface
@@ -62,7 +62,7 @@ fun BottomBar(
         ) {
             Icon(
                 painter = painterResource(
-                    id = R.drawable.homeicon
+                    id = R.drawable.pie_graph_icon
                 ),
                 contentDescription = "Statistics",
                 tint = MaterialTheme.colorScheme.onSurface
@@ -87,7 +87,7 @@ fun BottomBar(
             ) {
                 Icon(
                     painter = painterResource(
-                        id = R.drawable.homeicon
+                        id = R.drawable.add_icon
                     ),
                     contentDescription = "add",
                     tint = MaterialTheme.colorScheme.onPrimary
@@ -103,7 +103,7 @@ fun BottomBar(
         ) {
             Icon(
                 painter = painterResource(
-                    id = R.drawable.profileicon
+                    id = R.drawable.piggy_icon
                 ),
                 contentDescription = "Funds",
                 tint = MaterialTheme.colorScheme.onSurface
@@ -118,7 +118,7 @@ fun BottomBar(
         ) {
             Icon(
                 painter = painterResource(
-                    id = R.drawable.profileicon
+                    id = R.drawable.wallet_icon
                 ),
                 contentDescription = "Budget",
                 tint = MaterialTheme.colorScheme.onSurface

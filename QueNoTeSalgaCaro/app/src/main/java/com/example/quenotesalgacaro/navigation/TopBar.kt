@@ -13,22 +13,26 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
+import com.example.quenotesalgacaro.R
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
     title: String,
     navController: NavController,
-    auth: Boolean = false
+    auth: Boolean = false,
+    modifier: Modifier = Modifier
 ) {
     TopAppBar(
         title = {
             Text(
                 text = title,
                 color = Color.White,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
         },
@@ -46,8 +50,10 @@ fun TopBar(
                 IconButton(onClick = {
                     navController.navigate("SettingsScreen")
                 }) {
-                    Icon(imageVector = Icons.Outlined.Settings,
-                        contentDescription = null)
+                    Icon(painter = painterResource(id = R.drawable.settings_icon),
+                        contentDescription = null,
+                        tint = Color.White
+                    )
                 }
             }
         }
