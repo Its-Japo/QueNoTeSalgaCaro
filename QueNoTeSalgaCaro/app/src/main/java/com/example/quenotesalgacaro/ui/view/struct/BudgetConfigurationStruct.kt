@@ -1,4 +1,4 @@
-package com.example.quenotesalgacaro.ui.view.uistates
+package com.example.quenotesalgacaro.ui.view.struct
 
 import com.example.quenotesalgacaro.data.networking.BudgetConfiguration
 

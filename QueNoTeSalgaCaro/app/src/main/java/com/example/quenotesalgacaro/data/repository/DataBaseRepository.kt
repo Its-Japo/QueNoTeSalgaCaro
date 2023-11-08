@@ -10,6 +10,6 @@ interface DataBaseRepository {
     suspend fun deleteUser(user: FirebaseUser?)
     suspend fun getFirstGradeSubcollection(uid: String, collectionName: String): Result<List<SimpleDocument>>
     suspend fun addFirstGradeSubcollection(uid: String?, name: String, collectionName: String): Result<Unit>
-
     suspend fun getSecondGradeSubcollection(uid: String, collectionName: String, entity: String, subcollectionName: String): Result<List<BudgetConfiguration>>
+    suspend fun deleteSecondGradeSubcollectionDocument(uid: String, collectionName: String, entity: String, subcollectionName: String, documentName: String): Result<Unit>
 }

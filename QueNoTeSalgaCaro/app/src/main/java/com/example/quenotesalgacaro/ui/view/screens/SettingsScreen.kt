@@ -39,7 +39,7 @@ fun SettingsScreen(
        ){
            ButtonBar(icon =  R.drawable.profileicon, text = "Account", onClick = { navController.navigate("AccountScreen") })
            ButtonBar(icon =  R.drawable.wallet_icon, text = "Wallets", onClick = { navController.navigate("WalletsScreen") })
-           ButtonBar(icon =  R.drawable.profileicon, text = "Budgets", onClick = { navController.navigate("BudgetsScreen") })
+           ButtonBar(icon =  R.drawable.check_icon, text = "Budgets", onClick = { navController.navigate("BudgetsScreen") })
            ButtonBar(icon =  R.drawable.piggy_icon, text = "Funds", onClick = { navController.navigate("FundsScreen") })
            Spacer(modifier = modifier.height(60.dp))
            Spacer(modifier = modifier
@@ -48,8 +48,8 @@ fun SettingsScreen(
                .background(Color.LightGray)
                .fillMaxWidth()
            )
-           ButtonBar(icon =  R.drawable.profileicon, text = "Help & Feedback", onClick = { /*TODO*/ })
-           ButtonBar(icon =  R.drawable.profileicon, text = "About", onClick = { /*TODO*/ })
+           ButtonBar(icon =  R.drawable.question_icon, text = "Help & Feedback", onClick = { /*TODO*/ })
+           ButtonBar(icon =  R.drawable.info_icon, text = "About", onClick = { /*TODO*/ })
        }
     }
 

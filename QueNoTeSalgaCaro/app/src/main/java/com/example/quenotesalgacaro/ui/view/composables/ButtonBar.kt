@@ -25,6 +25,7 @@ fun ButtonBar(
     modifier: Modifier = Modifier,
     icon: Int? = null,
     text: String,
+    tint: Color = MaterialTheme.colorScheme.onSurface,
     onClick: () -> Unit
 ) {
     Button (
@@ -39,8 +40,8 @@ fun ButtonBar(
                     Icon(
                         painter = painterResource(id = icon),
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        modifier = modifier.weight(1f)
+                        tint = tint,
+                        modifier = modifier.weight(1f),
                     )
                 }
                 Text(

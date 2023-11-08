@@ -72,7 +72,7 @@ fun HomeScreen(
         var selectedDate by remember { mutableStateOf(dates[0]) }
         var selectedWallet by remember { mutableStateOf(wallets[0]) }
 
-        val saldo = 150430.41
+        val saldo = 8430.41
         val total = 12000.00
         val progress = (total - saldo)/total
 

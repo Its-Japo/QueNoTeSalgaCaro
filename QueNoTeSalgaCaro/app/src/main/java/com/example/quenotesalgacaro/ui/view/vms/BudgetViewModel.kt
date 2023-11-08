@@ -1,13 +1,12 @@
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.quenotesalgacaro.data.networking.BudgetConfiguration
 import com.example.quenotesalgacaro.data.repository.FirebaseFirestoreRepository
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import com.example.quenotesalgacaro.data.networking.SimpleDocument
 import com.example.quenotesalgacaro.data.repository.DataBaseRepository
-import com.example.quenotesalgacaro.ui.view.uistates.BudgetConfigurationStruct
+import com.example.quenotesalgacaro.ui.view.struct.BudgetConfigurationStruct
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 
 class BudgetViewModel(
@@ -60,6 +59,17 @@ class BudgetViewModel(
 
                 _budgetConfigurationFetchState.value = DataUiState.Success(configuration)
 
+            } catch (e: Exception) {
+                _budgetConfigurationFetchState.value = DataUiState.Error(e)
+            }
+        }
+    }
+
+    fun deleteRow(userId: String, budgetName: String, fieldType: String, rowId: String) {
+        viewModelScope.launch {
+            try {
+                firestoreRepository.deleteSecondGradeSubcollectionDocument(userId, "budgets", budgetName, fieldType, rowId)
+                fetchBudgetConfiguration(userId, budgetName)
             } catch (e: Exception) {
                 _budgetConfigurationFetchState.value = DataUiState.Error(e)
             }

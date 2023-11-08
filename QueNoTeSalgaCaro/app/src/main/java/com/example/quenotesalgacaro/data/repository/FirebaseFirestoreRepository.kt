@@ -82,6 +82,26 @@ class FirebaseFirestoreRepository: DataBaseRepository {
         }
     }
 
+    override suspend fun deleteSecondGradeSubcollectionDocument(
+        uid: String,
+        collectionName: String,
+        entity: String,
+        subcollectionName: String,
+        documentName: String
+    ): Result<Unit> {
+        return withContext(Dispatchers.IO) {
+            try {
+                firebaseFirestore.collection("users").document(uid)
+                    .collection(collectionName).document(entity)
+                    .collection(subcollectionName).document(documentName)
+                    .delete().await()
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+
 
 
 }

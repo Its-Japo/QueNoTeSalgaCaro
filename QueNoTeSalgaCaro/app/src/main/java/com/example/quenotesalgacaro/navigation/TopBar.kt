@@ -7,6 +7,7 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -36,7 +37,7 @@ fun TopBar(
                 textAlign = TextAlign.Center
             )
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color(0xFF6650a4)),
+        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
         navigationIcon = {
             if (navController.previousBackStackEntry != null) {
                 IconButton(onClick = { navController.navigateUp() }) {
