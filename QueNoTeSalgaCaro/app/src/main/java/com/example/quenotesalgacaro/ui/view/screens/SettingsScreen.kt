@@ -13,9 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.quenotesalgacaro.R
 import com.example.quenotesalgacaro.navigation.TopBar
 import com.example.quenotesalgacaro.ui.view.composables.ButtonBar
 
@@ -35,18 +37,19 @@ fun SettingsScreen(
        Column (
            modifier = modifier.padding(0.dp, 60.dp, 0.dp, 0.dp)
        ){
-           ButtonBar(text = "Account", onClick = { navController.navigate("AccountScreen") })
-           ButtonBar(text = "Wallets", onClick = { navController.navigate("WalletsScreen") })
-           ButtonBar(text = "Budgets", onClick = { navController.navigate("BudgetsScreen") })
-           ButtonBar(text = "Funds", onClick = { navController.navigate("FundsScreen") })
+           ButtonBar(icon =  R.drawable.profileicon, text = "Account", onClick = { navController.navigate("AccountScreen") })
+           ButtonBar(icon =  R.drawable.wallet_icon, text = "Wallets", onClick = { navController.navigate("WalletsScreen") })
+           ButtonBar(icon =  R.drawable.profileicon, text = "Budgets", onClick = { navController.navigate("BudgetsScreen") })
+           ButtonBar(icon =  R.drawable.piggy_icon, text = "Funds", onClick = { navController.navigate("FundsScreen") })
            Spacer(modifier = modifier.height(60.dp))
-           Spacer(modifier = modifier.height(1.dp)
+           Spacer(modifier = modifier
+               .height(1.dp)
                .padding(20.dp, 0.dp, 20.dp, 0.dp)
                .background(Color.LightGray)
                .fillMaxWidth()
            )
-           ButtonBar(text = "Help & Feedback", onClick = { /*TODO*/ })
-           ButtonBar(text = "About", onClick = { /*TODO*/ })
+           ButtonBar(icon =  R.drawable.profileicon, text = "Help & Feedback", onClick = { /*TODO*/ })
+           ButtonBar(icon =  R.drawable.profileicon, text = "About", onClick = { /*TODO*/ })
        }
     }
 

@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun ButtonBar(
@@ -31,18 +32,23 @@ fun ButtonBar(
             Row (
                 modifier = modifier
                     .fillMaxWidth()
-                    .background(Color.Transparent)
+                    .background(Color.Transparent),
+                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
             ) {
                 if (icon != null) {
                     Icon(
                         painter = painterResource(id = icon),
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurface
+                        tint = MaterialTheme.colorScheme.onSurface,
+                        modifier = modifier.weight(1f)
                     )
                 }
                 Text(
                     text = text,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontSize = 16.sp,
+                    modifier = modifier.weight(7f)
+                        .padding(10.dp, 10.dp, 0.dp, 10.dp)
                 )
             }
         },

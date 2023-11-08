@@ -31,6 +31,7 @@ import com.example.quenotesalgacaro.ui.view.composables.InfoBar
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 import com.example.quenotesalgacaro.R
 import com.example.quenotesalgacaro.ui.view.composables.ButtonBar
+import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,15 +66,15 @@ fun FundsScreen(
     ) {
         paddingValues ->
         when (val state = fundsFetchState) {
-            is UiState.Loading -> CircularProgressIndicator()
-            is UiState.Success -> {
+            is DataUiState.Loading -> CircularProgressIndicator()
+            is DataUiState.Success -> {
                 LazyColumn(contentPadding = paddingValues) {
                     items(state.data) { wallet ->
                         InfoBar(text = wallet.name, onClick = { /*TODO*/ })
                     }
                 }
             }
-            is UiState.Error -> Text("Error: ${state.exception.message}")
+            is DataUiState.Error -> Text("Error: ${state.exception.message}")
             else -> Text("Something went wrong")
         }
     }

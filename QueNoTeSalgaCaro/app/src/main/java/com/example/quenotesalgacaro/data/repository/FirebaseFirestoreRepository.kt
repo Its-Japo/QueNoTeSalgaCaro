@@ -1,6 +1,7 @@
 package com.example.quenotesalgacaro.data.repository
 
-import com.example.quenotesalgacaro.data.networking.Wallet
+import com.example.quenotesalgacaro.data.networking.BudgetConfiguration
+import com.example.quenotesalgacaro.data.networking.SimpleDocument
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
@@ -30,13 +31,7 @@ class FirebaseFirestoreRepository: DataBaseRepository {
         return withContext(Dispatchers.IO) {
             try {
                 firebaseFirestore.collection("users").document(user?.uid ?: "")
-                    .delete()
-                    .addOnSuccessListener {
-                        println("User deleted successfully")
-                    }
-                    .addOnFailureListener {
-                        println("Error deleting user")
-                    }
+                    .delete().await()
             } catch (e: Exception) {
                 throw e
             }
@@ -60,13 +55,27 @@ class FirebaseFirestoreRepository: DataBaseRepository {
 
     }
 
-    override suspend fun getSubcollection(uid: String, collectionName: String): Result<List<Wallet>> {
+    override suspend fun getFirstGradeSubcollection(uid: String, collectionName: String): Result<List<SimpleDocument>> {
         return withContext(Dispatchers.IO) {
             try {
                 val snapshot = firebaseFirestore.collection("users").document(uid)
                     .collection(collectionName).get().await()
-                val wallets = snapshot.documents.mapNotNull { it.toObject(Wallet::class.java) }
+                val wallets = snapshot.documents.mapNotNull { it.toObject(SimpleDocument::class.java) }
                 Result.success(wallets)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+
+    override suspend fun getSecondGradeSubcollection(uid: String, collectionName: String, entity: String, subcollectionName: String): Result<List<BudgetConfiguration>> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val snapshot = firebaseFirestore.collection("users").document(uid)
+                    .collection(collectionName).document(entity)
+                    .collection(subcollectionName).get().await()
+                val budgets = snapshot.documents.mapNotNull { it.toObject(BudgetConfiguration::class.java) }
+                Result.success(budgets)
             } catch (e: Exception) {
                 Result.failure(e)
             }

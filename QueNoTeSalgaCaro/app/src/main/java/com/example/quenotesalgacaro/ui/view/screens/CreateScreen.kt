@@ -27,6 +27,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.quenotesalgacaro.navigation.TopBar
+import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 
 
@@ -52,6 +53,8 @@ fun CreateScreen(
     } else {
         null
     }
+
+
 
     Scaffold (
         topBar = {
@@ -107,19 +110,19 @@ fun CreateScreen(
     LaunchedEffect(key1 = addWalletState) {
         when (actionViewModel) {
             is WalletViewModel -> {
-                if (addWalletState is UiState.Success<*>) {
+                if (addWalletState is DataUiState.Success<*>) {
                     actionViewModel.fetchWallets(authViewModel.loginUiState.value.user!!.uid)
                     navController.navigateUp()
                 }
             }
             is BudgetViewModel -> {
-                if (addWalletState is UiState.Success<*>) {
+                if (addWalletState is DataUiState.Success<*>) {
                     actionViewModel.fetchBudgets(authViewModel.loginUiState.value.user!!.uid)
                     navController.navigateUp()
                 }
             }
             is FundViewModel -> {
-                if (addWalletState is UiState.Success<*>) {
+                if (addWalletState is DataUiState.Success<*>) {
                     actionViewModel.fetchFunds(authViewModel.loginUiState.value.user!!.uid)
                     navController.navigateUp()
                 }

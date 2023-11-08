@@ -45,7 +45,7 @@ fun InfoBar(
 
 
         IconButton(
-            onClick = { /*TODO*/ },
+            onClick = onClick,
             modifier = modifier.weight(1f)
         ) {
             Icon(

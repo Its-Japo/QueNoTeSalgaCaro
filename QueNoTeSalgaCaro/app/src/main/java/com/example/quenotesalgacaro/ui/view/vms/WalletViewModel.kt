@@ -4,29 +4,30 @@ import com.example.quenotesalgacaro.data.repository.FirebaseFirestoreRepository
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import com.example.quenotesalgacaro.data.networking.Wallet
+import com.example.quenotesalgacaro.data.networking.SimpleDocument
 import com.example.quenotesalgacaro.data.repository.DataBaseRepository
+import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 
 class WalletViewModel(private val firestoreRepository: DataBaseRepository = FirebaseFirestoreRepository()) : ViewModel() {
 
-    private val _walletsFetchState = MutableStateFlow<UiState<List<Wallet>>>(UiState.Loading)
+    private val _walletsFetchState = MutableStateFlow<DataUiState<List<SimpleDocument>>>(DataUiState.Loading)
     val walletsFetchState = _walletsFetchState.asStateFlow()
 
-    private val _addWalletState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
+    private val _addWalletState = MutableStateFlow<DataUiState<Unit>>(DataUiState.Loading)
     val addWalletState = _addWalletState.asStateFlow()
 
     fun fetchWallets(userId: String) {
         viewModelScope.launch {
-            _walletsFetchState.value = UiState.Loading
+            _walletsFetchState.value = DataUiState.Loading
             try {
-                val result = firestoreRepository.getSubcollection(userId, "wallets")
+                val result = firestoreRepository.getFirstGradeSubcollection(userId, "wallets")
                 if (result.isSuccess) {
-                    _walletsFetchState.value = UiState.Success(result.getOrThrow())
+                    _walletsFetchState.value = DataUiState.Success(result.getOrThrow())
                 } else {
-                    _walletsFetchState.value = UiState.Error(Exception("Failed to fetch wallets"))
+                    _walletsFetchState.value = DataUiState.Error(Exception("Failed to fetch wallets"))
                 }
             } catch (e: Exception) {
-                _walletsFetchState.value = UiState.Error(e)
+                _walletsFetchState.value = DataUiState.Error(e)
             }
         }
     }
@@ -35,19 +36,13 @@ class WalletViewModel(private val firestoreRepository: DataBaseRepository = Fire
     fun addWallet(userId: String, walletName: String) {
         viewModelScope.launch {
             try {
-                _addWalletState.value = UiState.Loading
+                _addWalletState.value = DataUiState.Loading
                 firestoreRepository.addFirstGradeSubcollection(userId, walletName, "wallets")
-                _addWalletState.value = UiState.Success(Unit)
+                _addWalletState.value = DataUiState.Success(Unit)
                 fetchWallets(userId)
             } catch (e: Exception) {
-                _addWalletState.value = UiState.Error(e)
+                _addWalletState.value = DataUiState.Error(e)
             }
         }
     }
 }
-sealed class UiState<out T> {
-    object Loading : UiState<Nothing>()
-    data class Success<T>(val data: T) : UiState<T>()
-    data class Error(val exception: Throwable) : UiState<Nothing>()
-}
-

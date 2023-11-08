@@ -12,4 +12,5 @@ sealed class NavigationState(val route: String) {
     object AddTransactionScreen: NavigationState("AddTransactionScreen")
     object WalletsScreen: NavigationState("WalletsScreen")
     object CreateScreen: NavigationState("CreateScreen")
+    object BudgetConfigurationScreen: NavigationState("BudgetConfigurationScreen")
 }
