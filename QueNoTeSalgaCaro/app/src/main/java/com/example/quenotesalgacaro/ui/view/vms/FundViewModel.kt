@@ -5,8 +5,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import com.example.quenotesalgacaro.data.networking.Wallet
+import com.example.quenotesalgacaro.data.repository.DataBaseRepository
 
-class FundViewModel(private val firestoreRepository: FirebaseFirestoreRepository = FirebaseFirestoreRepository()) : ViewModel() {
+class FundViewModel(private val firestoreRepository: DataBaseRepository = FirebaseFirestoreRepository()) : ViewModel() {
 
     private val _fundsFetchState = MutableStateFlow<UiState<List<Wallet>>>(UiState.Loading)
     val fundFetchState = _fundsFetchState.asStateFlow()

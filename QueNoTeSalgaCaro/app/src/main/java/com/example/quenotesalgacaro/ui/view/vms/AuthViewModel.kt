@@ -1,9 +1,9 @@
 package com.example.quenotesalgacaro.ui.view.vms
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.quenotesalgacaro.data.repository.AuthRepository
+import com.example.quenotesalgacaro.data.repository.DataBaseRepository
 import com.example.quenotesalgacaro.data.repository.FirebaseAuthRepository
 import com.example.quenotesalgacaro.data.repository.FirebaseFirestoreRepository
 import com.example.quenotesalgacaro.ui.view.uistates.LoginUiState
@@ -13,8 +13,8 @@ import kotlinx.coroutines.launch
 
 
 class AuthViewModel(
-    private val firebaseAuthRepository: FirebaseAuthRepository = FirebaseAuthRepository(),
-    private val firebaseFirestoreRepository: FirebaseFirestoreRepository = FirebaseFirestoreRepository()
+    private val firebaseAuthRepository: AuthRepository = FirebaseAuthRepository(),
+    private val firebaseFirestoreRepository: DataBaseRepository = FirebaseFirestoreRepository()
 ) : ViewModel() {
 
     private val _loginUiState = MutableStateFlow<LoginUiState>(LoginUiState())
