@@ -7,11 +7,11 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 
-class FirebaseAuthRepository {
+class FirebaseAuthRepository : AuthRepository {
 
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    suspend fun registerNewUser(email: String, password: String): FirebaseUser? {
+    override suspend fun registerNewUser(email: String, password: String): FirebaseUser? {
         return withContext(Dispatchers.IO) {
             try {
                 val authResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
@@ -22,7 +22,7 @@ class FirebaseAuthRepository {
         }
     }
 
-    suspend fun signIn(email: String, password: String): FirebaseUser? {
+    override suspend fun signIn(email: String, password: String): FirebaseUser? {
         return withContext(Dispatchers.IO) {
             try {
                 val authResult = firebaseAuth.signInWithEmailAndPassword(email, password).await()
@@ -33,7 +33,7 @@ class FirebaseAuthRepository {
         }
     }
 
-    suspend fun signOut() {
+    override suspend fun signOut() {
         return withContext(Dispatchers.IO) {
             try {
                 firebaseAuth.signOut()
@@ -43,7 +43,7 @@ class FirebaseAuthRepository {
         }
     }
 
-    suspend fun deleteUser() {
+    override suspend fun deleteUser() {
         return withContext(Dispatchers.IO) {
             try {
                 firebaseAuth.currentUser?.delete()
@@ -53,7 +53,9 @@ class FirebaseAuthRepository {
         }
     }
 
-    fun getCurrentUser(): FirebaseUser? {
+    override fun getCurrentUser(): FirebaseUser? {
         return firebaseAuth.currentUser
     }
+
+
 }

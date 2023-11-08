@@ -7,11 +7,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
-class FirebaseFirestoreRepository {
+class FirebaseFirestoreRepository: DataBaseRepository {
 
     private val firebaseFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
-    suspend fun registerNewUser(user: FirebaseUser?, password: String) {
+    override suspend fun registerNewUser(user: FirebaseUser?, password: String) {
         return withContext(Dispatchers.IO) {
             try {
                 val userMap = hashMapOf(
@@ -19,20 +19,14 @@ class FirebaseFirestoreRepository {
                     "password" to password
                 )
                 firebaseFirestore.collection("users").document(user?.uid ?: "")
-                    .set(userMap)
-                    .addOnSuccessListener {
-                        println("User added successfully")
-                    }
-                    .addOnFailureListener {
-                        println("Error adding user")
-                    }
+                    .set(userMap).await()
             } catch (e: Exception) {
                 throw e
             }
         }
     }
 
-    suspend fun deleteUser(user: FirebaseUser?) {
+    override suspend fun deleteUser(user: FirebaseUser?) {
         return withContext(Dispatchers.IO) {
             try {
                 firebaseFirestore.collection("users").document(user?.uid ?: "")
@@ -49,7 +43,7 @@ class FirebaseFirestoreRepository {
         }
     }
 
-    suspend fun addFirstGradeSubcollection(uid: String?, name: String, collectionName: String): Result<Unit>  {
+    override suspend fun addFirstGradeSubcollection(uid: String?, name: String, collectionName: String): Result<Unit>  {
         return withContext(Dispatchers.IO) {
             try {
                 firebaseFirestore.collection("users").document(uid?: "")
@@ -66,7 +60,7 @@ class FirebaseFirestoreRepository {
 
     }
 
-    suspend fun getSubcollection(uid: String, collectionName: String): Result<List<Wallet>> {
+    override suspend fun getSubcollection(uid: String, collectionName: String): Result<List<Wallet>> {
         return withContext(Dispatchers.IO) {
             try {
                 val snapshot = firebaseFirestore.collection("users").document(uid)
