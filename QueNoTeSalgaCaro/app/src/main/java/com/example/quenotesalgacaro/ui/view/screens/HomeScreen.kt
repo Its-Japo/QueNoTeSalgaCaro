@@ -93,8 +93,6 @@ fun HomeScreen(
                 .fillMaxWidth()
                 .padding(10.dp, 60.dp, 10.dp, 84.dp),
         ) {
-
-
             ExposedDropdownMenuBox(
                 expanded = expandedDate,
                 onExpandedChange = {
@@ -298,7 +296,7 @@ fun HomeScreen(
                         ) {
                             Icon(
                                 painter = painterResource(
-                                    id = R.drawable.homeicon
+                                    id = R.drawable.option
                                 ),
                                 contentDescription = "Opciones",
                                 tint = MaterialTheme.colorScheme.primary
