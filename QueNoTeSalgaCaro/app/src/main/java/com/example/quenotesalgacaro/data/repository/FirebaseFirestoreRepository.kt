@@ -74,7 +74,13 @@ class FirebaseFirestoreRepository: DataBaseRepository {
                 val snapshot = firebaseFirestore.collection("users").document(uid)
                     .collection(collectionName).document(entity)
                     .collection(subcollectionName).get().await()
-                val budgets = snapshot.documents.mapNotNull { it.toObject(BudgetConfiguration::class.java) }
+                val budgets = snapshot.documents.mapNotNull { documentSnapshot ->
+                    val budget = documentSnapshot.toObject(BudgetConfiguration::class.java)
+                    if (budget != null) {
+                        budget.id = documentSnapshot.id
+                    }
+                    budget
+                }
                 Result.success(budgets)
             } catch (e: Exception) {
                 Result.failure(e)
@@ -82,19 +88,15 @@ class FirebaseFirestoreRepository: DataBaseRepository {
         }
     }
 
-    override suspend fun deleteSecondGradeSubcollectionDocument(
-        uid: String,
-        collectionName: String,
-        entity: String,
-        subcollectionName: String,
-        documentName: String
-    ): Result<Unit> {
+    override suspend fun deleteSecondGradeSubcollectionDocument(uid: String?, collectionName: String, entity: String, subcollectionName: String, documentName: String): Result<Unit> {
         return withContext(Dispatchers.IO) {
             try {
-                firebaseFirestore.collection("users").document(uid)
-                    .collection(collectionName).document(entity)
-                    .collection(subcollectionName).document(documentName)
-                    .delete().await()
+                if (uid != null) {
+                    firebaseFirestore.collection("users").document(uid)
+                        .collection(collectionName).document(entity)
+                        .collection(subcollectionName).document(documentName)
+                        .delete().await()
+                }
                 Result.success(Unit)
             } catch (e: Exception) {
                 Result.failure(e)
@@ -102,6 +104,26 @@ class FirebaseFirestoreRepository: DataBaseRepository {
         }
     }
 
+    override suspend fun addSecondGradeSubcollectionDocument(uid: String?, collectionName: String, entity: String, subcollectionName: String, budgetConfiguration: BudgetConfiguration): Result<Unit> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val budgetMap = hashMapOf(
+                    "amount" to budgetConfiguration.amount,
+                    "concept" to budgetConfiguration.concept
+                )
+
+                if (uid != null) {
+                    firebaseFirestore.collection("users").document(uid)
+                        .collection(collectionName).document(entity)
+                        .collection(subcollectionName).document()
+                        .set(budgetMap).await()
+                }
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
 
 
 }

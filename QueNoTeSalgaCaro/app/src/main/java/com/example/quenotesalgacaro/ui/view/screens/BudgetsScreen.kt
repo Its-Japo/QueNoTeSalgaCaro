@@ -39,6 +39,7 @@ import com.example.quenotesalgacaro.R
 import com.example.quenotesalgacaro.ui.view.composables.ButtonBar
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 
+
 @SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

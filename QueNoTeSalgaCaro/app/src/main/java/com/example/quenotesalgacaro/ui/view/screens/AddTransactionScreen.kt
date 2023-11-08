@@ -65,8 +65,10 @@ fun AddTransactionScreen(
         var expandedDate by remember { mutableStateOf(false) }
         var expandedWallet by remember { mutableStateOf(false) }
         var expandedCategory by remember { mutableStateOf(false) }
-        var descriptionText = remember { mutableStateOf(TextFieldValue()) }
-        var montoText = remember { mutableStateOf(TextFieldValue()) }
+        val descriptionText = remember { mutableStateOf(TextFieldValue()) }
+        val montoText = remember { mutableStateOf(TextFieldValue()) }
+
+
         Column(
             modifier = modifier
                 .fillMaxWidth()

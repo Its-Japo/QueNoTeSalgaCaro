@@ -1,5 +1,6 @@
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.quenotesalgacaro.data.networking.BudgetConfiguration
 import com.example.quenotesalgacaro.data.repository.FirebaseFirestoreRepository
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,6 +22,9 @@ class BudgetViewModel(
 
     private val _budgetConfigurationFetchState = MutableStateFlow<DataUiState<BudgetConfigurationStruct>>(DataUiState.Loading)
     val budgetConfigurationFetchState = _budgetConfigurationFetchState.asStateFlow()
+
+    private val _addRowState = MutableStateFlow<DataUiState<Unit>>(DataUiState.Success(Unit))
+    val addRowState = _addRowState.asStateFlow()
 
     fun fetchBudgets(userId: String) {
         viewModelScope.launch {
@@ -65,13 +69,31 @@ class BudgetViewModel(
         }
     }
 
-    fun deleteRow(userId: String, budgetName: String, fieldType: String, rowId: String) {
+    fun deleteRow(userId: String?, budgetName: String, fieldType: String, rowId: String) {
         viewModelScope.launch {
             try {
                 firestoreRepository.deleteSecondGradeSubcollectionDocument(userId, "budgets", budgetName, fieldType, rowId)
-                fetchBudgetConfiguration(userId, budgetName)
+                if (userId != null) {
+                    fetchBudgetConfiguration(userId, budgetName)
+                }
             } catch (e: Exception) {
                 _budgetConfigurationFetchState.value = DataUiState.Error(e)
+            }
+        }
+    }
+
+    fun addRow(userId: String, budgetName: String, rowType: String, amount: Float, concept: String) {
+        viewModelScope.launch {
+            _addBudgetState.value = DataUiState.Loading
+            try {
+                val result = firestoreRepository.addSecondGradeSubcollectionDocument(userId, "budgets", budgetName, rowType, BudgetConfiguration(amount = amount.toString(), concept = concept))
+                if (result.isSuccess) {
+                    _addBudgetState.value = DataUiState.Success(Unit)
+                } else {
+                    _addBudgetState.value = DataUiState.Error(Exception("Failed to add budget"))
+                }
+            } catch (e: Exception) {
+                _addBudgetState.value = DataUiState.Error(e)
             }
         }
     }
@@ -89,4 +111,6 @@ class BudgetViewModel(
             }
         }
     }
+
+
 }

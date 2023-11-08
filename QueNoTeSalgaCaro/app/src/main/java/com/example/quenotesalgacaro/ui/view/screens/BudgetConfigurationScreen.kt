@@ -92,11 +92,13 @@ fun BudgetConfigurationScreen(
                         )
                         Text(text = "Monto",
                             modifier = modifier
-                                .weight(1f)
+                                .weight(2f)
                                 .padding(0.dp, 0.dp, 10.dp, 0.dp)
                         )
                         IconButton(
-                            onClick = { /*TODO*/ },
+                            onClick = {
+                                navController.navigate("AddBudgetRowScreen/income/$id")
+                            },
                             modifier = modifier
                                 .weight(1f)
                                 .padding(0.dp, 0.dp, 10.dp, 0.dp)
@@ -128,11 +130,13 @@ fun BudgetConfigurationScreen(
                                 )
                                 Text(text = state.data.income[index].amount,
                                     modifier = modifier
-                                        .weight(1f)
+                                        .weight(2f)
                                         .padding(0.dp, 0.dp, 10.dp, 0.dp)
                                 )
                                 IconButton(
-                                    onClick = { /*TODO*/ },
+                                    onClick = {
+                                        budgetViewModel.deleteRow(userUid, id, "income", state.data.income[index].id)
+                                    },
                                     modifier = modifier
                                         .weight(1f)
                                         .padding(0.dp, 0.dp, 10.dp, 0.dp)) {
@@ -169,11 +173,13 @@ fun BudgetConfigurationScreen(
                         )
                         Text(text = "Monto",
                             modifier = modifier
-                                .weight(1f)
+                                .weight(2f)
                                 .padding(0.dp, 0.dp, 10.dp, 0.dp)
                         )
                         IconButton(
-                            onClick = { /*TODO*/ },
+                            onClick = {
+                                navController.navigate("AddBudgetRowScreen/fixedExpenses/$id")
+                            },
                             modifier = modifier
                                 .weight(1f)
                                 .padding(0.dp, 0.dp, 10.dp, 0.dp)
@@ -205,11 +211,13 @@ fun BudgetConfigurationScreen(
                                 )
                                 Text(text = state.data.fixedExpenses[index].amount,
                                     modifier = modifier
-                                        .weight(1f)
+                                        .weight(2f)
                                         .padding(0.dp, 0.dp, 10.dp, 0.dp)
                                 )
                                 IconButton(
-                                    onClick = { /*TODO*/ },
+                                    onClick = {
+                                        budgetViewModel.deleteRow(userUid, id, "fixedExpenses", state.data.fixedExpenses[index].id)
+                                    },
                                     modifier = modifier
                                         .weight(1f)
                                         .padding(0.dp, 0.dp, 10.dp, 0.dp)) {
@@ -246,11 +254,13 @@ fun BudgetConfigurationScreen(
                         )
                         Text(text = "Monto",
                             modifier = modifier
-                                .weight(1f)
+                                .weight(2f)
                                 .padding(0.dp, 0.dp, 10.dp, 0.dp)
                         )
                         IconButton(
-                            onClick = { /*TODO*/ },
+                            onClick = {
+                                navController.navigate("AddBudgetRowScreen/variableExpenses/$id")
+                            },
                             modifier = modifier
                                 .weight(1f)
                                 .padding(0.dp, 0.dp, 10.dp, 0.dp)
@@ -281,13 +291,15 @@ fun BudgetConfigurationScreen(
                                         .weight(2f)
                                         .padding(0.dp, 0.dp, 10.dp, 0.dp)
                                 )
-                                Text(text = "${state.data.variableExpenses[index].amount} ± ${((state.data.variableExpenses[index].amount.toInt())/10).toString()}",
+                                Text(text = "${state.data.variableExpenses[index].amount} ± ${((state.data.variableExpenses[index].amount.toFloat())/10)}",
                                     modifier = modifier
-                                        .weight(1f)
+                                        .weight(2f)
                                         .padding(0.dp, 0.dp, 10.dp, 0.dp)
                                 )
                                 IconButton(
-                                    onClick = { /*TODO*/ },
+                                    onClick = {
+                                        budgetViewModel.deleteRow(userUid, id, "variableExpenses", state.data.variableExpenses[index].id)
+                                    },
                                     modifier = modifier
                                         .weight(1f)
                                         .padding(0.dp, 0.dp, 10.dp, 0.dp)) {

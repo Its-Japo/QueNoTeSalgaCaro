@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.quenotesalgacaro.ui.view.screens.AccountScreen
+import com.example.quenotesalgacaro.ui.view.screens.AddBudgetRowScreen
 import com.example.quenotesalgacaro.ui.view.screens.BudgetsScreen
 import com.example.quenotesalgacaro.ui.view.screens.FundsScreen
 import com.example.quenotesalgacaro.ui.view.screens.HomeScreen
@@ -98,6 +99,17 @@ fun Navigation(
                 navController = navController,
                 authViewModel = authViewModel,
                 id = id!!
+            )
+        }
+        }
+        composable(NavigationState.AddBudgetRowScreen.route + "/{operation}/{id}") { backstackEntry -> run {
+            val operation = backstackEntry.arguments?.getString("operation")
+            val id = backstackEntry.arguments?.getString("id")
+            AddBudgetRowScreen(
+                navController = navController,
+                authViewModel = authViewModel,
+                operation = operation!!,
+                budgetName = id!!
             )
         }
         }

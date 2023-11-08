@@ -11,5 +11,6 @@ interface DataBaseRepository {
     suspend fun getFirstGradeSubcollection(uid: String, collectionName: String): Result<List<SimpleDocument>>
     suspend fun addFirstGradeSubcollection(uid: String?, name: String, collectionName: String): Result<Unit>
     suspend fun getSecondGradeSubcollection(uid: String, collectionName: String, entity: String, subcollectionName: String): Result<List<BudgetConfiguration>>
-    suspend fun deleteSecondGradeSubcollectionDocument(uid: String, collectionName: String, entity: String, subcollectionName: String, documentName: String): Result<Unit>
+    suspend fun deleteSecondGradeSubcollectionDocument(uid: String?, collectionName: String, entity: String, subcollectionName: String, documentName: String): Result<Unit>
+    suspend fun addSecondGradeSubcollectionDocument(uid: String?, collectionName: String, entity: String, subcollectionName: String, budgetConfiguration: BudgetConfiguration): Result<Unit>
 }
