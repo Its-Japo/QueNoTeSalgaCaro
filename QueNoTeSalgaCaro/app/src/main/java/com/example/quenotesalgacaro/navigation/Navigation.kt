@@ -21,6 +21,7 @@ import com.example.quenotesalgacaro.ui.view.screens.WalletsScreen
 import com.example.quenotesalgacaro.ui.view.screens.AddTransactionScreen
 import com.example.quenotesalgacaro.ui.view.screens.CreateScreen
 import com.example.quenotesalgacaro.ui.view.screens.BudgetConfigurationScreen
+import com.example.quenotesalgacaro.ui.view.screens.NavigationScreen
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 
 
@@ -38,7 +39,7 @@ fun Navigation(
         modifier = modifier,
         navController = navController,
         startDestination = if (isUserLoggedIn) {
-            NavigationState.HomeScreen.route
+            NavigationState.NavigationScreen.route
         } else {
             NavigationState.LoginScreen.route
         }
@@ -46,8 +47,8 @@ fun Navigation(
         composable(NavigationState.LoginScreen.route) {
             LoginScreen(navController = navController, viewModel = authViewModel)
         }
-        composable(NavigationState.HomeScreen.route) {
-            HomeScreen(navController = navController, viewModel = authViewModel)
+        composable(NavigationState.NavigationScreen.route) {
+            NavigationScreen(navController = navController, authViewModel = authViewModel)
         }
         composable(NavigationState.RegisterScreen.route) {
             RegisterScreen(navController = navController, viewModel = authViewModel)
@@ -66,9 +67,6 @@ fun Navigation(
         }
         composable(NavigationState.BudgetsScreen.route) {
             BudgetsScreen(navController = navController, authViewModel = authViewModel)
-        }
-        composable(NavigationState.AddTransactionScreen.route) {
-            AddTransactionScreen(navController = navController, viewModel = authViewModel)
         }
         composable(NavigationState.CreateScreen.route + "/{type}") { backstackEntry -> run {
             val type = backstackEntry.arguments?.getString("type")

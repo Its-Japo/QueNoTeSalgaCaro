@@ -22,7 +22,7 @@ import androidx.navigation.NavController
 import com.example.quenotesalgacaro.R
 
 @Composable
-fun BottomBar(
+fun BottomBar1(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
@@ -38,7 +38,6 @@ fun BottomBar(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-
         IconButton(
             onClick = { /*TODO*/ },
             modifier = Modifier
@@ -124,5 +123,6 @@ fun BottomBar(
                 tint = MaterialTheme.colorScheme.onSurface
             )
         }
+
     }
 }

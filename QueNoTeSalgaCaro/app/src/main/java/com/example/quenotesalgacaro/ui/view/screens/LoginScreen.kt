@@ -52,7 +52,7 @@ fun LoginScreen(
         viewModel.loginUiState.collectLatest { loginUiState ->
             if (loginUiState.user != null) {
                 Toast.makeText(context, "Usuario logueado", Toast.LENGTH_SHORT).show()
-                navController.navigate("HomeScreen") {
+                navController.navigate("NavigationScreen") {
                     popUpTo("LoginScreen") { inclusive = true }
                 }
             } else if (loginUiState.error != null) {

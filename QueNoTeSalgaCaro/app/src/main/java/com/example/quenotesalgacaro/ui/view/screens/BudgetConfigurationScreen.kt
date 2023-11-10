@@ -39,7 +39,7 @@ import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun BudgetConfigurationScreen(
     modifier: Modifier = Modifier,
@@ -67,56 +67,63 @@ fun BudgetConfigurationScreen(
         Column (
             modifier = modifier
                 .fillMaxWidth()
-                .padding(10.dp, 60.dp, 10.dp, 10.dp),
+                .padding(10.dp),
         ) {
             when (val state = budgetConfig) {
                 is DataUiState.Success -> {
-                    Text(
-                        text = "Ingresos",
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .padding(10.dp, 5.dp, 10.dp, 5.dp),
-                        fontSize = 20.sp,
-                        color = Color.LightGray
-                    )
-                    Row (
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .padding(0.dp, 0.dp, 10.dp, 0.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                    LazyColumn (
+                        contentPadding = it
                     ) {
-                        Text(text = "Concepto",
-                            modifier = modifier
-                                .weight(2f)
-                                .padding(0.dp, 0.dp, 10.dp, 0.dp)
-                        )
-                        Text(text = "Monto",
-                            modifier = modifier
-                                .weight(2f)
-                                .padding(0.dp, 0.dp, 10.dp, 0.dp)
-                        )
-                        IconButton(
-                            onClick = {
-                                navController.navigate("AddBudgetRowScreen/income/$id")
-                            },
-                            modifier = modifier
-                                .weight(1f)
-                                .padding(0.dp, 0.dp, 10.dp, 0.dp)
-                        ) {
-                            Icon (
-                                painter = painterResource(id = R.drawable.add_icon),
-                                contentDescription = null,
-                                tint = Color.Green
+                        item {
+                            Text(
+                                text = "Ingresos",
+                                modifier = modifier
+                                    .fillMaxWidth()
+                                    .padding(10.dp, 5.dp, 10.dp, 5.dp),
+                                fontSize = 20.sp,
+                                color = Color.LightGray
                             )
+                            Row (
+                                modifier = modifier
+                                    .fillMaxWidth()
+                                    .padding(0.dp, 0.dp, 10.dp, 0.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(text = "Concepto",
+                                    modifier = modifier
+                                        .weight(2f)
+                                        .padding(0.dp, 0.dp, 10.dp, 0.dp)
+                                )
+                                Text(text = "Monto",
+                                    modifier = modifier
+                                        .weight(2f)
+                                        .padding(0.dp, 0.dp, 10.dp, 0.dp)
+                                )
+                                IconButton(
+                                    onClick = {
+                                        navController.navigate("AddBudgetRowScreen/income/$id")
+                                    },
+                                    modifier = modifier
+                                        .weight(1f)
+                                        .padding(0.dp, 0.dp, 10.dp, 0.dp)
+                                ) {
+                                    Icon (
+                                        painter = painterResource(id = R.drawable.add_icon),
+                                        contentDescription = null,
+                                        tint = Color.Green
+                                    )
 
+                                }
+                            }
+                            Spacer(modifier = modifier
+                                .height(1.dp)
+                                .fillMaxWidth()
+                                .padding(20.dp, 0.dp, 20.dp, 0.dp)
+                                .background(Color.Gray)
+                            )
                         }
-                    }
-                    Spacer(modifier = modifier.height(1.dp)
-                        .fillMaxWidth()
-                        .padding(20.dp, 0.dp, 20.dp, 0.dp)
-                        .background(Color.Gray)
-                    )
-                    LazyColumn {
+
+
                         items(state.data.income.size) { index ->
                             Row (
                                 modifier = modifier
@@ -150,54 +157,57 @@ fun BudgetConfigurationScreen(
                                 }
                             }
                         }
-                    }
 
-                    Text(
-                        text = "Gastos Fijos",
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .padding(10.dp, 5.dp, 10.dp, 5.dp),
-                        fontSize = 20.sp,
-                        color = Color.LightGray
-                    )
-                    Row (
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .padding(0.dp, 0.dp, 10.dp, 0.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(text = "Concepto",
-                            modifier = modifier
-                                .weight(2f)
-                                .padding(0.dp, 0.dp, 10.dp, 0.dp)
-                        )
-                        Text(text = "Monto",
-                            modifier = modifier
-                                .weight(2f)
-                                .padding(0.dp, 0.dp, 10.dp, 0.dp)
-                        )
-                        IconButton(
-                            onClick = {
-                                navController.navigate("AddBudgetRowScreen/fixedExpenses/$id")
-                            },
-                            modifier = modifier
-                                .weight(1f)
-                                .padding(0.dp, 0.dp, 10.dp, 0.dp)
-                        ) {
-                            Icon (
-                                painter = painterResource(id = R.drawable.add_icon),
-                                contentDescription = null,
-                                tint = Color.Green
+                        item {
+                            Text(
+                                text = "Gastos Fijos",
+                                modifier = modifier
+                                    .fillMaxWidth()
+                                    .padding(10.dp, 5.dp, 10.dp, 5.dp),
+                                fontSize = 20.sp,
+                                color = Color.LightGray
                             )
+                            Row (
+                                modifier = modifier
+                                    .fillMaxWidth()
+                                    .padding(0.dp, 0.dp, 10.dp, 0.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(text = "Concepto",
+                                    modifier = modifier
+                                        .weight(2f)
+                                        .padding(0.dp, 0.dp, 10.dp, 0.dp)
+                                )
+                                Text(text = "Monto",
+                                    modifier = modifier
+                                        .weight(2f)
+                                        .padding(0.dp, 0.dp, 10.dp, 0.dp)
+                                )
+                                IconButton(
+                                    onClick = {
+                                        navController.navigate("AddBudgetRowScreen/fixedExpenses/$id")
+                                    },
+                                    modifier = modifier
+                                        .weight(1f)
+                                        .padding(0.dp, 0.dp, 10.dp, 0.dp)
+                                ) {
+                                    Icon (
+                                        painter = painterResource(id = R.drawable.add_icon),
+                                        contentDescription = null,
+                                        tint = Color.Green
+                                    )
 
+                                }
+                            }
+                            Spacer(modifier = modifier
+                                .height(1.dp)
+                                .fillMaxWidth()
+                                .padding(20.dp, 0.dp, 20.dp, 0.dp)
+                                .background(Color.Gray)
+                            )
                         }
-                    }
-                    Spacer(modifier = modifier.height(1.dp)
-                        .fillMaxWidth()
-                        .padding(20.dp, 0.dp, 20.dp, 0.dp)
-                        .background(Color.Gray)
-                    )
-                    LazyColumn {
+
+
                         items(state.data.fixedExpenses.size) { index ->
                             Row (
                                 modifier = modifier
@@ -231,55 +241,57 @@ fun BudgetConfigurationScreen(
                                 }
                             }
                         }
-                    }
 
-                    Text(
-                        text = "Gastos Variables",
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .padding(10.dp, 5.dp, 10.dp, 5.dp),
-                        fontSize = 20.sp,
-                        color = Color.LightGray
-                    )
-                    Row (
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .padding(0.dp, 0.dp, 10.dp, 0.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(text = "Concepto",
-                            modifier = modifier
-                                .weight(2f)
-                                .padding(0.dp, 0.dp, 10.dp, 0.dp)
-                        )
-                        Text(text = "Monto",
-                            modifier = modifier
-                                .weight(2f)
-                                .padding(0.dp, 0.dp, 10.dp, 0.dp)
-                        )
-                        IconButton(
-                            onClick = {
-                                navController.navigate("AddBudgetRowScreen/variableExpenses/$id")
-                            },
-                            modifier = modifier
-                                .weight(1f)
-                                .padding(0.dp, 0.dp, 10.dp, 0.dp)
-                        ) {
-                            Icon (
-                                painter = painterResource(id = R.drawable.add_icon),
-                                contentDescription = null,
-                                tint = Color.Green
+                        item {
+                            Text(
+                                text = "Gastos Variables",
+                                modifier = modifier
+                                    .fillMaxWidth()
+                                    .padding(10.dp, 5.dp, 10.dp, 5.dp),
+                                fontSize = 20.sp,
+                                color = Color.LightGray
                             )
+                            Row (
+                                modifier = modifier
+                                    .fillMaxWidth()
+                                    .padding(0.dp, 0.dp, 10.dp, 0.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(text = "Concepto",
+                                    modifier = modifier
+                                        .weight(2f)
+                                        .padding(0.dp, 0.dp, 10.dp, 0.dp)
+                                )
+                                Text(text = "Monto",
+                                    modifier = modifier
+                                        .weight(2f)
+                                        .padding(0.dp, 0.dp, 10.dp, 0.dp)
+                                )
+                                IconButton(
+                                    onClick = {
+                                        navController.navigate("AddBudgetRowScreen/variableExpenses/$id")
+                                    },
+                                    modifier = modifier
+                                        .weight(1f)
+                                        .padding(0.dp, 0.dp, 10.dp, 0.dp)
+                                ) {
+                                    Icon (
+                                        painter = painterResource(id = R.drawable.add_icon),
+                                        contentDescription = null,
+                                        tint = Color.Green
+                                    )
 
+                                }
+                            }
+                            Spacer(modifier = modifier
+                                .height(1.dp)
+                                .fillMaxWidth()
+                                .padding(20.dp, 0.dp, 20.dp, 0.dp)
+                                .background(Color.Gray)
+                            )
                         }
-                    }
-                    Spacer(modifier = modifier.height(1.dp)
-                        .fillMaxWidth()
-                        .padding(20.dp, 0.dp, 20.dp, 0.dp)
-                        .background(Color.Gray)
-                    )
 
-                    LazyColumn {
+
                         items(state.data.variableExpenses.size) { index ->
                             Row (
                                 modifier = modifier
@@ -315,6 +327,7 @@ fun BudgetConfigurationScreen(
 
                         }
                     }
+
                 }
                 is DataUiState.Error -> {
                     Text(text = "Error")
