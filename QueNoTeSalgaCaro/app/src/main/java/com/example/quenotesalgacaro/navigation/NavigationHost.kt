@@ -62,54 +62,7 @@ fun NavigationHost(
                 modifier = Modifier
                     .padding(12.dp)
             )
-            BottomNavigationItem(
-                icon = {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = NavigationBarState.StatsInfoScreen.icon),
-                        contentDescription = "Navigation Icon"
-                    )
-                },
-                selected = currentDestination?.hierarchy?.any {
-                    it.route == NavigationBarState.StatsInfoScreen.route
-                } == true,
-                unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
-                onClick = {
-                    navController.navigate(NavigationBarState.StatsInfoScreen.route) {
-                        popUpTo(navController.graph.findStartDestination().id)
-                        launchSingleTop = true
-                    }
-                },
-                modifier = Modifier
-                    .padding(12.dp)
-            )
-            BottomNavigationItem(
-                icon = {
-                    Surface (
-                        modifier = Modifier
-                            .width(60.dp)
-                            .height(60.dp),
-                        shape = MaterialTheme.shapes.large,
-                        color = MaterialTheme.colorScheme.primary
-                    ){
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = NavigationBarState.AddTransactionScreen.icon),
-                            contentDescription = "Navigation Icon"
-                        )
-                    }
-                },
-                selected = currentDestination?.hierarchy?.any {
-                    it.route == NavigationBarState.AddTransactionScreen.route
-                } == true,
-                unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
-                onClick = {
-                    navController.navigate(NavigationBarState.AddTransactionScreen.route) {
-                        popUpTo(navController.graph.findStartDestination().id)
-                        launchSingleTop = true
-                    }
-                },
-                modifier = Modifier
-                    .padding(12.dp)
-            )
+
             BottomNavigationItem(
                 icon = {
                     Icon(
@@ -130,6 +83,37 @@ fun NavigationHost(
                 modifier = Modifier
                     .padding(12.dp)
             )
+
+            BottomNavigationItem(
+                icon = {
+                    Surface (
+                        modifier = Modifier
+                            .width(60.dp)
+                            .height(60.dp),
+                        shape = MaterialTheme.shapes.large,
+                        color = MaterialTheme.colorScheme.primary
+                    ){
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = NavigationBarState.AddTransactionScreen.icon),
+                            contentDescription = "Navigation Icon",
+                            tint = Color.White
+                        )
+                    }
+                },
+                selected = currentDestination?.hierarchy?.any {
+                    it.route == NavigationBarState.AddTransactionScreen.route
+                } == true,
+                unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
+                onClick = {
+                    navController.navigate(NavigationBarState.AddTransactionScreen.route) {
+                        popUpTo(navController.graph.findStartDestination().id)
+                        launchSingleTop = true
+                    }
+                },
+                modifier = Modifier
+                    .padding(12.dp)
+            )
+
             BottomNavigationItem(
                 icon = {
                     Icon(
@@ -143,6 +127,26 @@ fun NavigationHost(
                 unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
                 onClick = {
                     navController.navigate(NavigationBarState.FundsInfoScreen.route) {
+                        popUpTo(navController.graph.findStartDestination().id)
+                        launchSingleTop = true
+                    }
+                },
+                modifier = Modifier
+                    .padding(12.dp)
+            )
+            BottomNavigationItem(
+                icon = {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = NavigationBarState.StatsInfoScreen.icon),
+                        contentDescription = "Navigation Icon"
+                    )
+                },
+                selected = currentDestination?.hierarchy?.any {
+                    it.route == NavigationBarState.StatsInfoScreen.route
+                } == true,
+                unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
+                onClick = {
+                    navController.navigate(NavigationBarState.StatsInfoScreen.route) {
                         popUpTo(navController.graph.findStartDestination().id)
                         launchSingleTop = true
                     }
