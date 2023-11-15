@@ -125,5 +125,21 @@ class FirebaseFirestoreRepository: DataBaseRepository {
         }
     }
 
+    override suspend fun updateDocument(uid: String?, collectionName: String, documentId: String, fieldName: String, element: Any): Result<Unit> {
+        return withContext(Dispatchers.IO) {
+            try {
+                if (uid != null) {
+                    firebaseFirestore.collection("users").document(uid)
+                        .collection(collectionName).document(documentId)
+                        .update(fieldName, element).await()
+                }
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+
+    }
+
 
 }

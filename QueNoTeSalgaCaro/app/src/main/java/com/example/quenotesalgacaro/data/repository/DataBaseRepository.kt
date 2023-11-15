@@ -13,4 +13,5 @@ interface DataBaseRepository {
     suspend fun getSecondGradeSubcollection(uid: String, collectionName: String, entity: String, subcollectionName: String): Result<List<BudgetConfiguration>>
     suspend fun deleteSecondGradeSubcollectionDocument(uid: String?, collectionName: String, entity: String, subcollectionName: String, documentName: String): Result<Unit>
     suspend fun addSecondGradeSubcollectionDocument(uid: String?, collectionName: String, entity: String, subcollectionName: String, budgetConfiguration: BudgetConfiguration): Result<Unit>
+    suspend fun updateDocument(uid: String?, collectionName: String, documentId: String, fieldName: String, element: Any): Result<Unit>
 }

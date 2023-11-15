@@ -22,6 +22,7 @@ import com.example.quenotesalgacaro.ui.view.screens.AddTransactionScreen
 import com.example.quenotesalgacaro.ui.view.screens.CreateScreen
 import com.example.quenotesalgacaro.ui.view.screens.BudgetConfigurationScreen
 import com.example.quenotesalgacaro.ui.view.screens.NavigationScreen
+import com.example.quenotesalgacaro.ui.view.screens.WalletConfigurationScreen
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 
 
@@ -111,5 +112,15 @@ fun Navigation(
             )
         }
         }
+        composable(NavigationState.WalletConfigurationScreen.route + "/{walletname}") {navBackStackEntry -> run{
+            val walletName = navBackStackEntry.arguments?.getString("walletname")
+            WalletConfigurationScreen(
+                navController = navController,
+                authViewModel = authViewModel,
+                walletName = walletName!!
+            )
+        }
+        }
     }
 }
+

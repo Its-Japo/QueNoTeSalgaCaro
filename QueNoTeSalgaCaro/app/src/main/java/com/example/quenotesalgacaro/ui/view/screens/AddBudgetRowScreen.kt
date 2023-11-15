@@ -35,7 +35,7 @@ import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("StateFlowValueCalledInComposition", "UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun AddBudgetRowScreen(
     navController: NavController,

@@ -11,7 +11,6 @@ import com.example.quenotesalgacaro.ui.view.uistates.RegisterUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-
 class AuthViewModel(
     private val firebaseAuthRepository: AuthRepository = FirebaseAuthRepository(),
     private val firebaseFirestoreRepository: DataBaseRepository = FirebaseFirestoreRepository()

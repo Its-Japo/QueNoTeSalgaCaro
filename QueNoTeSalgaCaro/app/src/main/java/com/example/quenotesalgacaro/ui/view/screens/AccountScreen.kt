@@ -26,7 +26,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.quenotesalgacaro.navigation.TopBar
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
-
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,6 +34,7 @@ fun AccountScreen(
     modifier: Modifier = Modifier,
     viewModel: AuthViewModel = viewModel()
 ){
+
     Scaffold (
         topBar = {
             TopBar(title = "Settings", navController = navController)

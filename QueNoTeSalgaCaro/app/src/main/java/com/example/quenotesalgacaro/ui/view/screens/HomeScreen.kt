@@ -21,7 +21,6 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -35,12 +34,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.example.quenotesalgacaro.R
-import com.example.quenotesalgacaro.navigation.TopBar
-import com.example.quenotesalgacaro.ui.view.uistates.FilaTabla
+import com.example.quenotesalgacaro.ui.view.struct.FilaTabla
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 
 
@@ -301,5 +297,4 @@ fun HomeScreen(
         )
 
     }
-
 }

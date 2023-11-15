@@ -20,6 +20,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             QueNoTeSalgaCaroTheme {
                 val authViewModel: AuthViewModel = viewModel()
+
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

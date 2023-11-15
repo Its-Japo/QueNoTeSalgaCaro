@@ -16,6 +16,9 @@ class WalletViewModel(private val firestoreRepository: DataBaseRepository = Fire
     private val _addWalletState = MutableStateFlow<DataUiState<Unit>>(DataUiState.Loading)
     val addWalletState = _addWalletState.asStateFlow()
 
+    private val _addWalletCategoryState = MutableStateFlow<DataUiState<Unit>>(DataUiState.Loading)
+    val addWalletCategoryState = _addWalletCategoryState.asStateFlow()
+
     fun fetchWallets(userId: String) {
         viewModelScope.launch {
             _walletsFetchState.value = DataUiState.Loading
@@ -42,6 +45,19 @@ class WalletViewModel(private val firestoreRepository: DataBaseRepository = Fire
                 fetchWallets(userId)
             } catch (e: Exception) {
                 _addWalletState.value = DataUiState.Error(e)
+            }
+        }
+    }
+
+    fun addWalletCategory(userId: String, walletName: String, element: String) {
+        viewModelScope.launch {
+            try {
+                _addWalletCategoryState.value = DataUiState.Loading
+                firestoreRepository.updateDocument(userId, "wallets", walletName, "categories", element)
+                _addWalletCategoryState.value = DataUiState.Success(Unit)
+                fetchWallets(userId)
+            } catch (e: Exception) {
+                _addWalletCategoryState.value = DataUiState.Error(e)
             }
         }
     }
