@@ -1,6 +1,5 @@
 package com.example.quenotesalgacaro.ui.view.screens
 
-import BudgetViewModel
 import WalletViewModel
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
@@ -10,18 +9,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Text
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,34 +39,32 @@ import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun AddBudgetRowScreen(
+fun AddWalletCategoryRowScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
     authViewModel: AuthViewModel = viewModel(),
-    budgetViewModel: BudgetViewModel = viewModel(),
-    operation: String,
-    budgetName: String
+    walletViewModel: WalletViewModel = viewModel(),
+    walletName: String
 ) {
-    val amout = remember { mutableStateOf("") }
-    val concept = remember { mutableStateOf("") }
 
-    val addRowConfig by budgetViewModel.addRowState.collectAsState()
+    val category = remember { mutableStateOf("") }
 
+    val addCategoryState by walletViewModel.addWalletCategoryState.collectAsState()
 
     val userUid = authViewModel.loginUiState.value.user?.uid
 
     Scaffold(
         topBar = {
-            TopBar(title = "Add Budget Row", navController = navController)
+            TopBar(title = "Add Category", navController = navController)
         }
     ){
         paddingValues ->
-        when(val state = addRowConfig){
+        when(val state = addCategoryState){
             is DataUiState.Loading -> {
                 Column (
                     modifier = modifier
                         .fillMaxSize()
-                        .padding(10.dp, 10.dp, 10.dp, 10.dp),
+                        .padding(paddingValues),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
 
@@ -83,36 +79,17 @@ fun AddBudgetRowScreen(
                 Column (
                     modifier = modifier
                         .padding(paddingValues),
-                    horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     TextField(
-                        value = amout.value,
-                        onValueChange = { amout.value = it },
+                        value = category.value,
+                        onValueChange = { category.value = it },
                         modifier = modifier
                             .fillMaxWidth()
                             .padding(16.dp),
                         label = {
                             androidx.compose.material.Text(
-                                text = "Amount",
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                        },
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = MaterialTheme.colorScheme.surface,
-                        ),
-                        maxLines = 1,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                    )
-
-                    TextField(
-                        value = concept.value,
-                        onValueChange = { concept.value = it },
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        label = {
-                            androidx.compose.material.Text(
-                                text = "Concept",
+                                text = "Category",
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                         },
@@ -121,10 +98,12 @@ fun AddBudgetRowScreen(
                         ),
                         maxLines = 1
                     )
+
+
                     Button(
                         onClick = {
                             if (userUid != null) {
-                                budgetViewModel.addRow(userUid, budgetName, operation, amout.value.toFloat(), concept.value)
+                                walletViewModel.addWalletCategory(userUid, walletName, category.value)
                                 navController.navigateUp()
                             }
                         },
@@ -155,4 +134,6 @@ fun AddBudgetRowScreen(
 
 
     }
+
+
 }

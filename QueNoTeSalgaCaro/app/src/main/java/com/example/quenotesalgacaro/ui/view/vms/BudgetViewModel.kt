@@ -47,16 +47,15 @@ class BudgetViewModel(
             _budgetConfigurationFetchState.value = DataUiState.Loading
             var configuration: BudgetConfigurationStruct = BudgetConfigurationStruct()
             try {
-
-                val income = firestoreRepository.getSecondGradeSubcollection(userId, "budgets", budgetName, "income")
+                val income = firestoreRepository.getSecondGradeSubcollectionBudget(userId, "budgets", budgetName, "income")
                 if (income.isSuccess) {
                     configuration = configuration.copy(income = income.getOrThrow())
                 }
-                val fixedCosts = firestoreRepository.getSecondGradeSubcollection(userId, "budgets", budgetName, "fixedExpenses")
+                val fixedCosts = firestoreRepository.getSecondGradeSubcollectionBudget(userId, "budgets", budgetName, "fixedExpenses")
                 if (fixedCosts.isSuccess) {
                     configuration = configuration.copy(fixedExpenses = fixedCosts.getOrThrow())
                 }
-                val variableCosts = firestoreRepository.getSecondGradeSubcollection(userId, "budgets", budgetName, "variableExpenses")
+                val variableCosts = firestoreRepository.getSecondGradeSubcollectionBudget(userId, "budgets", budgetName, "variableExpenses")
                 if (variableCosts.isSuccess) {
                     configuration = configuration.copy(variableExpenses = variableCosts.getOrThrow())
                 }
@@ -86,7 +85,7 @@ class BudgetViewModel(
         viewModelScope.launch {
             _addBudgetState.value = DataUiState.Loading
             try {
-                val result = firestoreRepository.addSecondGradeSubcollectionDocument(userId, "budgets", budgetName, rowType, BudgetConfiguration(amount = amount.toString(), concept = concept))
+                val result = firestoreRepository.addSecondGradeSubcollectionDocumentBudget(userId, "budgets", budgetName, rowType, BudgetConfiguration(amount = amount.toString(), concept = concept))
                 if (result.isSuccess) {
                     _addBudgetState.value = DataUiState.Success(Unit)
                 } else {

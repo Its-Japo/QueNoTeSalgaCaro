@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import com.example.quenotesalgacaro.data.networking.SimpleDocument
 import com.example.quenotesalgacaro.data.repository.DataBaseRepository
+import com.example.quenotesalgacaro.ui.view.struct.BudgetConfigurationStruct
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 
 class WalletViewModel(private val firestoreRepository: DataBaseRepository = FirebaseFirestoreRepository()) : ViewModel() {
@@ -16,8 +17,11 @@ class WalletViewModel(private val firestoreRepository: DataBaseRepository = Fire
     private val _addWalletState = MutableStateFlow<DataUiState<Unit>>(DataUiState.Loading)
     val addWalletState = _addWalletState.asStateFlow()
 
-    private val _addWalletCategoryState = MutableStateFlow<DataUiState<Unit>>(DataUiState.Loading)
+    private val _addWalletCategoryState = MutableStateFlow<DataUiState<Unit>>(DataUiState.Success(Unit))
     val addWalletCategoryState = _addWalletCategoryState.asStateFlow()
+
+    private val _fetchWalletCategoriesState = MutableStateFlow<DataUiState<List<SimpleDocument>>>(DataUiState.Loading)
+    val fetchWalletCategoriesState = _fetchWalletCategoriesState.asStateFlow()
 
     fun fetchWallets(userId: String) {
         viewModelScope.launch {
@@ -53,11 +57,37 @@ class WalletViewModel(private val firestoreRepository: DataBaseRepository = Fire
         viewModelScope.launch {
             try {
                 _addWalletCategoryState.value = DataUiState.Loading
-                firestoreRepository.updateDocument(userId, "wallets", walletName, "categories", element)
+                firestoreRepository.addSecondGradeSubcollectionDocumentWallet(userId, "wallets", walletName, "categories", SimpleDocument(element))
                 _addWalletCategoryState.value = DataUiState.Success(Unit)
                 fetchWallets(userId)
             } catch (e: Exception) {
                 _addWalletCategoryState.value = DataUiState.Error(e)
+            }
+        }
+    }
+
+    fun fetchWalletCategories(userId: String, walletName: String){
+        viewModelScope.launch {
+            try {
+                _fetchWalletCategoriesState.value = DataUiState.Loading
+                val categories = firestoreRepository.getSecondGradeSubcollectionWallet(userId, "wallets", walletName, "categories")
+                _fetchWalletCategoriesState.value = DataUiState.Success(categories.getOrThrow())
+
+            } catch (e: Exception) {
+                _fetchWalletCategoriesState.value = DataUiState.Error(e)
+            }
+        }
+    }
+
+    fun deleteWalletCategory(userId: String?, walletName: String, rowId: String){
+        viewModelScope.launch {
+            try {
+                firestoreRepository.deleteSecondGradeSubcollectionDocument(userId, "wallets", walletName, "categories", rowId)
+                if (userId != null) {
+                    fetchWalletCategories(userId, walletName)
+                }
+            } catch (e: Exception) {
+                _fetchWalletCategoriesState.value = DataUiState.Error(e)
             }
         }
     }
