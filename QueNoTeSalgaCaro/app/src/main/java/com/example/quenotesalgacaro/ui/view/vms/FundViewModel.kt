@@ -1,12 +1,12 @@
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.quenotesalgacaro.data.repository.FirebaseFirestoreRepository
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import com.example.quenotesalgacaro.data.networking.SimpleDocument
 import com.example.quenotesalgacaro.data.repository.DataBaseRepository
+import com.example.quenotesalgacaro.data.repository.FirebaseFirestoreRepository
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class FundViewModel(private val firestoreRepository: DataBaseRepository = FirebaseFirestoreRepository()) : ViewModel() {
 

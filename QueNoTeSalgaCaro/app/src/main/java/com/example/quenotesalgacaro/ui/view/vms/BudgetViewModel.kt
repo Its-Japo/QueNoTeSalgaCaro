@@ -1,14 +1,14 @@
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quenotesalgacaro.data.networking.BudgetConfiguration
-import com.example.quenotesalgacaro.data.repository.FirebaseFirestoreRepository
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import com.example.quenotesalgacaro.data.networking.SimpleDocument
 import com.example.quenotesalgacaro.data.repository.DataBaseRepository
+import com.example.quenotesalgacaro.data.repository.FirebaseFirestoreRepository
 import com.example.quenotesalgacaro.ui.view.struct.BudgetConfigurationStruct
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class BudgetViewModel(
     private val firestoreRepository: DataBaseRepository = FirebaseFirestoreRepository()

@@ -27,11 +27,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.example.quenotesalgacaro.R
-import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.quenotesalgacaro.R
 import com.example.quenotesalgacaro.navigation.TopBar
+import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 

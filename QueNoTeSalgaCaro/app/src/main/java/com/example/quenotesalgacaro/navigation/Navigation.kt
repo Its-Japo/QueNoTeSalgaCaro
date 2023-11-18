@@ -11,22 +11,18 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.quenotesalgacaro.ui.view.screens.AccountScreen
 import com.example.quenotesalgacaro.ui.view.screens.AddBudgetRowScreen
+import com.example.quenotesalgacaro.ui.view.screens.AddWalletCategoryRowScreen
+import com.example.quenotesalgacaro.ui.view.screens.BudgetConfigurationScreen
 import com.example.quenotesalgacaro.ui.view.screens.BudgetsScreen
+import com.example.quenotesalgacaro.ui.view.screens.CreateScreen
 import com.example.quenotesalgacaro.ui.view.screens.FundsScreen
-import com.example.quenotesalgacaro.ui.view.screens.HomeScreen
 import com.example.quenotesalgacaro.ui.view.screens.LoginScreen
+import com.example.quenotesalgacaro.ui.view.screens.NavigationScreen
 import com.example.quenotesalgacaro.ui.view.screens.RegisterScreen
 import com.example.quenotesalgacaro.ui.view.screens.SettingsScreen
-import com.example.quenotesalgacaro.ui.view.screens.WalletsScreen
-import com.example.quenotesalgacaro.ui.view.screens.AddTransactionScreen
-import com.example.quenotesalgacaro.ui.view.screens.AddWalletCategoryRowScreen
-import com.example.quenotesalgacaro.ui.view.screens.CreateScreen
-import com.example.quenotesalgacaro.ui.view.screens.BudgetConfigurationScreen
-import com.example.quenotesalgacaro.ui.view.screens.NavigationScreen
 import com.example.quenotesalgacaro.ui.view.screens.WalletConfigurationScreen
+import com.example.quenotesalgacaro.ui.view.screens.WalletsScreen
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
-
-
 
 
 @Composable

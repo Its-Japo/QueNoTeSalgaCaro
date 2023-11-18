@@ -41,12 +41,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.quenotesalgacaro.R
-import com.example.quenotesalgacaro.ui.view.struct.FilaTabla
-import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.quenotesalgacaro.R
 import com.example.quenotesalgacaro.data.networking.SimpleDocument
+import com.example.quenotesalgacaro.ui.view.struct.FilaTabla
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
+import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
