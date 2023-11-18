@@ -9,7 +9,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -26,7 +25,6 @@ import com.example.quenotesalgacaro.navigation.TopBar
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountScreen(
     navController: NavHostController,
@@ -83,7 +81,7 @@ fun AccountScreen(
                         containerColor = Color.White,
                         contentColor = Color.Red
                     ),
-                    enabled = if (viewModel.loginUiState.value.user != null) true else false
+                    enabled = viewModel.loginUiState.value.user != null
                 ) {
                     Text(text = "Cerrar Sesión")
                 }
@@ -101,7 +99,7 @@ fun AccountScreen(
                         containerColor = Color.Red,
                         contentColor = Color.White
                     ),
-                    enabled = if (viewModel.loginUiState.value.user != null) true else false
+                    enabled = viewModel.loginUiState.value.user != null
                 ) {
                     Text(text = "Eliminar Cuenta")
                 }

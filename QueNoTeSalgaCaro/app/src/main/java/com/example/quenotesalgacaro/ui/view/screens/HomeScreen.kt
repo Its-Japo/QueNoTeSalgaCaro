@@ -1,6 +1,6 @@
 package com.example.quenotesalgacaro.ui.view.screens
 
-import WalletViewModel
+import com.example.quenotesalgacaro.ui.view.vms.WalletViewModel
 import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.background

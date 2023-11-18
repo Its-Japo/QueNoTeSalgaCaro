@@ -1,6 +1,6 @@
 package com.example.quenotesalgacaro.ui.view.screens
 
-import FundViewModel
+import com.example.quenotesalgacaro.ui.view.vms.FundViewModel
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

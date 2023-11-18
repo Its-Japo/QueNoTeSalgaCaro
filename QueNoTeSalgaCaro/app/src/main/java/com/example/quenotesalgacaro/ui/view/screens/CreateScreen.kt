@@ -1,8 +1,7 @@
 package com.example.quenotesalgacaro.ui.view.screens
 
-import BudgetViewModel
-import FundViewModel
-import WalletViewModel
+import com.example.quenotesalgacaro.ui.view.vms.FundViewModel
+import com.example.quenotesalgacaro.ui.view.vms.WalletViewModel
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +24,7 @@ import androidx.navigation.NavHostController
 import com.example.quenotesalgacaro.navigation.TopBar
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
+import com.example.quenotesalgacaro.ui.view.vms.BudgetViewModel
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")

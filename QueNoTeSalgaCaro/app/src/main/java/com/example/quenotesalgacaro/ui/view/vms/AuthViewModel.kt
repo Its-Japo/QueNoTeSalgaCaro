@@ -16,10 +16,10 @@ class AuthViewModel(
     private val firebaseFirestoreRepository: DataBaseRepository = FirebaseFirestoreRepository()
 ) : ViewModel() {
 
-    private val _loginUiState = MutableStateFlow<LoginUiState>(LoginUiState())
+    private val _loginUiState = MutableStateFlow(LoginUiState())
     val loginUiState: MutableStateFlow<LoginUiState> = _loginUiState
 
-    private val _registerUiState = MutableStateFlow<RegisterUiState>(RegisterUiState())
+    private val _registerUiState = MutableStateFlow(RegisterUiState())
     val registerUiState: MutableStateFlow<RegisterUiState> = _registerUiState
 
     init {

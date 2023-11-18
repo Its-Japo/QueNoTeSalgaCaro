@@ -1,3 +1,5 @@
+package com.example.quenotesalgacaro.ui.view.vms
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quenotesalgacaro.data.networking.BudgetConfiguration
@@ -45,7 +47,7 @@ class BudgetViewModel(
     fun fetchBudgetConfiguration(userId: String, budgetName: String) {
         viewModelScope.launch {
             _budgetConfigurationFetchState.value = DataUiState.Loading
-            var configuration: BudgetConfigurationStruct = BudgetConfigurationStruct()
+            var configuration = BudgetConfigurationStruct()
             try {
                 val income = firestoreRepository.getSecondGradeSubcollectionBudget(userId, "budgets", budgetName, "income")
                 if (income.isSuccess) {

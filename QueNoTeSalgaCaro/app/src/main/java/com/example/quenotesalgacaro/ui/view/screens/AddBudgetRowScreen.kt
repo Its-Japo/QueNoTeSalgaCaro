@@ -1,6 +1,5 @@
 package com.example.quenotesalgacaro.ui.view.screens
 
-import BudgetViewModel
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,6 +28,7 @@ import com.example.quenotesalgacaro.navigation.TopBar
 import com.example.quenotesalgacaro.ui.view.composables.LoadingScreen
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
+import com.example.quenotesalgacaro.ui.view.vms.BudgetViewModel
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable

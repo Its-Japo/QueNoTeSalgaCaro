@@ -1,3 +1,5 @@
+package com.example.quenotesalgacaro.ui.view.vms
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quenotesalgacaro.data.networking.SimpleDocument

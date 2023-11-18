@@ -1,6 +1,5 @@
 package com.example.quenotesalgacaro.ui.view.screens
 
-import BudgetViewModel
 import android.annotation.SuppressLint
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -20,6 +19,7 @@ import com.example.quenotesalgacaro.ui.view.composables.InfoBar
 import com.example.quenotesalgacaro.ui.view.composables.LoadingScreen
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
+import com.example.quenotesalgacaro.ui.view.vms.BudgetViewModel
 
 
 @SuppressLint("StateFlowValueCalledInComposition")

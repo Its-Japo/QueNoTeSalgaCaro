@@ -1,6 +1,6 @@
 package com.example.quenotesalgacaro.ui.view.screens
 
-import WalletViewModel
+import com.example.quenotesalgacaro.ui.view.vms.WalletViewModel
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

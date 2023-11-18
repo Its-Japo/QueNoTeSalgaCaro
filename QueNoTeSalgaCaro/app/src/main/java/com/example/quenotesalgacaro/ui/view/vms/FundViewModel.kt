@@ -1,7 +1,8 @@
+package com.example.quenotesalgacaro.ui.view.vms
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quenotesalgacaro.data.networking.FundData
-import com.example.quenotesalgacaro.data.networking.SimpleDocument
 import com.example.quenotesalgacaro.data.repository.DataBaseRepository
 import com.example.quenotesalgacaro.data.repository.FirebaseFirestoreRepository
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState

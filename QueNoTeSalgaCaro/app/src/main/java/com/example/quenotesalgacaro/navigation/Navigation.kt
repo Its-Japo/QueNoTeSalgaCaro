@@ -1,9 +1,8 @@
 package com.example.quenotesalgacaro.navigation
 
 
-import BudgetViewModel
-import FundViewModel
-import WalletViewModel
+import com.example.quenotesalgacaro.ui.view.vms.FundViewModel
+import com.example.quenotesalgacaro.ui.view.vms.WalletViewModel
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
@@ -23,6 +22,7 @@ import com.example.quenotesalgacaro.ui.view.screens.SettingsScreen
 import com.example.quenotesalgacaro.ui.view.screens.WalletConfigurationScreen
 import com.example.quenotesalgacaro.ui.view.screens.WalletsScreen
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
+import com.example.quenotesalgacaro.ui.view.vms.BudgetViewModel
 
 
 @Composable
