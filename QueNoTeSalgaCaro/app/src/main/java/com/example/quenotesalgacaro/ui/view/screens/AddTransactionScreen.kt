@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.Text
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -28,13 +30,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import com.example.quenotesalgacaro.ui.view.composables.DatePickerDialogD
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,7 +44,8 @@ import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 fun AddTransactionScreen(
     //navController: NavController,
     modifier: Modifier = Modifier,
-    viewModel: AuthViewModel = viewModel()
+    viewModel: AuthViewModel = viewModel(),
+    paddingValues: PaddingValues
 ){
     val context = LocalContext.current
     val wallets = arrayOf("Wallet 1", "Wallet 2", "Wallet 3", "Wallet 4", "Wallet 5")
@@ -55,14 +57,16 @@ fun AddTransactionScreen(
     var expandedDate by remember { mutableStateOf(false) }
     var expandedWallet by remember { mutableStateOf(false) }
     var expandedCategory by remember { mutableStateOf(false) }
+    var seletedDate by remember { mutableStateOf("") }
     val descriptionText = remember { mutableStateOf(TextFieldValue()) }
     val montoText = remember { mutableStateOf(TextFieldValue()) }
+
 
 
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(10.dp, 60.dp),
+            .padding(paddingValues = paddingValues),
         verticalArrangement = Arrangement.SpaceAround,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
@@ -93,8 +97,10 @@ fun AddTransactionScreen(
                             color = MaterialTheme.colorScheme.onSurface
                         )
                     },
-                    colors = TextFieldDefaults.textFieldColors(
-                        containerColor = MaterialTheme.colorScheme.surface,
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        disabledContainerColor = MaterialTheme.colorScheme.surface,
                     )
                 )
                 ExposedDropdownMenu(
@@ -113,47 +119,7 @@ fun AddTransactionScreen(
                     }
                 }
             }
-
-            ExposedDropdownMenuBox(
-                expanded = expandedDate,
-                onExpandedChange = { expandedDate = !expandedDate },
-                modifier = modifier
-                    .padding(12.dp)
-            ) {
-                TextField(
-                    value = selectedDate,
-                    onValueChange = {},
-                    readOnly = true,
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedDate) },
-                    modifier = modifier
-                        .menuAnchor()
-                        .width(170.dp),
-                    label = {
-                        Text(
-                            text = "Fecha:",
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                    },
-                    colors = TextFieldDefaults.textFieldColors(
-                        containerColor = MaterialTheme.colorScheme.surface,
-                    )
-                )
-                ExposedDropdownMenu(
-                    expanded = expandedDate,
-                    onDismissRequest = { expandedDate = false }
-                ) {
-                    dates.forEach { item ->
-                        DropdownMenuItem(
-                            text = { androidx.compose.material3.Text(text = item) },
-                            onClick = {
-                                selectedDate = item
-                                expandedDate = false
-                                Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
-                            }
-                        )
-                    }
-                }
-            }
+            DatePickerDialogD(onDateSelected = { seletedDate = it })
         }
 
         ExposedDropdownMenuBox(
@@ -176,8 +142,10 @@ fun AddTransactionScreen(
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 },
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    disabledContainerColor = MaterialTheme.colorScheme.surface,
                 )
             )
             ExposedDropdownMenu(
@@ -210,8 +178,10 @@ fun AddTransactionScreen(
                     color = MaterialTheme.colorScheme.onSurface
                 )
             },
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = MaterialTheme.colorScheme.surface,
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                disabledContainerColor = MaterialTheme.colorScheme.surface,
             )
         )
 
@@ -227,8 +197,10 @@ fun AddTransactionScreen(
                     color = MaterialTheme.colorScheme.onSurface
                 )
             },
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = MaterialTheme.colorScheme.surface,
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                disabledContainerColor = MaterialTheme.colorScheme.surface,
             ),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )

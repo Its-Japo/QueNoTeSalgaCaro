@@ -41,7 +41,7 @@ fun NavigationHost(
                 icon = {
                     Icon(
                         imageVector = ImageVector.vectorResource(id = NavigationBarState.HomeScreen.icon),
-                        contentDescription = "Navigation Icon"
+                        contentDescription = "Navigation Icon",
                     )
                 },
                 selected = currentDestination?.hierarchy?.any {

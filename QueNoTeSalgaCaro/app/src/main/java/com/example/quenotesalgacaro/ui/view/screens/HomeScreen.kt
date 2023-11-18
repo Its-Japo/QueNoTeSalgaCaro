@@ -4,13 +4,12 @@ import WalletViewModel
 import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -36,7 +35,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -57,12 +55,13 @@ fun HomeScreen(
     //navController: NavController,
     modifier: Modifier = Modifier,
     viewModel: AuthViewModel = viewModel(),
-    walletViewModel: WalletViewModel = viewModel()
+    walletViewModel: WalletViewModel = viewModel(),
+    paddingValues: PaddingValues
 ) {
 
     val context = LocalContext.current
     val dates = listOf("Ago 2023", "Sep 2023", "Oct 2023", "Nov 2023", "Dic 2023")
-    var wallets: List<SimpleDocument> = emptyList()
+    val wallets: List<SimpleDocument>
 
     var expandedDate by remember { mutableStateOf(false) }
     var expandedWallet by remember { mutableStateOf(false) }
@@ -72,7 +71,7 @@ fun HomeScreen(
     val total = 12000.00
     val progress = (total - saldo)/total
 
-    var elementosTabla = mutableListOf<FilaTabla>(
+    val elementosTabla = mutableListOf(
         FilaTabla("1", "Comida", "Q100.00"),
         FilaTabla("2", "Comida", "Q100.00"),
         FilaTabla("2","Cine","Q50.00"),
@@ -104,11 +103,11 @@ fun HomeScreen(
         is DataUiState.Success -> {
             wallets = (state.data)
             var selectedDate by remember { mutableStateOf(dates[0]) }
-            var selectedWallet by remember { mutableStateOf(wallets.get(0)) }
+            var selectedWallet by remember { mutableStateOf(wallets[0]) }
             Column (
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(10.dp, 60.dp),
+                    .padding(paddingValues = paddingValues),
             ) {
                 ExposedDropdownMenuBox(
                     expanded = expandedDate,
@@ -134,8 +133,10 @@ fun HomeScreen(
                                 text = "Fecha"
                             )
                         },
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = MaterialTheme.colorScheme.surface,
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                            disabledContainerColor = MaterialTheme.colorScheme.surface,
                         )
                     )
                     ExposedDropdownMenu(
@@ -183,8 +184,10 @@ fun HomeScreen(
                                         text = "Wallet"
                                     )
                                 },
-                                colors = TextFieldDefaults.textFieldColors(
-                                    containerColor = MaterialTheme.colorScheme.surface,
+                                colors = TextFieldDefaults.colors(
+                                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                                    disabledContainerColor = MaterialTheme.colorScheme.surface,
                                 )
                             )
                             ExposedDropdownMenu(
@@ -222,13 +225,12 @@ fun HomeScreen(
                         modifier = modifier.weight(4f),
                     ) {
                         CircularProgressIndicator(
-                            progress = progress.toFloat(),
+                            progress = { progress.toFloat() },
                             modifier = modifier
                                 .width(160.dp)
                                 .aspectRatio(1f)
                                 .align(alignment = Alignment.Center)
                                 .padding(12.dp),
-                            strokeWidth = 16.dp,
                             color = when (progress) {
                                 in 0.0..0.5 -> Color(57, 255, 20)
                                 in 0.5..0.8 -> Color(255, 255, 0)
@@ -236,7 +238,8 @@ fun HomeScreen(
                                 else -> {
                                     Color(80, 0, 0)
                                 }
-                            }
+                            },
+                            strokeWidth = 16.dp,
                         )
                         Text(
                             text = "${(progress * 100).toInt()}%",

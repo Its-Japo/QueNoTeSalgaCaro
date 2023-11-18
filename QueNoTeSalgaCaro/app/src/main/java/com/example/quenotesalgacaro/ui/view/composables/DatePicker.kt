@@ -27,7 +27,7 @@ import androidx.compose.ui.window.Dialog
 import java.util.Calendar
 
 @Composable
-fun DatePicker(
+fun DatePickerCustom(
     onDateSelected: (Int, Int) -> Unit
 ){
     var showDialog by remember { mutableStateOf(false) }
@@ -39,7 +39,7 @@ fun DatePicker(
     }
 
     if (showDialog) {
-        DatePickerDialog(
+        DatePickerDialogCustom(
             initialYear = currentYear,
             initialMonth = currentMonth,
             onMonthYearSelected = { year, month ->
@@ -53,7 +53,7 @@ fun DatePicker(
 
 
 @Composable
-fun DatePickerDialog(
+fun DatePickerDialogCustom(
     initialYear: Int,
     initialMonth: Int,
     onMonthYearSelected: (Int, Int) -> Unit,

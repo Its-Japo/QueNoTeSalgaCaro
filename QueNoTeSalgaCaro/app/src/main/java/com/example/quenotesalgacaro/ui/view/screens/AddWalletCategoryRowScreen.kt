@@ -2,16 +2,12 @@ package com.example.quenotesalgacaro.ui.view.screens
 
 import WalletViewModel
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -24,7 +20,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -34,7 +29,7 @@ import com.example.quenotesalgacaro.ui.view.composables.LoadingScreen
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun AddWalletCategoryRowScreen(
@@ -57,7 +52,7 @@ fun AddWalletCategoryRowScreen(
         }
     ){
         paddingValues ->
-        when(val state = addCategoryState){
+        when(addCategoryState){
             is DataUiState.Loading -> {
                 LoadingScreen(paddingValues = paddingValues)
             }
@@ -79,8 +74,10 @@ fun AddWalletCategoryRowScreen(
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                         },
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = MaterialTheme.colorScheme.surface,
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                            disabledContainerColor = MaterialTheme.colorScheme.surface,
                         ),
                         maxLines = 1
                     )

@@ -3,17 +3,12 @@ package com.example.quenotesalgacaro.ui.view.screens
 import WalletViewModel
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,7 +34,6 @@ import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 
 @SuppressLint("StateFlowValueCalledInComposition")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WalletConfigurationScreen(
     modifier: Modifier = Modifier,
@@ -80,13 +74,7 @@ fun WalletConfigurationScreen(
         paddingValues ->
         when(val state = walletConfig) {
             is DataUiState.Success -> {
-                var index = 0
-                for (i in 0..state.data.size-1) {
-                    if (state.data.get(i).name == walletName) {
-                        index = i
-                    }
-                }
-                
+
                 LazyColumn(contentPadding = paddingValues){
                     item {
                         Text(
@@ -115,7 +103,7 @@ fun WalletConfigurationScreen(
 
 
                             Text(
-                                text = (state.data.get(subindex).name),
+                                text = (state.data[subindex].name),
                                 modifier = modifier
                                     .fillMaxWidth()
                                     .weight(4f)
@@ -125,7 +113,7 @@ fun WalletConfigurationScreen(
                             IconButton(
                                 onClick = {
                                     if (walletName != null) {
-                                        walletViewModel.deleteWalletCategory(uid, walletName, state.data.get(subindex).id)
+                                        walletViewModel.deleteWalletCategory(uid, walletName, state.data[subindex].id)
                                     }
                                 },
                                 modifier = modifier

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -29,7 +28,6 @@ import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateScreen(
     modifier: Modifier = Modifier,
@@ -41,14 +39,22 @@ fun CreateScreen(
     val name = remember {
         mutableStateOf(TextFieldValue())
     }
-    val addWalletState = if (actionViewModel is WalletViewModel) {
-        actionViewModel.addWalletState.collectAsState().value
-    } else if (actionViewModel is BudgetViewModel) {
-        actionViewModel.addBudgetState.collectAsState().value
-    } else if (actionViewModel is FundViewModel) {
-        actionViewModel.addFundState.collectAsState().value
-    } else {
-        null
+    val addWalletState = when (actionViewModel) {
+        is WalletViewModel -> {
+            actionViewModel.addWalletState.collectAsState().value
+        }
+
+        is BudgetViewModel -> {
+            actionViewModel.addBudgetState.collectAsState().value
+        }
+
+        is FundViewModel -> {
+            actionViewModel.addFundState.collectAsState().value
+        }
+
+        else -> {
+            null
+        }
     }
 
 
@@ -84,12 +90,18 @@ fun CreateScreen(
                 onClick = {
                     val loginState = authViewModel.loginUiState.value
 
-                    if (actionViewModel is WalletViewModel) {
-                        loginState.user?.let { it1 -> actionViewModel.addWallet(it1.uid, name.value.text) }
-                    } else if (actionViewModel is BudgetViewModel) {
-                        loginState.user?.let { it1 -> actionViewModel.addBudget(it1.uid, name.value.text) }
-                    } else if (actionViewModel is FundViewModel) {
-                        loginState.user?.let { it1 -> actionViewModel.addFund(it1.uid, name.value.text) }
+                    when (actionViewModel) {
+                        is WalletViewModel -> {
+                            loginState.user?.let { it1 -> actionViewModel.addWallet(it1.uid, name.value.text) }
+                        }
+
+                        is BudgetViewModel -> {
+                            loginState.user?.let { it1 -> actionViewModel.addBudget(it1.uid, name.value.text) }
+                        }
+
+                        is FundViewModel -> {
+                            loginState.user?.let { it1 -> actionViewModel.addFund(it1.uid, name.value.text) }
+                        }
                     }
                 },
                 modifier = modifier

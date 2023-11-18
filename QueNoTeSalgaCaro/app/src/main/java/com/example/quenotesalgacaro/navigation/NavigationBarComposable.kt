@@ -1,5 +1,6 @@
 package com.example.quenotesalgacaro.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -16,6 +17,7 @@ import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 fun NavigationBarComposable(
     navController: NavHostController,
     authViewModel: AuthViewModel = viewModel(),
+    paddingValues: PaddingValues
 ) {
     NavHost(
         navController = navController,
@@ -23,19 +25,19 @@ fun NavigationBarComposable(
     ) {
 
         composable(NavigationBarState.HomeScreen.route) {
-            HomeScreen(viewModel = authViewModel)
+            HomeScreen(viewModel = authViewModel, paddingValues = paddingValues)
         }
         composable(NavigationBarState.StatsInfoScreen.route) {
-            StatsInfoScreen()
+            StatsInfoScreen(paddingValues = paddingValues)
         }
         composable(NavigationBarState.AddTransactionScreen.route) {
-            AddTransactionScreen(viewModel = authViewModel)
+            AddTransactionScreen(viewModel = authViewModel, paddingValues = paddingValues)
         }
         composable(NavigationBarState.BudgetInfoScreen.route) {
-            BudgetInfoScreen()
+            BudgetInfoScreen(paddingValues = paddingValues)
         }
         composable(NavigationBarState.FundsInfoScreen.route) {
-            FundsInfoScreen()
+            FundsInfoScreen(paddingValues = paddingValues)
         }
 
     }
