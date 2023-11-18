@@ -128,6 +128,16 @@ fun Navigation(
                 )
             }
         }
+        composable(NavigationState.FundConfigurationScreen.route + "/{fund}") { navBackStackEntry ->
+            run {
+                val fund = navBackStackEntry.arguments?.getString("fund")
+                com.example.quenotesalgacaro.ui.view.screens.FundConfigurationScreen(
+                    navController = navController,
+                    authViewModel = authViewModel,
+                    fund = fund!!
+                )
+            }
+        }
     }
 }
 

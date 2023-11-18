@@ -65,7 +65,7 @@ class AuthViewModel(
                 val user = firebaseAuthRepository.registerNewUser(email, password)
                 _registerUiState.value = RegisterUiState(success = user != null, user = user)
                 if (user != null) {
-                    firebaseFirestoreRepository.registerNewUser(user, password)
+                    firebaseFirestoreRepository.registerNewUser(user)
                 }
                 _registerUiState.value = RegisterUiState()
 

@@ -1,5 +1,6 @@
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.quenotesalgacaro.data.networking.FundData
 import com.example.quenotesalgacaro.data.networking.SimpleDocument
 import com.example.quenotesalgacaro.data.repository.DataBaseRepository
 import com.example.quenotesalgacaro.data.repository.FirebaseFirestoreRepository
@@ -10,8 +11,11 @@ import kotlinx.coroutines.launch
 
 class FundViewModel(private val firestoreRepository: DataBaseRepository = FirebaseFirestoreRepository()) : ViewModel() {
 
-    private val _fundsFetchState = MutableStateFlow<DataUiState<List<SimpleDocument>>>(DataUiState.Loading)
+    private val _fundsFetchState = MutableStateFlow<DataUiState<List<FundData>>>(DataUiState.Loading)
     val fundFetchState = _fundsFetchState.asStateFlow()
+
+    private val _fetchOneFundState = MutableStateFlow<DataUiState<FundData>>(DataUiState.Loading)
+    val fetchOneFundState = _fetchOneFundState.asStateFlow()
 
     private val _addFundsState = MutableStateFlow<DataUiState<Unit>>(DataUiState.Loading)
     val addFundState = _addFundsState.asStateFlow()
@@ -20,11 +24,11 @@ class FundViewModel(private val firestoreRepository: DataBaseRepository = Fireba
         viewModelScope.launch {
             _fundsFetchState.value = DataUiState.Loading
             try {
-                val result = firestoreRepository.getFirstGradeSubcollection(userId, "funds")
+                val result = firestoreRepository.getFirstGradeSubcollectionFund(userId, "funds")
                 if (result.isSuccess) {
                     _fundsFetchState.value = DataUiState.Success(result.getOrThrow())
                 } else {
-                    _fundsFetchState.value = DataUiState.Error(Exception("Failed to fetch budgets"))
+                    _fundsFetchState.value = DataUiState.Error(Exception("Failed to fetch funds"))
                 }
             } catch (e: Exception) {
                 _fundsFetchState.value = DataUiState.Error(e)
@@ -32,12 +36,42 @@ class FundViewModel(private val firestoreRepository: DataBaseRepository = Fireba
         }
     }
 
+    fun fetchOneFund(userId: String, fundName: String){
+        viewModelScope.launch {
+            _fetchOneFundState.value = DataUiState.Loading
+            try {
+                val result = firestoreRepository.getOneFund(userId, fundName)
+                if (result.isSuccess) {
+                    _fetchOneFundState.value = DataUiState.Success(result.getOrThrow())
+                } else {
+                    _fetchOneFundState.value = DataUiState.Error(Exception("Failed to fetch fund"))
+                }
+            } catch (e: Exception) {
+                _fetchOneFundState.value = DataUiState.Error(e)
+            }
+        }
+    }
 
-    fun addFund(userId: String, walletName: String) {
+    fun updateFund(userId: String, fundName: String, fundData: FundData) {
         viewModelScope.launch {
             try {
                 _addFundsState.value = DataUiState.Loading
-                firestoreRepository.addFirstGradeSubcollection(userId, walletName, "funds")
+                firestoreRepository.updateFund(userId, "funds", fundName, fundData)
+                _addFundsState.value = DataUiState.Success(Unit)
+                fetchFunds(userId)
+            } catch (e: Exception) {
+                _addFundsState.value = DataUiState.Error(e)
+            }
+        }
+
+    }
+
+
+    fun addFund(userId: String, fundName: String) {
+        viewModelScope.launch {
+            try {
+                _addFundsState.value = DataUiState.Loading
+                firestoreRepository.addFirstGradeSubcollectionFund(userId, "funds", FundData(id = fundName, name = fundName))
                 _addFundsState.value = DataUiState.Success(Unit)
                 fetchFunds(userId)
             } catch (e: Exception) {

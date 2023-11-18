@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.quenotesalgacaro.R
 import com.example.quenotesalgacaro.data.networking.SimpleDocument
+import com.example.quenotesalgacaro.ui.view.composables.LoadingScreen
 import com.example.quenotesalgacaro.ui.view.struct.FilaTabla
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
@@ -98,19 +99,7 @@ fun HomeScreen(
     val walletsState by walletViewModel.walletsFetchState.collectAsState()
     when(val state = walletsState) {
         is DataUiState.Loading -> {
-            Column (
-                modifier = modifier
-                    .fillMaxSize()
-                    .padding(10.dp, 10.dp, 10.dp, 10.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-
-            ) {
-                CircularProgressIndicator(
-                    modifier = modifier
-                        .scale(1.3f)
-                )
-            }
+            LoadingScreen()
         }
         is DataUiState.Success -> {
             wallets = (state.data)

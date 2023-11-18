@@ -22,6 +22,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.quenotesalgacaro.navigation.TopBar
 import com.example.quenotesalgacaro.ui.view.composables.InfoBar
+import com.example.quenotesalgacaro.ui.view.composables.LoadingScreen
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 
@@ -61,7 +62,7 @@ fun WalletsScreen(
         floatingActionButtonPosition = FabPosition.End
     ) { paddingValues ->
         when (val state = walletsFetchState) {
-            is DataUiState.Loading -> CircularProgressIndicator()
+            is DataUiState.Loading -> LoadingScreen(paddingValues = paddingValues)
             is DataUiState.Success -> {
                 LazyColumn(contentPadding = paddingValues) {
                     items(state.data) { wallet ->

@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.quenotesalgacaro.navigation.TopBar
+import com.example.quenotesalgacaro.ui.view.composables.LoadingScreen
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 
@@ -58,19 +59,7 @@ fun AddWalletCategoryRowScreen(
         paddingValues ->
         when(val state = addCategoryState){
             is DataUiState.Loading -> {
-                Column (
-                    modifier = modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-
-                ) {
-                    CircularProgressIndicator(
-                        modifier = modifier
-                            .scale(1.3f)
-                    )
-                }
+                LoadingScreen(paddingValues = paddingValues)
             }
             is DataUiState.Success -> {
                 Column (

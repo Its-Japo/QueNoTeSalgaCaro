@@ -1,6 +1,7 @@
 package com.example.quenotesalgacaro.data.repository
 
 import com.example.quenotesalgacaro.data.networking.BudgetConfiguration
+import com.example.quenotesalgacaro.data.networking.FundData
 import com.example.quenotesalgacaro.data.networking.SimpleDocument
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -12,12 +13,11 @@ class FirebaseFirestoreRepository: DataBaseRepository {
 
     private val firebaseFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
-    override suspend fun registerNewUser(user: FirebaseUser?, password: String) {
+    override suspend fun registerNewUser(user: FirebaseUser?) {
         return withContext(Dispatchers.IO) {
             try {
                 val userMap = hashMapOf(
                     "email" to user?.email,
-                    "password" to password
                 )
                 firebaseFirestore.collection("users").document(user?.uid ?: "")
                     .set(userMap).await()
@@ -55,12 +55,74 @@ class FirebaseFirestoreRepository: DataBaseRepository {
 
     }
 
+    override suspend fun addFirstGradeSubcollectionFund(uid: String?, collectionName: String, document: FundData): Result<Unit>  {
+        return withContext(Dispatchers.IO) {
+            try {
+                firebaseFirestore.collection("users").document(uid?: "")
+                    .collection(collectionName).document(document.id)
+                    .set(hashMapOf(
+                        "name" to document.name,
+                        "initialcapital" to document.initialCapital,
+                        "interest" to document.interest,
+                        "anualcapitalizations" to document.anualcapitalizations,
+                        "goal" to document.goal
+                    )).await()
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+
+    override suspend fun getOneFund(uid: String, fundName: String): Result<FundData> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val snapshot = firebaseFirestore.collection("users").document(uid)
+                    .collection("funds").document(fundName).get().await()
+                val fund = snapshot.toObject(FundData::class.java)
+                Result.success(fund!!)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+
+    override suspend fun updateFund(uid: String, collectionName: String, fundName: String, data: FundData): Result<Unit> {
+        return withContext(Dispatchers.IO) {
+            try {
+                firebaseFirestore.collection("users").document(uid)
+                    .collection(collectionName).document(fundName)
+                    .update("name", data.name,
+                        "initialcapital", data.initialCapital,
+                        "interest", data.interest,
+                        "anualcapitalizations", data.anualcapitalizations,
+                        "goal", data.goal).await()
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+
     override suspend fun getFirstGradeSubcollection(uid: String, collectionName: String): Result<List<SimpleDocument>> {
         return withContext(Dispatchers.IO) {
             try {
                 val snapshot = firebaseFirestore.collection("users").document(uid)
                     .collection(collectionName).get().await()
                 val wallets = snapshot.documents.mapNotNull { it.toObject(SimpleDocument::class.java) }
+                Result.success(wallets)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+
+    override suspend fun getFirstGradeSubcollectionFund(uid: String, collectionName: String): Result<List<FundData>> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val snapshot = firebaseFirestore.collection("users").document(uid)
+                    .collection(collectionName).get().await()
+                val wallets = snapshot.documents.mapNotNull { it.toObject(FundData::class.java) }
                 Result.success(wallets)
             } catch (e: Exception) {
                 Result.failure(e)
