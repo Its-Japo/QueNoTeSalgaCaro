@@ -3,5 +3,6 @@ package com.example.quenotesalgacaro.data.networking
 import com.google.firebase.firestore.PropertyName
 
 data class SimpleDocument(
-    @PropertyName("name") val name: String = ""
+    @PropertyName("name") val name: String = "",
+    @PropertyName("id") var id: String = ""
 )

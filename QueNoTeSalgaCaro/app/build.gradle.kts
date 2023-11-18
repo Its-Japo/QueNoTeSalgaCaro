@@ -50,6 +50,8 @@ android {
     }
 }
 
+
+
 dependencies {
 
     val navVersion = "2.7.3"
@@ -83,3 +85,4 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
 }
+

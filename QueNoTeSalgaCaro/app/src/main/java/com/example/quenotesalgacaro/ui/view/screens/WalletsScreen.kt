@@ -2,6 +2,7 @@ package com.example.quenotesalgacaro.ui.view.screens
 
 import WalletViewModel
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
@@ -15,6 +16,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -63,12 +65,22 @@ fun WalletsScreen(
             is DataUiState.Success -> {
                 LazyColumn(contentPadding = paddingValues) {
                     items(state.data) { wallet ->
-                        InfoBar(text = wallet.name, onClick = { /*TODO*/ })
+                        InfoBar(text = wallet.name, onClick = {
+                             navController.navigate("WalletConfigurationScreen/${wallet.name}")
+                        })
                     }
                 }
             }
-            is DataUiState.Error -> Text("Error: ${state.exception.message}")
-            else -> Text("Something went wrong")
+            is DataUiState.Error -> {
+                Text("Error: ${state.exception.message}")
+                Toast(LocalContext.current).apply {
+                    setText("Ha ocurrido un error")
+                    show()
+                }
+                println(
+                    "Error: ${state.exception.message}"
+                )
+            }
         }
     }
 }

@@ -16,7 +16,6 @@ import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 @Composable
 fun NavigationBarComposable(
     navController: NavHostController,
-    modifier: Modifier = Modifier,
     authViewModel: AuthViewModel = viewModel(),
 ) {
     NavHost(
