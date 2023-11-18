@@ -54,9 +54,9 @@ fun ButtonBar(
             }
         },
         onClick = onClick,
-        modifier = modifier.background(Color.White),
+        modifier = modifier.background(MaterialTheme.colorScheme.surface),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color.Transparent,
+            containerColor = MaterialTheme.colorScheme.surface,
             contentColor = MaterialTheme.colorScheme.onSurface
         )
     )

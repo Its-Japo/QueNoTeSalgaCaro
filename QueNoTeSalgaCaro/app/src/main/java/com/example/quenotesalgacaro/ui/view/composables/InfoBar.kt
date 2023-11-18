@@ -29,7 +29,7 @@ fun InfoBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.surface)
             .padding(6.dp),
         verticalAlignment = Alignment.CenterVertically
     )

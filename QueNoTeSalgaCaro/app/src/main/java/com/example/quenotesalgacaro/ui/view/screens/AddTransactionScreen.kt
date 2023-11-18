@@ -34,6 +34,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -246,12 +247,13 @@ fun AddTransactionScreen(
                     .width(300.dp),
                 enabled = true,
                 colors = ButtonDefaults.buttonColors(
-                    contentColor = Color.Blue
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    containerColor = MaterialTheme.colorScheme.primary,
                 ),
             ) {
                 Text(
                     text = "Agregar",
-                    modifier = modifier.padding(12.dp)
+                    modifier = modifier.padding(12.dp),
                 )
             }
         }
