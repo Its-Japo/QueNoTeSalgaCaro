@@ -4,12 +4,14 @@ import com.example.quenotesalgacaro.ui.view.vms.WalletViewModel
 import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -35,9 +37,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.quenotesalgacaro.R
@@ -102,237 +106,254 @@ fun HomeScreen(
         }
         is DataUiState.Success -> {
             wallets = (state.data)
-            var selectedDate by remember { mutableStateOf(dates[0]) }
-            var selectedWallet by remember { mutableStateOf(wallets[0]) }
-            Column (
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(paddingValues = paddingValues),
-            ) {
-                ExposedDropdownMenuBox(
-                    expanded = expandedDate,
-                    onExpandedChange = {
-                        expandedDate = !expandedDate
-                    },
+            if (state.data.isNotEmpty()) {
+                var selectedDate by remember { mutableStateOf(dates[0]) }
+                var selectedWallet by remember { mutableStateOf(wallets[0]) }
+                Column (
                     modifier = modifier
-                        .padding(12.dp)
-                        .align(alignment = Alignment.CenterHorizontally),
-
-                    ) {
-
-                    TextField(
-                        value = selectedDate,
-                        onValueChange = {},
-                        readOnly = true,
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedDate) },
-                        modifier = modifier
-                            .menuAnchor()
-                            .width(180.dp),
-                        label = {
-                            Text(
-                                text = "Fecha"
-                            )
-                        },
-                        colors = TextFieldDefaults.colors(
-                            focusedContainerColor = MaterialTheme.colorScheme.surface,
-                            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                            disabledContainerColor = MaterialTheme.colorScheme.surface,
-                        )
-                    )
-                    ExposedDropdownMenu(
+                        .fillMaxWidth()
+                        .padding(paddingValues = paddingValues),
+                ) {
+                    ExposedDropdownMenuBox(
                         expanded = expandedDate,
-                        onDismissRequest = { expandedDate = false }
-                    ) {
-                        dates.forEach { item ->
-                            DropdownMenuItem(
-                                text = { Text(text = item) },
-                                onClick = {
-                                    selectedDate = item
-                                    expandedDate = false
-                                    Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
-                                }
-                            )
-                        }
-                    }
-                }
-                Row {
-                    Column(
+                        onExpandedChange = {
+                            expandedDate = !expandedDate
+                        },
                         modifier = modifier
-                            .weight(5f)
-                            .padding(12.dp),
-                    ) {
-                        ExposedDropdownMenuBox(
-                            expanded = expandedWallet,
-                            onExpandedChange = {
-                                expandedWallet = !expandedWallet
-                            },
+                            .padding(12.dp)
+                            .align(alignment = Alignment.CenterHorizontally),
+
+                        ) {
+
+                        TextField(
+                            value = selectedDate,
+                            onValueChange = {},
+                            readOnly = true,
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedDate) },
                             modifier = modifier
-                                .padding(12.dp)
-                                .align(alignment = Alignment.CenterHorizontally),
-
-                            ) {
-
-                            TextField(
-                                value = selectedWallet.name,
-                                onValueChange = {},
-                                readOnly = true,
-                                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedWallet) },
-                                modifier = modifier
-                                    .menuAnchor(),
-                                label = {
-                                    Text(
-                                        text = "Wallet"
-                                    )
-                                },
-                                colors = TextFieldDefaults.colors(
-                                    focusedContainerColor = MaterialTheme.colorScheme.surface,
-                                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                                    disabledContainerColor = MaterialTheme.colorScheme.surface,
+                                .menuAnchor()
+                                .width(180.dp),
+                            label = {
+                                Text(
+                                    text = "Fecha"
                                 )
+                            },
+                            colors = TextFieldDefaults.colors(
+                                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                                disabledContainerColor = MaterialTheme.colorScheme.surface,
                             )
-                            ExposedDropdownMenu(
-                                expanded = expandedWallet,
-                                onDismissRequest = { expandedWallet = false }
-                            ) {
-                                wallets.forEach { item ->
-                                    DropdownMenuItem(
-                                        text = { Text(text = item.name) },
-                                        onClick = {
-                                            selectedWallet = item
-                                            expandedWallet = false
-                                            Toast.makeText(context, item.name, Toast.LENGTH_SHORT).show()
-                                        }
-                                    )
-                                }
+                        )
+                        ExposedDropdownMenu(
+                            expanded = expandedDate,
+                            onDismissRequest = { expandedDate = false }
+                        ) {
+                            dates.forEach { item ->
+                                DropdownMenuItem(
+                                    text = { Text(text = item) },
+                                    onClick = {
+                                        selectedDate = item
+                                        expandedDate = false
+                                        Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
+                                    }
+                                )
                             }
                         }
+                    }
+                    Row {
                         Column(
-                            modifier = modifier.padding(12.dp, 12.dp, 0.dp, 12.dp),
+                            modifier = modifier
+                                .weight(5f)
+                                .padding(12.dp),
                         ) {
-                            Text(
-                                text = "Saldo",
-                                style = MaterialTheme.typography.labelLarge,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            ExposedDropdownMenuBox(
+                                expanded = expandedWallet,
+                                onExpandedChange = {
+                                    expandedWallet = !expandedWallet
+                                },
+                                modifier = modifier
+                                    .padding(12.dp)
+                                    .align(alignment = Alignment.CenterHorizontally),
+
+                                ) {
+
+                                TextField(
+                                    value = selectedWallet.name,
+                                    onValueChange = {},
+                                    readOnly = true,
+                                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedWallet) },
+                                    modifier = modifier
+                                        .menuAnchor(),
+                                    label = {
+                                        Text(
+                                            text = "Wallet"
+                                        )
+                                    },
+                                    colors = TextFieldDefaults.colors(
+                                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                                        disabledContainerColor = MaterialTheme.colorScheme.surface,
+                                    )
+                                )
+                                ExposedDropdownMenu(
+                                    expanded = expandedWallet,
+                                    onDismissRequest = { expandedWallet = false }
+                                ) {
+                                    wallets.forEach { item ->
+                                        DropdownMenuItem(
+                                            text = { Text(text = item.name) },
+                                            onClick = {
+                                                selectedWallet = item
+                                                expandedWallet = false
+                                                Toast.makeText(context, item.name, Toast.LENGTH_SHORT).show()
+                                            }
+                                        )
+                                    }
+                                }
+                            }
+                            Column(
+                                modifier = modifier.padding(12.dp, 12.dp, 0.dp, 12.dp),
+                            ) {
+                                Text(
+                                    text = "Saldo",
+                                    style = MaterialTheme.typography.labelLarge,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                                Text(
+                                    text = "Q$saldo",
+                                    style = MaterialTheme.typography.headlineSmall,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+                        }
+                        Box(
+                            modifier = modifier.weight(4f),
+                        ) {
+                            CircularProgressIndicator(
+                                progress = { progress.toFloat() },
+                                modifier = modifier
+                                    .width(160.dp)
+                                    .aspectRatio(1f)
+                                    .align(alignment = Alignment.Center)
+                                    .padding(12.dp),
+                                color = when (progress) {
+                                    in 0.0..0.5 -> Color(57, 255, 20)
+                                    in 0.5..0.8 -> Color(255, 255, 0)
+                                    in 0.8..0.99 -> Color(255, 0, 0)
+                                    else -> {
+                                        Color(80, 0, 0)
+                                    }
+                                },
+                                strokeWidth = 16.dp,
                             )
                             Text(
-                                text = "Q$saldo",
-                                style = MaterialTheme.typography.headlineSmall,
-                                color = MaterialTheme.colorScheme.onSurface
+                                text = "${(progress * 100).toInt()}%",
+                                style = MaterialTheme.typography.displaySmall,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                modifier = modifier.align(alignment = Alignment.Center)
                             )
                         }
                     }
-                    Box(
-                        modifier = modifier.weight(4f),
-                    ) {
-                        CircularProgressIndicator(
-                            progress = { progress.toFloat() },
+                    Row {
+                        Text(
+                            text = "Dia",
                             modifier = modifier
-                                .width(160.dp)
-                                .aspectRatio(1f)
-                                .align(alignment = Alignment.Center)
+                                .weight(1f)
                                 .padding(12.dp),
-                            color = when (progress) {
-                                in 0.0..0.5 -> Color(57, 255, 20)
-                                in 0.5..0.8 -> Color(255, 255, 0)
-                                in 0.8..0.99 -> Color(255, 0, 0)
-                                else -> {
-                                    Color(80, 0, 0)
-                                }
-                            },
-                            strokeWidth = 16.dp,
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
-                            text = "${(progress * 100).toInt()}%",
-                            style = MaterialTheme.typography.displaySmall,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            modifier = modifier.align(alignment = Alignment.Center)
+                            text = "Cantegoria",
+                            modifier = modifier
+                                .weight(3f)
+                                .padding(12.dp)
+                        )
+                        Text(
+                            text = "Monto",
+                            modifier = modifier
+                                .weight(2f)
+                                .padding(12.dp)
+                        )
+                        Text(
+                            text = "",
+                            modifier = modifier
+                                .weight(1f)
+                                .padding(12.dp)
                         )
                     }
-                }
-                Row {
-                    Text(
-                        text = "Dia",
-                        modifier = modifier
-                            .weight(1f)
-                            .padding(12.dp),
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Text(
-                        text = "Cantegoria",
-                        modifier = modifier
-                            .weight(3f)
-                            .padding(12.dp)
-                    )
-                    Text(
-                        text = "Monto",
-                        modifier = modifier
-                            .weight(2f)
-                            .padding(12.dp)
-                    )
-                    Text(
-                        text = "",
-                        modifier = modifier
-                            .weight(1f)
-                            .padding(12.dp)
-                    )
-                }
-                Spacer(modifier = modifier
-                    .height(1.dp)
-                    .fillMaxWidth()
-                    .padding(20.dp, 0.dp, 20.dp, 0.dp)
-                    .background(Color.Gray)
-                )
-                LazyColumn(
-                    modifier = modifier
+                    Spacer(modifier = modifier
+                        .height(1.dp)
                         .fillMaxWidth()
-                ) {
-                    items(elementosTabla.size) { index ->
-                        Row {
+                        .padding(20.dp, 0.dp, 20.dp, 0.dp)
+                        .background(Color.Gray)
+                    )
+                    LazyColumn(
+                        modifier = modifier
+                            .fillMaxWidth()
+                    ) {
+                        items(elementosTabla.size) { index ->
+                            Row {
 
-                            Text(
-                                text = elementosTabla[index].dia,
-                                modifier = modifier
-                                    .weight(1f)
-                                    .padding(12.dp),
-                                style = MaterialTheme.typography.labelLarge,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            Text(
-                                text = elementosTabla[index].categoria,
-                                modifier = modifier
-                                    .weight(3f)
-                                    .padding(12.dp)
-                            )
-                            Text(
-                                text = elementosTabla[index].monto,
-                                modifier = modifier
-                                    .weight(2f)
-                                    .padding(12.dp)
-                            )
-                            IconButton(
-                                onClick = { /*TODO*/ },
-                                modifier = modifier
-                                    .weight(1f)
-                            ) {
-                                Icon(
-                                    painter = painterResource(
-                                        id = R.drawable.option
-                                    ),
-                                    contentDescription = "Opciones",
-                                    tint = MaterialTheme.colorScheme.primary
+                                Text(
+                                    text = elementosTabla[index].dia,
+                                    modifier = modifier
+                                        .weight(1f)
+                                        .padding(12.dp),
+                                    style = MaterialTheme.typography.labelLarge,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
+                                Text(
+                                    text = elementosTabla[index].categoria,
+                                    modifier = modifier
+                                        .weight(3f)
+                                        .padding(12.dp)
+                                )
+                                Text(
+                                    text = elementosTabla[index].monto,
+                                    modifier = modifier
+                                        .weight(2f)
+                                        .padding(12.dp)
+                                )
+                                IconButton(
+                                    onClick = { /*TODO*/ },
+                                    modifier = modifier
+                                        .weight(1f)
+                                ) {
+                                    Icon(
+                                        painter = painterResource(
+                                            id = R.drawable.option
+                                        ),
+                                        contentDescription = "Opciones",
+                                        tint = MaterialTheme.colorScheme.primary
+                                    )
+                                }
                             }
                         }
                     }
+                    Spacer(
+                        modifier = modifier
+                            .height(61.dp)
+                            .fillMaxWidth()
+                    )
                 }
-                Spacer(
+            } else {
+                Column (
                     modifier = modifier
-                        .height(61.dp)
-                        .fillMaxWidth()
-                )
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
 
+                ) {
+                    Text(
+                        text = "No tienes wallets configuradas, agregalas en ajustes",
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
+            
+            
         }
         is DataUiState.Error -> {
             Text(text = "Error")
