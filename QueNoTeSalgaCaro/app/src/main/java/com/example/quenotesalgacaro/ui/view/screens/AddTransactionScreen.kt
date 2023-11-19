@@ -1,5 +1,6 @@
 package com.example.quenotesalgacaro.ui.view.screens
 
+//noinspection UsingMaterialAndMaterial3Libraries
 import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
@@ -7,19 +8,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
-//noinspection UsingMaterialAndMaterial3Libraries
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -37,36 +34,25 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.quenotesalgacaro.data.networking.SimpleDocument
 import com.example.quenotesalgacaro.ui.view.composables.DatePickerDialogD
 import com.example.quenotesalgacaro.ui.view.composables.LoadingDropdownTextField
+import com.example.quenotesalgacaro.ui.view.composables.LoadingScreen
+import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 import com.example.quenotesalgacaro.ui.view.vms.WalletViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @Composable
 fun AddTransactionScreen(
-    //navController: NavController,
     modifier: Modifier = Modifier,
     viewModel: AuthViewModel = viewModel(),
     walletViewModel: WalletViewModel = viewModel(),
     paddingValues: PaddingValues
 ){
     val context = LocalContext.current
-    val wallets = arrayOf("Wallet 1", "Wallet 2", "Wallet 3", "Wallet 4", "Wallet 5")
-    val dates = arrayOf("Ago 2023", "Sep 2023", "Oct 2023", "Nov 2023", "Dic 2023")
-    val categories = arrayOf("Category 1", "Category 2", "Category 3", "Category 4", "Category 5")
-    var selectedWallet by remember { mutableStateOf(wallets[0]) }
-    var selectedDate by remember { mutableStateOf(dates[0]) }
-    var selectedCategory by remember { mutableStateOf(categories[0]) }
-    var expandedDate by remember { mutableStateOf(false) }
-    var expandedWallet by remember { mutableStateOf(false) }
-    var expandedCategory by remember { mutableStateOf(false) }
-    var seletedDate by remember { mutableStateOf("") }
-    val descriptionText = remember { mutableStateOf(TextFieldValue()) }
-    val montoText = remember { mutableStateOf(TextFieldValue()) }
 
-    val uid = viewModel.loginUiState.value.user?.uid
+
     val getWalletsState by walletViewModel.walletsFetchState.collectAsState()
     val walletCategoriesState by walletViewModel.fetchWalletCategoriesState.collectAsState()
 
@@ -77,193 +63,207 @@ fun AddTransactionScreen(
             walletViewModel.fetchWallets(it.uid)
         }
     }
-    LaunchedEffect(user) {
-        user?.let {
-            walletViewModel.fetchWalletCategories(it.uid, selectedWallet)
-        }
-    }
 
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(paddingValues = paddingValues),
-        verticalArrangement = Arrangement.SpaceAround,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        Row(
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = modifier
-                .fillMaxWidth()
-        )
-        {
-            /*ExposedDropdownMenuBox(
-                expanded = expandedWallet,
-                onExpandedChange = { expandedWallet = !expandedWallet },
-                modifier = modifier
-                    .padding(12.dp)
-            ) {
-                TextField(
-                    value = selectedWallet,
-                    onValueChange = {},
-                    readOnly = true,
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedWallet) },
-                    modifier = modifier
-                        .menuAnchor()
-                        .width(170.dp),
-                    label = {
-                        Text(
-                            text = "Wallet:",
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                    },
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = MaterialTheme.colorScheme.surface,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                        disabledContainerColor = MaterialTheme.colorScheme.surface,
-                    )
-                )
-                ExposedDropdownMenu(
-                    expanded = expandedWallet,
-                    onDismissRequest = { expandedWallet = false }
-                ) {
-                    dates.forEach { item ->
-                        DropdownMenuItem(
-                            text = { androidx.compose.material3.Text(text = item) },
-                            onClick = {
-                                selectedWallet = item
-                                expandedWallet = false
-                                Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
-                            }
-                        )
+
+    when (getWalletsState) {
+        is DataUiState.Loading -> {
+            LoadingScreen()
+        }
+        is DataUiState.Success -> {
+            if ((getWalletsState as DataUiState.Success<List<SimpleDocument>>).data.isNotEmpty()) {
+                var selectedWallet by remember { mutableStateOf((getWalletsState as DataUiState.Success<List<SimpleDocument>>).data[0].name) }
+                var selectedCategory by remember { mutableStateOf("") }
+
+                var expandedWallet by remember { mutableStateOf(false) }
+                var expandedCategory by remember { mutableStateOf(false) }
+                var seletedDate by remember { mutableStateOf("") }
+                val descriptionText = remember { mutableStateOf(TextFieldValue()) }
+                val montoText = remember { mutableStateOf(TextFieldValue()) }
+
+                LaunchedEffect(selectedWallet, user) {
+                    user?.let {
+                        walletViewModel.fetchWalletCategories(it.uid, selectedWallet)
                     }
                 }
-            }*/
-            LoadingDropdownTextField(
-                selectedWallet = selectedWallet,
-                dates = wallets,
-                expandedWallet = expandedWallet,
-                onExpandedChange = {expandedWallet = !expandedWallet},
-                onItemSelected =
-                {
-                    selectedWallet = it
-                    expandedWallet = false
-                    Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-                },
-                uiState = getWalletsState,
-                width = 170
-            )
-            DatePickerDialogD(onDateSelected = { seletedDate = it })
-        }
 
-        ExposedDropdownMenuBox(
-            expanded = expandedCategory,
-            onExpandedChange = { expandedCategory = !expandedCategory },
-            modifier = modifier
-                .padding(12.dp)
-        ) {
-            TextField(
-                value = selectedCategory,
-                onValueChange = {},
-                readOnly = true,
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedCategory) },
-                modifier = modifier
-                    .menuAnchor()
-                    .width(250.dp),
-                label = {
-                    Text(
-                        text = "Categorías:",
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                },
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = MaterialTheme.colorScheme.surface,
-                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                    disabledContainerColor = MaterialTheme.colorScheme.surface,
-                )
-            )
-            ExposedDropdownMenu(
-                expanded = expandedCategory,
-                onDismissRequest = { expandedCategory = false }
-            ) {
-                dates.forEach { item ->
-                    DropdownMenuItem(
-                        text = { androidx.compose.material3.Text(text = item) },
-                        onClick = {
-                            selectedCategory = item
-                            expandedCategory = false
-                            Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
+                LaunchedEffect(walletCategoriesState) {
+                    when (walletCategoriesState) {
+                        is DataUiState.Loading -> {
+                            selectedCategory = "Loading..."
                         }
+                        is DataUiState.Success<List<SimpleDocument>> -> {
+                            val categories = (walletCategoriesState as DataUiState.Success<List<SimpleDocument>>).data
+                            if (categories.isNotEmpty()) {
+                                selectedCategory = categories.first().name
+                            }
+                        }
+
+                        is DataUiState.Error -> {
+                            selectedCategory = "Error"
+                        }
+                    }
+                }
+                Column(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(paddingValues = paddingValues),
+                    verticalArrangement = Arrangement.SpaceAround,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ){
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceAround,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = modifier
+                            .fillMaxWidth()
                     )
+                    {
+                        LoadingDropdownTextField(
+                            selectedWallet = selectedWallet,
+                            dates = when(getWalletsState) {
+                                is DataUiState.Success -> {
+                                    (getWalletsState as DataUiState.Success<List<SimpleDocument>>).data.map { it.name }.toTypedArray()
+                                }
+                                else -> {
+                                    arrayOf("UNCATEGORIZED")
+                                }
+                            },
+                            expandedWallet = expandedWallet,
+                            onExpandedChange = {expandedWallet = !expandedWallet},
+                            onItemSelected =
+                            {
+                                selectedWallet = it
+                                expandedWallet = false
+                                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                            },
+                            uiState = getWalletsState,
+                            width = 170,
+                            label = "Wallet:"
+                        )
+                        DatePickerDialogD(onDateSelected = { seletedDate = it })
+                    }
+
+                    LoadingDropdownTextField(
+                        selectedWallet = selectedCategory,
+                        dates = when(walletCategoriesState) {
+                            is DataUiState.Success -> {
+                                (walletCategoriesState as DataUiState.Success<List<SimpleDocument>>).data.map { it.name }.toTypedArray()
+                            }
+                            else -> {
+                                arrayOf("UNCATEGORIZED")
+                            }
+                        },
+                        expandedWallet = expandedCategory,
+                        onExpandedChange = {
+                            expandedCategory = !expandedCategory
+                        },
+                        onItemSelected = {
+                            selectedCategory = it
+                            expandedCategory = false
+                            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                        },
+                        uiState = walletCategoriesState,
+                        width = 250,
+                        label = "Category:"
+                    )
+
+
+
+                    TextField(
+                        value = descriptionText.value,
+                        onValueChange = {descriptionText.value = it},
+                        modifier = modifier
+                            .padding(12.dp)
+                            .width(300.dp)
+                            .height(100.dp),
+                        label = {
+                            Text(
+                                text = "Descripción:",
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        },
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                            disabledContainerColor = MaterialTheme.colorScheme.surface,
+                        )
+                    )
+
+                    TextField(
+                        value = montoText.value,
+                        onValueChange = {montoText.value = it},
+                        modifier = modifier
+                            .padding(12.dp)
+                            .width(300.dp),
+                        label = {
+                            Text(
+                                text = "Monto:",
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        },
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                            disabledContainerColor = MaterialTheme.colorScheme.surface,
+                        ),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    )
+
+                    Column(
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(),
+                        verticalArrangement = Arrangement.Bottom,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Button(
+                            onClick = {
+                                if (user != null) {
+                                    walletViewModel.addTransaction(
+                                        userId = user.uid,
+                                        walletName = selectedWallet,
+                                        category = selectedCategory,
+                                        date = seletedDate,
+                                        concept = descriptionText.value.text,
+                                        amount = montoText.value.text
+                                    )
+                                }
+                            },
+                            modifier = modifier
+                                .padding(12.dp)
+                                .width(300.dp),
+                            enabled = true,
+                            colors = ButtonDefaults.buttonColors(
+                                contentColor = MaterialTheme.colorScheme.onPrimary,
+                                containerColor = MaterialTheme.colorScheme.primary,
+                            ),
+                        ) {
+                            Text(
+                                text = "Agregar",
+                                modifier = modifier.padding(12.dp),
+                            )
+                        }
+                    }
+                }
+            }
+            else {
+                Column(
+                    modifier = modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(text = "No tienes wallets")
                 }
             }
         }
-
-        TextField(
-            value = descriptionText.value,
-            onValueChange = {descriptionText.value = it},
-            modifier = modifier
-                .padding(12.dp)
-                .width(300.dp)
-                .height(100.dp),
-            label = {
-                Text(
-                    text = "Descripción:",
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            },
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colorScheme.surface,
-                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                disabledContainerColor = MaterialTheme.colorScheme.surface,
-            )
-        )
-
-        TextField(
-            value = montoText.value,
-            onValueChange = {montoText.value = it},
-            modifier = modifier
-                .padding(12.dp)
-                .width(300.dp),
-            label = {
-                Text(
-                    text = "Monto:",
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            },
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colorScheme.surface,
-                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                disabledContainerColor = MaterialTheme.colorScheme.surface,
-            ),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-        )
-
-        Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .fillMaxHeight(),
-            verticalArrangement = Arrangement.Bottom,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Button(
-                onClick = { /*TODO*/ },
+        is DataUiState.Error -> {
+            Column(
                 modifier = modifier
-                    .padding(12.dp)
-                    .width(300.dp),
-                enabled = true,
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = MaterialTheme.colorScheme.onPrimary,
-                    containerColor = MaterialTheme.colorScheme.primary,
-                ),
+                    .fillMaxSize()
+                    .padding(paddingValues)
             ) {
-                Text(
-                    text = "Agregar",
-                    modifier = modifier.padding(12.dp),
-                )
+                Text(text = "Funds")
             }
         }
-
     }
-
 }

@@ -17,6 +17,9 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.unit.dp
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 
@@ -30,8 +33,12 @@ fun LoadingDropdownTextField(
     onItemSelected: (String) -> Unit,
     uiState: DataUiState<*>,
     width: Int,
+    label: String,
     modifier: Modifier = Modifier
 ) {
+    val focusRequester = FocusRequester()
+
+
     Box(modifier = modifier) {
         ExposedDropdownMenuBox(
             expanded = expandedWallet,
@@ -43,13 +50,29 @@ fun LoadingDropdownTextField(
                 value = selectedWallet,
                 onValueChange = {},
                 readOnly = true,
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedWallet) },
+                trailingIcon = {
+                    if (uiState is DataUiState.Loading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .align(Alignment.CenterEnd)
+                                .size(20.dp)
+                        )
+                    } else {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedWallet)
+                    }
+               },
                 modifier = modifier
                     .menuAnchor()
-                    .width(170.dp),
+                    .width(width.dp)
+                    .focusRequester(focusRequester)
+                    .onFocusChanged { focusState ->
+                        if (!focusState.isFocused && expandedWallet) {
+                            onExpandedChange(false)
+                        }
+                    },
                 label = {
                     Text(
-                        text = "Wallet:",
+                        text = label,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 },
@@ -57,7 +80,8 @@ fun LoadingDropdownTextField(
                     focusedContainerColor = MaterialTheme.colorScheme.surface,
                     unfocusedContainerColor = MaterialTheme.colorScheme.surface,
                     disabledContainerColor = MaterialTheme.colorScheme.surface,
-                )
+                ),
+                enabled = uiState !is DataUiState.Loading,
             )
             ExposedDropdownMenu(
                 expanded = expandedWallet,
@@ -72,15 +96,6 @@ fun LoadingDropdownTextField(
                     )
                 }
             }
-        }
-
-        if (uiState is DataUiState.Loading) {
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .size(20.dp)
-                    .padding(end = 8.dp)
-            )
         }
     }
 }

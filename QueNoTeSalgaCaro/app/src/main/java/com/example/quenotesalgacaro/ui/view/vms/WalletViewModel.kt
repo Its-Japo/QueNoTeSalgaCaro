@@ -3,12 +3,14 @@ package com.example.quenotesalgacaro.ui.view.vms
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quenotesalgacaro.data.networking.SimpleDocument
+import com.example.quenotesalgacaro.data.networking.Transaction
 import com.example.quenotesalgacaro.data.repository.DataBaseRepository
 import com.example.quenotesalgacaro.data.repository.FirebaseFirestoreRepository
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 
 class WalletViewModel(private val firestoreRepository: DataBaseRepository = FirebaseFirestoreRepository()) : ViewModel() {
 
@@ -89,6 +91,22 @@ class WalletViewModel(private val firestoreRepository: DataBaseRepository = Fire
                 }
             } catch (e: Exception) {
                 _fetchWalletCategoriesState.value = DataUiState.Error(e)
+            }
+        }
+    }
+
+    fun addTransaction(userId: String, walletName: String, category: String, amount: String, concept: String, date: String) {
+        viewModelScope.launch {
+            try {
+                val time = date.split("-")
+                println(time)
+                val day = time[0].toInt()
+                val dateTime = time[1] + "-" + time[2]
+                val transaction = Transaction(amount.toDouble(), category, dateTime, day, concept)
+                firestoreRepository.addSecondGradeSubcollectionDocumentTransaction(userId, "wallets", walletName, "transactions", transaction)
+
+            } catch (e: Exception) {
+                _addWalletCategoryState.value = DataUiState.Error(e)
             }
         }
     }

@@ -3,6 +3,7 @@ package com.example.quenotesalgacaro.data.repository
 import com.example.quenotesalgacaro.data.networking.BudgetConfiguration
 import com.example.quenotesalgacaro.data.networking.FundData
 import com.example.quenotesalgacaro.data.networking.SimpleDocument
+import com.example.quenotesalgacaro.data.networking.Transaction
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
@@ -214,6 +215,29 @@ class FirebaseFirestoreRepository: DataBaseRepository {
                     "name" to data.name,
                 )
 
+                if (uid != null) {
+                    firebaseFirestore.collection("users").document(uid)
+                        .collection(collectionName).document(entity)
+                        .collection(subcollectionName).document()
+                        .set(documentMap).await()
+                }
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+
+    override suspend fun addSecondGradeSubcollectionDocumentTransaction(uid: String?, collectionName: String, entity: String, subcollectionName: String, data: Transaction): Result<Unit> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val documentMap = hashMapOf(
+                    "amount" to data.amount,
+                    "category" to data.category,
+                    "date" to data.date,
+                    "day" to data.day,
+                    "description" to data.description,
+                )
                 if (uid != null) {
                     firebaseFirestore.collection("users").document(uid)
                         .collection(collectionName).document(entity)
