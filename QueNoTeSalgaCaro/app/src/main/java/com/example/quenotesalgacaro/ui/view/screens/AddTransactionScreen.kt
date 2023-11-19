@@ -24,6 +24,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,7 +38,9 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.quenotesalgacaro.ui.view.composables.DatePickerDialogD
+import com.example.quenotesalgacaro.ui.view.composables.LoadingDropdownTextField
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
+import com.example.quenotesalgacaro.ui.view.vms.WalletViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
@@ -45,6 +49,7 @@ fun AddTransactionScreen(
     //navController: NavController,
     modifier: Modifier = Modifier,
     viewModel: AuthViewModel = viewModel(),
+    walletViewModel: WalletViewModel = viewModel(),
     paddingValues: PaddingValues
 ){
     val context = LocalContext.current
@@ -61,7 +66,22 @@ fun AddTransactionScreen(
     val descriptionText = remember { mutableStateOf(TextFieldValue()) }
     val montoText = remember { mutableStateOf(TextFieldValue()) }
 
+    val uid = viewModel.loginUiState.value.user?.uid
+    val getWalletsState by walletViewModel.walletsFetchState.collectAsState()
+    val walletCategoriesState by walletViewModel.fetchWalletCategoriesState.collectAsState()
 
+    val user = viewModel.loginUiState.value.user
+
+    LaunchedEffect(user) {
+        user?.let {
+            walletViewModel.fetchWallets(it.uid)
+        }
+    }
+    LaunchedEffect(user) {
+        user?.let {
+            walletViewModel.fetchWalletCategories(it.uid, selectedWallet)
+        }
+    }
 
     Column(
         modifier = modifier
@@ -77,7 +97,7 @@ fun AddTransactionScreen(
                 .fillMaxWidth()
         )
         {
-            ExposedDropdownMenuBox(
+            /*ExposedDropdownMenuBox(
                 expanded = expandedWallet,
                 onExpandedChange = { expandedWallet = !expandedWallet },
                 modifier = modifier
@@ -118,7 +138,21 @@ fun AddTransactionScreen(
                         )
                     }
                 }
-            }
+            }*/
+            LoadingDropdownTextField(
+                selectedWallet = selectedWallet,
+                dates = wallets,
+                expandedWallet = expandedWallet,
+                onExpandedChange = {expandedWallet = !expandedWallet},
+                onItemSelected =
+                {
+                    selectedWallet = it
+                    expandedWallet = false
+                    Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                },
+                uiState = getWalletsState,
+                width = 170
+            )
             DatePickerDialogD(onDateSelected = { seletedDate = it })
         }
 
