@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -34,6 +35,7 @@ import com.example.quenotesalgacaro.ui.view.composables.LoadingScreen
 import com.example.quenotesalgacaro.ui.view.composables.PersistentPlaceholderTextField
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
+import com.example.quenotesalgacaro.R
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -48,7 +50,7 @@ fun FundConfigurationScreen(
 
     val initialCapital = remember { mutableStateOf(TextFieldValue()) }
     val goal = remember { mutableStateOf(TextFieldValue()) }
-    val anualCapitalization = remember { mutableStateOf(TextFieldValue()) }
+    val annualCapitalization = remember { mutableStateOf(TextFieldValue()) }
     val interest = remember { mutableStateOf(TextFieldValue()) }
 
     val user = authViewModel.loginUiState.value.user
@@ -63,7 +65,7 @@ fun FundConfigurationScreen(
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopBar(title = "Fund Configuration", navController = navController)
+            TopBar(title = stringResource(id = R.string.ConfigureFund), navController = navController)
         },
     )
     {
@@ -94,7 +96,7 @@ fun FundConfigurationScreen(
                             },
                             placeholder = state.data.initialCapital.toString(),
                             width = 170,
-                            label = "Capital Inicial:",
+                            label = stringResource(id = R.string.InitialCapital),
                             keyboardType = KeyboardType.Number
                         )
                         PersistentPlaceholderTextField(
@@ -104,19 +106,19 @@ fun FundConfigurationScreen(
                             },
                             placeholder = state.data.goal.toString(),
                             width = 170,
-                            label = "Meta:",
+                            label = stringResource(id = R.string.Goal),
                             keyboardType = KeyboardType.Number
                         )
                     }
 
                     PersistentPlaceholderTextField(
-                        value = anualCapitalization.value,
+                        value = annualCapitalization.value,
                         onValueChange = {
-                            anualCapitalization.value = it
+                            annualCapitalization.value = it
                         },
                         placeholder = state.data.anualcapitalizations.toString(),
                         width = 200,
-                        label = "Capitalizaciones Anuales:",
+                        label = stringResource(id = R.string.AnnualCapitalization),
                         keyboardType = KeyboardType.Number
                     )
                     PersistentPlaceholderTextField(
@@ -126,7 +128,7 @@ fun FundConfigurationScreen(
                         },
                         placeholder = state.data.interest.toString(),
                         width = 200,
-                        label = "Porcentaje de Interes:",
+                        label = stringResource(id = R.string.InterestRate),
                         keyboardType = KeyboardType.Number
                     )
 
@@ -145,7 +147,7 @@ fun FundConfigurationScreen(
                                         name = state.data.name,
                                         initialCapital = if(initialCapital.value.text.isNotEmpty()) initialCapital.value.text.toDouble() else state.data.initialCapital,
                                         interest = if(interest.value.text.isNotEmpty()) interest.value.text.toDouble() else state.data.interest,
-                                        anualcapitalizations = if(anualCapitalization.value.text.isNotEmpty()) anualCapitalization.value.text.toInt() else state.data.anualcapitalizations,
+                                        anualcapitalizations = if(annualCapitalization.value.text.isNotEmpty()) annualCapitalization.value.text.toInt() else state.data.anualcapitalizations,
                                         goal = if(goal.value.text.isNotEmpty()) goal.value.text.toDouble() else state.data.goal
                                     )
                                     fundViewModel.updateFund(user.uid, fund, newData)
@@ -157,14 +159,14 @@ fun FundConfigurationScreen(
                                 .width(300.dp),
                             enabled = initialCapital.value.text.isNotEmpty() ||
                             goal.value.text.isNotEmpty() ||
-                            anualCapitalization.value.text.isNotEmpty() ||
+                            annualCapitalization.value.text.isNotEmpty() ||
                             interest.value.text.isNotEmpty(),
                             colors = ButtonDefaults.buttonColors(
                                 contentColor = Color.Blue
                             ),
                         ) {
                             Text(
-                                text = "Actualizar",
+                                text = stringResource(id = R.string.Update),
                                 modifier = modifier.padding(12.dp),
                                 color = MaterialTheme.colorScheme.onSurface
                             )

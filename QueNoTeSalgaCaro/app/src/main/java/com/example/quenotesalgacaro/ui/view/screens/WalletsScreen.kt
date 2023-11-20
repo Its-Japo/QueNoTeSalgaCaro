@@ -1,8 +1,6 @@
 package com.example.quenotesalgacaro.ui.view.screens
 
-import com.example.quenotesalgacaro.ui.view.vms.WalletViewModel
 import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.FabPosition
@@ -13,15 +11,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.quenotesalgacaro.R
 import com.example.quenotesalgacaro.navigation.TopBar
+import com.example.quenotesalgacaro.ui.view.composables.ErrorScreen
 import com.example.quenotesalgacaro.ui.view.composables.InfoBar
 import com.example.quenotesalgacaro.ui.view.composables.LoadingScreen
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
+import com.example.quenotesalgacaro.ui.view.vms.WalletViewModel
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
@@ -43,7 +44,7 @@ fun WalletsScreen(
 
     Scaffold(
         topBar = {
-            TopBar(title = "Wallets", navController = navController)
+            TopBar(title = stringResource(id = R.string.Wallets), navController = navController)
         },
         floatingActionButton = {
             FloatingActionButton(
@@ -68,14 +69,7 @@ fun WalletsScreen(
                 }
             }
             is DataUiState.Error -> {
-                Text("Error: ${state.exception.message}")
-                Toast(LocalContext.current).apply {
-                    setText("Ha ocurrido un error")
-                    show()
-                }
-                println(
-                    "Error: ${state.exception.message}"
-                )
+                ErrorScreen(error = state.exception, paddingValues = paddingValues)
             }
         }
     }

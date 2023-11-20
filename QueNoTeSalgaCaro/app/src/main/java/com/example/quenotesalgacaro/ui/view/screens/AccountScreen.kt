@@ -18,11 +18,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.quenotesalgacaro.navigation.TopBar
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
+import com.example.quenotesalgacaro.R
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @Composable
@@ -34,7 +36,7 @@ fun AccountScreen(
 
     Scaffold (
         topBar = {
-            TopBar(title = "Settings", navController = navController)
+            TopBar(title = stringResource(id = R.string.Account), navController = navController)
         }
     ){
         Column(
@@ -46,13 +48,13 @@ fun AccountScreen(
             ) {
                 Icon(
                     imageVector = Icons.Outlined.AccountCircle,
-                    contentDescription = "Profile Picture",
+                    contentDescription = stringResource(id = R.string.Account),
                     modifier = modifier
                         .padding(20.dp)
                         .scale(4f)
                         .weight(2f)
                 )
-                Text(text = "Correo: ${viewModel.loginUiState.value.user?.email}",
+                Text(text = "${stringResource(id = R.string.mail)} ${viewModel.loginUiState.value.user?.email}",
                     modifier = modifier.weight(3f)
 
                 )
@@ -65,14 +67,15 @@ fun AccountScreen(
                             popUpTo("NavigationScreen") { inclusive = true }
                         }
                     },
-                    modifier = if (viewModel.loginUiState.value.user != null) {modifier
-                        .weight(1f)
-                        .padding(20.dp)
-                        .border(
-                            width = 1.dp,
-                            color = Color.Red,
-                            shape = MaterialTheme.shapes.extraLarge
-                        )} else {
+                    modifier = if (viewModel.loginUiState.value.user != null) {
+                        modifier
+                            .weight(1f)
+                            .padding(20.dp)
+                            .border(
+                                width = 1.dp,
+                                color = Color.Red,
+                                shape = MaterialTheme.shapes.extraLarge
+                            )} else {
                         modifier
                             .weight(1f)
                             .padding(20.dp)
@@ -83,7 +86,7 @@ fun AccountScreen(
                     ),
                     enabled = viewModel.loginUiState.value.user != null
                 ) {
-                    Text(text = "Cerrar Sesión")
+                    Text(text = stringResource(id = R.string.Logout))
                 }
                 Button(
                     onClick = {
@@ -101,7 +104,7 @@ fun AccountScreen(
                     ),
                     enabled = viewModel.loginUiState.value.user != null
                 ) {
-                    Text(text = "Eliminar Cuenta")
+                    Text(text = stringResource(id = R.string.DeleteAccount))
                 }
             }
         }

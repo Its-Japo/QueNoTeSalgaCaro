@@ -23,12 +23,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.quenotesalgacaro.R
 import com.example.quenotesalgacaro.navigation.TopBar
+import com.example.quenotesalgacaro.ui.view.composables.ErrorScreen
 import com.example.quenotesalgacaro.ui.view.composables.LoadingScreen
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
@@ -59,7 +61,7 @@ fun WalletConfigurationScreen(
 
     Scaffold (
         topBar = {
-            TopBar(title = "Configure Wallet", navController = navController)
+            TopBar(title = stringResource(id = R.string.ConfigureWallet), navController = navController)
         },
         floatingActionButton = {
             FloatingActionButton(
@@ -78,7 +80,7 @@ fun WalletConfigurationScreen(
                 LazyColumn(contentPadding = paddingValues){
                     item {
                         Text(
-                            text = "Categorias",
+                            text = stringResource(id = R.string.Categories),
                             modifier = modifier
                                 .fillMaxWidth()
                                 .padding(10.dp, 5.dp, 10.dp, 5.dp),
@@ -95,7 +97,7 @@ fun WalletConfigurationScreen(
 
                     items(
                         state.data.size
-                    ) {subindex ->
+                    ) {subIndex ->
                         Row(
                             modifier = modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,
@@ -103,7 +105,7 @@ fun WalletConfigurationScreen(
 
 
                             Text(
-                                text = (state.data[subindex].name),
+                                text = (state.data[subIndex].name),
                                 modifier = modifier
                                     .fillMaxWidth()
                                     .weight(4f)
@@ -113,7 +115,7 @@ fun WalletConfigurationScreen(
                             IconButton(
                                 onClick = {
                                     if (walletName != null) {
-                                        walletViewModel.deleteWalletCategory(uid, walletName, state.data[subindex].id)
+                                        walletViewModel.deleteWalletCategory(uid, walletName, state.data[subIndex].id)
                                     }
                                 },
                                 modifier = modifier
@@ -133,7 +135,7 @@ fun WalletConfigurationScreen(
                 }
             }
             is DataUiState.Error -> {
-                Text(text = "Error")
+                ErrorScreen(error = state.exception, paddingValues = paddingValues)
             }
             is DataUiState.Loading -> {
                 LoadingScreen(paddingValues = paddingValues)

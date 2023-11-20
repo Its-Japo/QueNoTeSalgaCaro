@@ -1,8 +1,7 @@
 package com.example.quenotesalgacaro.ui.view.screens
 
-import DatePickerWithoutDays
+import com.example.quenotesalgacaro.ui.view.composables.DatePickerWithoutDays
 import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -25,10 +24,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -43,14 +39,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.quenotesalgacaro.R
-import com.example.quenotesalgacaro.data.networking.Transaction
 import com.example.quenotesalgacaro.ui.view.composables.ErrorScreen
 import com.example.quenotesalgacaro.ui.view.composables.LoadingScreen
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
@@ -105,12 +99,8 @@ fun HomeScreen(
                 LaunchedEffect(selectedWallet, selectedDate) {
                     if (uid != null) {
                         walletViewModel.fetchTransactions(uid, selectedWallet, selectedDate)
-
-
-
                     }
                 }
-
 
                 Column (
                     modifier = modifier
@@ -124,7 +114,7 @@ fun HomeScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ){
-                        Text(text = "Seleccionar fecha:", modifier = modifier.padding(12.dp))
+                        Text(text = stringResource(id = R.string.SelectDate), modifier = modifier.padding(12.dp))
                     }
                     Row (
                         modifier = modifier
@@ -164,7 +154,7 @@ fun HomeScreen(
                                         .menuAnchor(),
                                     label = {
                                         Text(
-                                            text = "Wallet"
+                                            text = stringResource(id = R.string.Wallet)
                                         )
                                     },
                                     colors = TextFieldDefaults.colors(
@@ -195,21 +185,21 @@ fun HomeScreen(
                                 modifier = modifier.padding(12.dp, 12.dp, 0.dp, 12.dp),
                             ) {
                                 Text(
-                                    text = "Saldo",
+                                    text = stringResource(id = R.string.Balance),
                                     style = MaterialTheme.typography.labelLarge,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                                 when(val tState = transactionState) {
                                     is DataUiState.Loading -> {
-                                        Text(text = "Cargando")
+                                        Text(text = stringResource(id = R.string.Loading))
                                     }
                                     is DataUiState.Error -> {
-                                        Text(text = "Error")
+                                        Text(text = stringResource(id = R.string.Error))
                                     }
                                     is DataUiState.Success -> {
-                                        val saldo = tState.data.filter { it.amount >= 0 }.sumOf { it.amount } + tState.data.filter { it.amount < 0 }.sumOf { it.amount }
+                                        val balance = tState.data.filter { it.amount >= 0 }.sumOf { it.amount } + tState.data.filter { it.amount < 0 }.sumOf { it.amount }
                                         Text(
-                                            text = "Q$saldo",
+                                            text = "Q$balance",
                                             style = MaterialTheme.typography.headlineSmall,
                                             color = MaterialTheme.colorScheme.onSurface
                                         )
@@ -272,7 +262,7 @@ fun HomeScreen(
                     }
                     Row {
                         Text(
-                            text = "Dia",
+                            text = stringResource(id = R.string.Day),
                             modifier = modifier
                                 .weight(1f)
                                 .padding(12.dp),
@@ -280,13 +270,13 @@ fun HomeScreen(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
-                            text = "Cantegoria",
+                            text = stringResource(id = R.string.Category),
                             modifier = modifier
                                 .weight(3f)
                                 .padding(12.dp)
                         )
                         Text(
-                            text = "Monto",
+                            text = stringResource(id = R.string.Amount),
                             modifier = modifier
                                 .weight(2f)
                                 .padding(12.dp)
@@ -352,7 +342,7 @@ fun HomeScreen(
                                                         painter = painterResource(
                                                             id = R.drawable.option
                                                         ),
-                                                        contentDescription = "Opciones",
+                                                        contentDescription = "options",
                                                         tint = MaterialTheme.colorScheme.primary
                                                     )
                                                 }*/
@@ -369,33 +359,28 @@ fun HomeScreen(
                                             horizontalAlignment = Alignment.CenterHorizontally
 
                                         ) {
-                                            Surface (
+                                            Text(
+                                                text = stringResource(id = R.string.YouHaveNoTransactionsOnThisDate),
+                                                textAlign = TextAlign.Center,
+                                                modifier = modifier
+                                                    .background(
+                                                        Brush.verticalGradient(
+                                                            colors = listOf(
+                                                                MaterialTheme.colorScheme.primary,
+                                                                MaterialTheme.colorScheme.primary
+                                                            )
+                                                        ),
+                                                        MaterialTheme.shapes.large,
+                                                        0.7F
+                                                    )
+                                                    .border(
+                                                        width = 1.dp,
+                                                        color = MaterialTheme.colorScheme.primary,
+                                                        shape = MaterialTheme.shapes.large
+                                                    )
+                                                    .padding(12.dp)
 
-                                            ) {
-                                                Text(
-                                                    text = "No tienes transacciones en esta fecha",
-                                                    textAlign = TextAlign.Center,
-                                                    modifier = modifier
-                                                        .background(
-                                                            Brush.verticalGradient(
-                                                                colors = listOf(
-                                                                    MaterialTheme.colorScheme.primary,
-                                                                    MaterialTheme.colorScheme.primary
-                                                                )
-                                                            ),
-                                                            MaterialTheme.shapes.large,
-                                                            0.7F
-                                                        )
-                                                        .border(
-                                                            width = 1.dp,
-                                                            color = MaterialTheme.colorScheme.primary,
-                                                            shape = MaterialTheme.shapes.large
-                                                        )
-                                                        .padding(12.dp)
-
-                                                )
-
-                                            }
+                                            )
                                         }
                                     }
                                 }
@@ -418,16 +403,17 @@ fun HomeScreen(
 
                 ) {
                     Text(
-                        text = "No tienes wallets configuradas",
+                        text = stringResource(id = R.string.YouHaveNoWalletsConfigured),
                         textAlign = TextAlign.Center,
                         modifier = modifier.padding(16.dp)
                     )
                     Button(
                         onClick = { navController.navigate("WalletsScreen") },
-                        modifier = modifier.background(
-                            color = MaterialTheme.colorScheme.primary,
-                            shape = MaterialTheme.shapes.extraLarge,
-                        )
+                        modifier = modifier
+                            .background(
+                                color = MaterialTheme.colorScheme.primary,
+                                shape = MaterialTheme.shapes.extraLarge,
+                            )
                             .border(
                                 width = 1.dp,
                                 color = MaterialTheme.colorScheme.primary,
@@ -439,7 +425,7 @@ fun HomeScreen(
                             containerColor = Color.Transparent
                         )
                     ) {
-                        Text(text = "Configurar ahora")
+                        Text(text = stringResource(id = R.string.Configure))
                     }
                 }
             }
