@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -20,6 +21,7 @@ import com.example.quenotesalgacaro.ui.view.composables.LoadingScreen
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 import com.example.quenotesalgacaro.ui.view.vms.BudgetViewModel
+import com.example.quenotesalgacaro.R
 
 
 @SuppressLint("StateFlowValueCalledInComposition")
@@ -40,7 +42,7 @@ fun BudgetsScreen(
 
     Scaffold (
         topBar = {
-            TopBar(title = "Budgets", navController = navController)
+            TopBar(title = stringResource(id = R.string.Budgets), navController = navController)
         },
         floatingActionButton = {
             if (budgetsFetchState is DataUiState.Success) {

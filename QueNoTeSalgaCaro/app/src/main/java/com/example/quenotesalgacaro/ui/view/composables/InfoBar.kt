@@ -62,8 +62,3 @@ fun InfoBar(
     )
 
 }
-@Composable
-@Preview()
-fun InfoBarDarkPreview(){
-    InfoBar(text= "Hola", onClick = { /*TODO*/ })
-}

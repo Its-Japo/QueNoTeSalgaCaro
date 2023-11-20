@@ -1,6 +1,5 @@
 package com.example.quenotesalgacaro.ui.view.composables
 
-import android.app.DatePickerDialog
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
@@ -16,9 +15,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import com.example.quenotesalgacaro.R
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
+
 
 @ExperimentalMaterial3Api
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,14 +49,14 @@ fun MyDatePickerDialog(
             }
 
             ) {
-                Text(text = "OK")
+                Text(text = stringResource(id = R.string.Ok))
             }
         },
         dismissButton = {
             Button(onClick = {
                 onDismiss()
             }) {
-                Text(text = "Cancel")
+                Text(text = stringResource(id = R.string.Cancel))
             }
         }
     ) {
@@ -75,8 +78,9 @@ fun convertMillisToDate(millis: Long): String {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerDialogD(onDateSelected: (String) -> Unit) {
+    val context = LocalContext.current
     var date by remember {
-        mutableStateOf("Select Date")
+        mutableStateOf(context.getString(R.string.SelectDate))
     }
 
     var showDatePicker by remember {

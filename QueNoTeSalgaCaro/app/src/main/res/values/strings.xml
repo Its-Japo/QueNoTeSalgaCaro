@@ -1,9 +1,87 @@
 <resources>
     <string name="app_name">Que No Te Salga Caro</string>
-    <string name="loginScreenTitle">Iniciar Sesión</string>
-    <string name="registerScreenTitle">Registrarse</string>
-    <string name="loginButton">Iniciar Sesión</string>
-    <string name="registerButton">Registrarse</string>
+
+    <string name="Cancel">Cancelar</string>
+    <string name="Ok">Aceptar</string>
+
+    <string name="SelectDate">Seleccionar fecha</string>
+    <string name="SelectYear">Seleccionar año</string>
+    <string name="Add">Agregar</string>
+    <string name="Amount">Monto</string>
+    <string name="Category">Categoría</string>
+    <string name="Categories">Categorías</string>
+    <string name="Concept">Concepto</string>
+    <string name="Loading">Cargando…</string>
+    <string name="NoData">No hay datos</string>
+    <string name="Error">Error</string>
+    <string name="Uncategorized">Sin Categoría</string>
+    <string name="Day">Día</string>
+    <string name="Balance">Saldo</string>
+    <string name="ProfileIcon">Perfil</string>
+    <string name="HelpAndFeedback">Ayuda &amp; Comentarios</string>
+    <string name="About">Acerca de</string>
+
+    <string name="Income">Ingresos</string>
+    <string name="FixedExpenses">Gastos Fijos</string>
+    <string name="VariableExpenses">Gastos Variables</string>
+
+    <string name="Wallet">Cartera</string>
+
+
+    <string name="Account">Cuenta</string>
+    <string name="Logout">Cerrar Sesión</string>
+    <string name="DeleteAccount">Eliminar Cuenta</string>
+
+
+    <string name="Login">Iniciar Sesión</string>
+    <string name="Register">Registrarse</string>
+    <string name="RegisterMe">¡Registrarme!</string>
+
     <string name="email">Correo Electrónico</string>
+    <string name="mail">Correo</string>
     <string name="password">Contraseña</string>
+    <string name="confirmPassword">Confirmar Contraseña</string>
+    <string name="name">Nombre</string>
+    <string name="lastName">Apellido</string>
+
+
+    <string name="AddBudgetRow">Agregar fila</string>
+    <string name="AddCategory">Agregar Categoria</string>
+
+    <string name="ConfigureBudget">Configurar Presupuesto</string>
+    <string name="ConfigureWallet">Configurar Cartera</string>
+    <string name="ConfigureFund">Configurar Fondo</string>
+    <string name="Configure">Configurar</string>
+
+    <string name="CreateBudget">Crear Presupuesto</string>
+    <string name="CreateWallet">Crear Cartera</string>
+    <string name="CreateFund">Crear Fondo</string>
+
+    <string name="BudgetName">Nombre del Presupuesto</string>
+    <string name="WalletName">Nombre de la Cartera</string>
+    <string name="FundName">Nombre del Fondo</string>
+
+    <string name="Settings">Ajustes</string>
+    <string name="Wallets">Carteras</string>
+    <string name="Budgets">Presupuestos</string>
+
+    <string name="InitialCapital">Capital Inicial</string>
+    <string name="Goal">Meta</string>
+    <string name="AnnualCapitalization">Capitalizaciones Anuales</string>
+    <string name="InterestRate">Tasa de Interés</string>
+    <string name="Update">Actualizar</string>
+
+
+    <string name="Funds">Fondos</string>
+
+
+    <string name="YouHaveNoWalletsConfigured">No tienes carteras configuradas</string>
+    <string name="YouHaveNoBudgetsConfigured">No tienes presupuestos configurados</string>
+    <string name="YouHaveNoFundsConfigured">No tienes fondos configurados</string>
+    <string name="YouHaveNoTransactionsOnThisDate">No tienes transacciones en esta fecha</string>
+    <string name="NoAccountRegisterNow">¿No tienes cuenta?, Regístrate</string>
+    <string name="AlreadyHaveAccount">¿Ya tienes cuenta?, Inicia Sesión</string>
+    <string name="AnErrorHasOccurred">Ha ocurrido un error</string>
+    <string name="UnknownError">Error desconocido</string>
+
 </resources>

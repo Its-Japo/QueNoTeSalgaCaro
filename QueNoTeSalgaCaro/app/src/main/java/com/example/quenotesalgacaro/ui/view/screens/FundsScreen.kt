@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -20,6 +21,8 @@ import com.example.quenotesalgacaro.ui.view.composables.InfoBar
 import com.example.quenotesalgacaro.ui.view.composables.LoadingScreen
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
+import com.example.quenotesalgacaro.R
+import com.example.quenotesalgacaro.ui.view.composables.ErrorScreen
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -38,7 +41,7 @@ fun FundsScreen(
     }
     Scaffold (
         topBar = {
-            TopBar(title = "Funds", navController = navController)
+            TopBar(title = stringResource(id = R.string.Funds), navController = navController)
         },
         floatingActionButton = {
             FloatingActionButton(
@@ -60,7 +63,9 @@ fun FundsScreen(
                     }
                 }
             }
-            is DataUiState.Error -> Text("Error: ${state.exception.message}")
+            is DataUiState.Error -> {
+                ErrorScreen(error = state.exception, paddingValues = paddingValues)
+            }
         }
     }
 

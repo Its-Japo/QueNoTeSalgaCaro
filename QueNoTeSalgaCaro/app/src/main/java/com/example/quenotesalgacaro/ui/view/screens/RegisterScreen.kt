@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -41,23 +42,19 @@ fun RegisterScreen(
     val usernameState = remember { mutableStateOf(TextFieldValue()) }
     val passwordState = remember { mutableStateOf(TextFieldValue()) }
 
-    val context = LocalContext.current
     LaunchedEffect(Unit) {
         viewModel.registerUiState.collectLatest { registerUiState ->
             if (registerUiState.user != null) {
-                Toast.makeText(context, "Usuario registrado", Toast.LENGTH_SHORT).show()
                 navController.navigate("LoginScreen") {
                     popUpTo("RegisterScreen") { inclusive = true }
                 }
-            } else if (registerUiState.error != null) {
-                Toast.makeText(context, "Error al registrar usuario: ${registerUiState.error}", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     Scaffold(
         topBar = {
-            TopBar(title = "Registrarse", navController = navController, auth = viewModel.loginUiState.value.user != null)
+            TopBar(title = stringResource(id = R.string.Register), navController = navController, auth = viewModel.loginUiState.value.user != null)
         },
         bottomBar = {
             Button(
@@ -71,7 +68,7 @@ fun RegisterScreen(
                     .padding(20.dp),
             ) {
                 Text(
-                    text = "¿Ya tienes cuenta? Inicia sesión",
+                    text = stringResource(id = R.string.AlreadyHaveAccount)
                 )
             }
         }
@@ -83,7 +80,7 @@ fun RegisterScreen(
         ) {
             Image (
                 painter = painterResource(id = R.drawable.profileicon),
-                contentDescription = "Logo",
+                contentDescription = stringResource(id = R.string.ProfileIcon),
                 modifier = modifier
                     .fillMaxWidth()
                     .height(300.dp)
@@ -95,7 +92,7 @@ fun RegisterScreen(
             TextField(
                 value = usernameState.value,
                 onValueChange = { usernameState.value = it },
-                label = { Text("Correo electrónico") },
+                label = { Text(text = stringResource(id = R.string.email)) },
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(20.dp),
@@ -104,7 +101,7 @@ fun RegisterScreen(
             TextField(
                 value = passwordState.value,
                 onValueChange = { passwordState.value = it },
-                label = { Text("Contraseña") },
+                label = { Text(text = stringResource(id = R.string.password)) },
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(20.dp),
@@ -119,7 +116,7 @@ fun RegisterScreen(
                     viewModel.register(usernameState.value.text, passwordState.value.text)
 
                 }) {
-                Text("¡Registrarme!")
+                Text(text = stringResource(id = R.string.RegisterMe))
             }
 
         }

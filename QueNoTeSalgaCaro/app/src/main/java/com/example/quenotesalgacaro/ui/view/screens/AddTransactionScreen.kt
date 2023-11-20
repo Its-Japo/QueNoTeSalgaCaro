@@ -14,10 +14,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Text
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -30,14 +30,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavHostController
+import com.example.quenotesalgacaro.R
 import com.example.quenotesalgacaro.data.networking.SimpleDocument
-import com.example.quenotesalgacaro.navigation.NavigationBarState
 import com.example.quenotesalgacaro.ui.view.composables.DatePickerDialogD
 import com.example.quenotesalgacaro.ui.view.composables.ErrorScreen
 import com.example.quenotesalgacaro.ui.view.composables.LoadingDropdownTextField
@@ -77,12 +76,12 @@ fun AddTransactionScreen(
             if ((getWalletsState as DataUiState.Success<List<SimpleDocument>>).data.isNotEmpty()) {
                 var selectedWallet by remember { mutableStateOf((getWalletsState as DataUiState.Success<List<SimpleDocument>>).data[0].name) }
                 var selectedCategory by remember { mutableStateOf("") }
-                var seletedDate by remember { mutableStateOf("") }
+                var selectedDate by remember { mutableStateOf("") }
 
                 var expandedWallet by remember { mutableStateOf(false) }
                 var expandedCategory by remember { mutableStateOf(false) }
                 val descriptionText = remember { mutableStateOf(TextFieldValue()) }
-                val montoText = remember { mutableStateOf(TextFieldValue()) }
+                val amountText = remember { mutableStateOf(TextFieldValue()) }
 
                 LaunchedEffect(selectedWallet, user) {
                     user?.let {
@@ -93,7 +92,7 @@ fun AddTransactionScreen(
                 LaunchedEffect(walletCategoriesState) {
                     when (walletCategoriesState) {
                         is DataUiState.Loading -> {
-                            selectedCategory = "Loading..."
+                            selectedCategory = context.getString(R.string.Loading)
                         }
                         is DataUiState.Success<List<SimpleDocument>> -> {
                             val categories = (walletCategoriesState as DataUiState.Success<List<SimpleDocument>>).data
@@ -103,7 +102,7 @@ fun AddTransactionScreen(
                         }
 
                         is DataUiState.Error -> {
-                            selectedCategory = "Error"
+                            selectedCategory = context.getString(R.string.Error)
                         }
                     }
                 }
@@ -128,7 +127,7 @@ fun AddTransactionScreen(
                                     (getWalletsState as DataUiState.Success<List<SimpleDocument>>).data.map { it.name }.toTypedArray()
                                 }
                                 else -> {
-                                    arrayOf("UNCATEGORIZED")
+                                    arrayOf(stringResource(id = R.string.Uncategorized))
                                 }
                             },
                             expandedWallet = expandedWallet,
@@ -141,9 +140,9 @@ fun AddTransactionScreen(
                             },
                             uiState = getWalletsState,
                             width = 170,
-                            label = "Wallet:"
+                            label = stringResource(id = R.string.Wallet)
                         )
-                        DatePickerDialogD(onDateSelected = { seletedDate = it })
+                        DatePickerDialogD(onDateSelected = { selectedDate = it })
                     }
 
                     LoadingDropdownTextField(
@@ -153,7 +152,7 @@ fun AddTransactionScreen(
                                 (walletCategoriesState as DataUiState.Success<List<SimpleDocument>>).data.map { it.name }.toTypedArray()
                             }
                             else -> {
-                                arrayOf("UNCATEGORIZED")
+                                arrayOf(stringResource(id = R.string.Uncategorized))
                             }
                         },
                         expandedWallet = expandedCategory,
@@ -167,7 +166,7 @@ fun AddTransactionScreen(
                         },
                         uiState = walletCategoriesState,
                         width = 250,
-                        label = "Category:"
+                        label = stringResource(id = R.string.Category)
                     )
 
 
@@ -181,7 +180,7 @@ fun AddTransactionScreen(
                             .height(100.dp),
                         label = {
                             Text(
-                                text = "Descripción:",
+                                text = stringResource(id = R.string.Concept),
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                         },
@@ -193,14 +192,14 @@ fun AddTransactionScreen(
                     )
 
                     TextField(
-                        value = montoText.value,
-                        onValueChange = {montoText.value = it},
+                        value = amountText.value,
+                        onValueChange = {amountText.value = it},
                         modifier = modifier
                             .padding(12.dp)
                             .width(300.dp),
                         label = {
                             Text(
-                                text = "Monto:",
+                                text = stringResource(id = R.string.Amount),
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                         },
@@ -226,26 +225,32 @@ fun AddTransactionScreen(
                                         userId = user.uid,
                                         walletName = selectedWallet,
                                         category = selectedCategory,
-                                        date = seletedDate,
+                                        date = selectedDate,
                                         concept = descriptionText.value.text,
-                                        amount = montoText.value.text
+                                        amount = amountText.value.text
                                     )
                                 }
                             },
-                            modifier = modifier.padding(12.dp)
+                            modifier = modifier
+                                .padding(12.dp)
                                 .width(300.dp),
                             colors = ButtonDefaults.buttonColors(
                                 contentColor = MaterialTheme.colorScheme.onPrimary,
                                 containerColor = MaterialTheme.colorScheme.primary,
                             ),
                             enabled = if (user != null) {
-                                selectedCategory != "Loading..." && selectedCategory != "Error" && selectedCategory != "" && seletedDate != "" && descriptionText.value.text != "" && montoText.value.text != ""
+                                selectedCategory != stringResource(id = R.string.Loading) &&
+                                selectedCategory != stringResource(id = R.string.Error) &&
+                                selectedCategory != stringResource(id = R.string.Uncategorized) &&
+                                selectedCategory != "" &&
+                                selectedDate != "" && descriptionText.value.text != "" &&
+                                amountText.value.text != ""
                             } else {
                                 false
                             }
                         ) {
                             Text(
-                                text = "Agregar",
+                                text = stringResource(id = R.string.Add),
                                 modifier = modifier.padding(12.dp),
                             )
                         }
@@ -259,7 +264,7 @@ fun AddTransactionScreen(
                         .padding(paddingValues),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = "No tienes wallets")
+                    Text(text = stringResource(R.string.YouHaveNoWalletsConfigured))
                 }
             }
         }

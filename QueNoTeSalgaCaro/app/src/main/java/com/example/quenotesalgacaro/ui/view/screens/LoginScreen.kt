@@ -2,7 +2,6 @@ package com.example.quenotesalgacaro.ui.view.screens
 
 
 import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,8 +20,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -44,24 +43,19 @@ fun LoginScreen(
     val usernameState = remember { mutableStateOf(TextFieldValue()) }
     val passwordState = remember { mutableStateOf(TextFieldValue()) }
 
-    val context = LocalContext.current
-
     LaunchedEffect(Unit) {
         viewModel.loginUiState.collectLatest { loginUiState ->
             if (loginUiState.user != null) {
-                Toast.makeText(context, "Usuario logueado", Toast.LENGTH_SHORT).show()
                 navController.navigate("NavigationScreen") {
                     popUpTo("LoginScreen") { inclusive = true }
                 }
-            } else if (loginUiState.error != null) {
-                Toast.makeText(context, "Error al loguear usuario: ${loginUiState.error}", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     Scaffold(
         topBar = {
-            TopBar(title = "Iniciar Sesión", navController = navController, auth = viewModel.loginUiState.value.user != null)
+            TopBar(title = stringResource(id = R.string.Login), navController = navController, auth = viewModel.loginUiState.value.user != null)
         },
         bottomBar = {
             Button(
@@ -75,7 +69,7 @@ fun LoginScreen(
                     .padding(20.dp),
             ) {
                 Text(
-                    text = "¿No tienes cuenta? Regístrate",
+                    text = stringResource(id = R.string.NoAccountRegisterNow),
                 )
             }
         }
@@ -87,7 +81,7 @@ fun LoginScreen(
         ) {
             Image (
                 painter = painterResource(id = R.drawable.profileicon),
-                contentDescription = "Logo",
+                contentDescription = stringResource(id = R.string.ProfileIcon),
                 modifier = modifier
                     .fillMaxWidth()
                     .height(300.dp)
@@ -99,7 +93,7 @@ fun LoginScreen(
             TextField(
                 value = usernameState.value,
                 onValueChange = { usernameState.value = it },
-                label = { Text("Correo electrónico") },
+                label = { Text(text = stringResource(id = R.string.email)) },
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(20.dp),
@@ -109,7 +103,7 @@ fun LoginScreen(
             TextField(
                 value = passwordState.value,
                 onValueChange = { passwordState.value = it },
-                label = { Text("Contraseña") },
+                label = { Text(text = stringResource(id = R.string.password)) },
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(20.dp),
@@ -124,7 +118,7 @@ fun LoginScreen(
                 viewModel.login(usernameState.value.text, passwordState.value.text)
 
             }) {
-                Text("Login")
+                Text(text = stringResource(id = R.string.Login))
             }
 
         }

@@ -2,16 +2,13 @@ package com.example.quenotesalgacaro.ui.view.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -25,12 +22,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.quenotesalgacaro.R
 import com.example.quenotesalgacaro.navigation.TopBar
+import com.example.quenotesalgacaro.ui.view.composables.ErrorScreen
+import com.example.quenotesalgacaro.ui.view.composables.LoadingScreen
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 import com.example.quenotesalgacaro.ui.view.vms.BudgetViewModel
@@ -51,13 +51,12 @@ fun BudgetConfigurationScreen(
     if (userUid != null) {
         LaunchedEffect(Unit) {
             budgetViewModel.fetchBudgetConfiguration(userUid, id)
-            println("BudgetConfiguraton $budgetConfig")
         }
     }
 
     Scaffold (
         topBar = {
-            TopBar(title = "Configure Budget", navController = navController)
+            TopBar(title = stringResource(id = R.string.ConfigureBudget), navController = navController)
         }
     ) {
         Column (
@@ -72,7 +71,7 @@ fun BudgetConfigurationScreen(
                     ) {
                         item {
                             Text(
-                                text = "Ingresos",
+                                text = stringResource(id = R.string.Income),
                                 modifier = modifier
                                     .fillMaxWidth()
                                     .padding(10.dp, 5.dp, 10.dp, 5.dp),
@@ -85,12 +84,12 @@ fun BudgetConfigurationScreen(
                                     .padding(0.dp, 0.dp, 10.dp, 0.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(text = "Concepto",
+                                Text(text = stringResource(id = R.string.Concept),
                                     modifier = modifier
                                         .weight(2f)
                                         .padding(0.dp, 0.dp, 10.dp, 0.dp)
                                 )
-                                Text(text = "Monto",
+                                Text(text = stringResource(id = R.string.Amount),
                                     modifier = modifier
                                         .weight(2f)
                                         .padding(0.dp, 0.dp, 10.dp, 0.dp)
@@ -156,7 +155,7 @@ fun BudgetConfigurationScreen(
 
                         item {
                             Text(
-                                text = "Gastos Fijos",
+                                text = stringResource(id = R.string.FixedExpenses),
                                 modifier = modifier
                                     .fillMaxWidth()
                                     .padding(10.dp, 5.dp, 10.dp, 5.dp),
@@ -169,12 +168,12 @@ fun BudgetConfigurationScreen(
                                     .padding(0.dp, 0.dp, 10.dp, 0.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(text = "Concepto",
+                                Text(text = stringResource(id = R.string.Concept),
                                     modifier = modifier
                                         .weight(2f)
                                         .padding(0.dp, 0.dp, 10.dp, 0.dp)
                                 )
-                                Text(text = "Monto",
+                                Text(text = stringResource(id = R.string.Amount),
                                     modifier = modifier
                                         .weight(2f)
                                         .padding(0.dp, 0.dp, 10.dp, 0.dp)
@@ -240,7 +239,7 @@ fun BudgetConfigurationScreen(
 
                         item {
                             Text(
-                                text = "Gastos Variables",
+                                text = stringResource(id = R.string.VariableExpenses),
                                 modifier = modifier
                                     .fillMaxWidth()
                                     .padding(10.dp, 5.dp, 10.dp, 5.dp),
@@ -253,12 +252,12 @@ fun BudgetConfigurationScreen(
                                     .padding(0.dp, 0.dp, 10.dp, 0.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(text = "Concepto",
+                                Text(text = stringResource(id = R.string.Concept),
                                     modifier = modifier
                                         .weight(2f)
                                         .padding(0.dp, 0.dp, 10.dp, 0.dp)
                                 )
-                                Text(text = "Monto",
+                                Text(text = stringResource(id = R.string.Amount),
                                     modifier = modifier
                                         .weight(2f)
                                         .padding(0.dp, 0.dp, 10.dp, 0.dp)
@@ -326,22 +325,10 @@ fun BudgetConfigurationScreen(
 
                 }
                 is DataUiState.Error -> {
-                    Text(text = "Error")
+                    ErrorScreen(error = (budgetConfig as DataUiState.Error).exception, paddingValues = it)
                 }
                 is DataUiState.Loading -> {
-                    Column (
-                        modifier = modifier
-                            .fillMaxSize()
-                            .padding(10.dp, 10.dp, 10.dp, 10.dp),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-
-                    ) {
-                        CircularProgressIndicator(
-                            modifier = modifier
-                                .scale(1.3f)
-                        )
-                    }
+                    LoadingScreen(paddingValues = it)
                 }
             }
         }

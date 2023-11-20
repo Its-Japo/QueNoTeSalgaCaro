@@ -16,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -25,6 +26,7 @@ import com.example.quenotesalgacaro.navigation.TopBar
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 import com.example.quenotesalgacaro.ui.view.vms.BudgetViewModel
+import com.example.quenotesalgacaro.R
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -62,9 +64,9 @@ fun CreateScreen(
     Scaffold (
         topBar = {
             when (actionViewModel) {
-                is WalletViewModel -> TopBar(title = "Create Wallet", navController = navController)
-                is BudgetViewModel -> TopBar(title = "Create Budget", navController = navController)
-                is FundViewModel -> TopBar(title = "Create Fund", navController = navController)
+                is WalletViewModel -> TopBar(title = stringResource(id = R.string.CreateWallet), navController = navController)
+                is BudgetViewModel -> TopBar(title = stringResource(id = R.string.CreateBudget), navController = navController)
+                is FundViewModel -> TopBar(title = stringResource(id = R.string.CreateFund), navController = navController)
             }
         }
     ){
@@ -77,9 +79,9 @@ fun CreateScreen(
                 value = name.value,
                 onValueChange = { name.value = it },
                 label = { when (actionViewModel) {
-                    is WalletViewModel -> Text(text = "Wallet Name")
-                    is BudgetViewModel -> Text(text = "Budget Name")
-                    is FundViewModel -> Text(text = "Fund Name")
+                    is WalletViewModel -> Text(text = stringResource(id = R.string.WalletName))
+                    is BudgetViewModel -> Text(text = stringResource(id = R.string.BudgetName))
+                    is FundViewModel -> Text(text = stringResource(id = R.string.FundName))
                 }},
                 modifier = modifier
                     .fillMaxWidth()
@@ -109,9 +111,9 @@ fun CreateScreen(
                     .padding(20.dp)
             ) {
                 when (actionViewModel) {
-                    is WalletViewModel -> Text(text = "Create Wallet")
-                    is BudgetViewModel -> Text(text = "Create Budget")
-                    is FundViewModel -> Text(text = "Create Fund")
+                    is WalletViewModel -> Text(text = stringResource(id = R.string.CreateWallet))
+                    is BudgetViewModel -> Text(text = stringResource(id = R.string.CreateBudget))
+                    is FundViewModel -> Text(text = stringResource(id = R.string.CreateFund))
                 }
             }
         }
