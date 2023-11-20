@@ -31,7 +31,7 @@ fun NavigationBarComposable(
             StatsInfoScreen(paddingValues = paddingValues)
         }
         composable(NavigationBarState.AddTransactionScreen.route) {
-            AddTransactionScreen(viewModel = authViewModel, paddingValues = paddingValues)
+            AddTransactionScreen(navController = navController, viewModel = authViewModel, paddingValues = paddingValues)
         }
         composable(NavigationBarState.BudgetInfoScreen.route) {
             BudgetInfoScreen(paddingValues = paddingValues)

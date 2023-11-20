@@ -34,8 +34,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavHostController
 import com.example.quenotesalgacaro.data.networking.SimpleDocument
+import com.example.quenotesalgacaro.navigation.NavigationBarState
 import com.example.quenotesalgacaro.ui.view.composables.DatePickerDialogD
+import com.example.quenotesalgacaro.ui.view.composables.ErrorScreen
 import com.example.quenotesalgacaro.ui.view.composables.LoadingDropdownTextField
 import com.example.quenotesalgacaro.ui.view.composables.LoadingScreen
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
@@ -45,6 +49,7 @@ import com.example.quenotesalgacaro.ui.view.vms.WalletViewModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @Composable
 fun AddTransactionScreen(
+    navController: NavHostController,
     modifier: Modifier = Modifier,
     viewModel: AuthViewModel = viewModel(),
     walletViewModel: WalletViewModel = viewModel(),
@@ -73,10 +78,10 @@ fun AddTransactionScreen(
             if ((getWalletsState as DataUiState.Success<List<SimpleDocument>>).data.isNotEmpty()) {
                 var selectedWallet by remember { mutableStateOf((getWalletsState as DataUiState.Success<List<SimpleDocument>>).data[0].name) }
                 var selectedCategory by remember { mutableStateOf("") }
+                var seletedDate by remember { mutableStateOf("") }
 
                 var expandedWallet by remember { mutableStateOf(false) }
                 var expandedCategory by remember { mutableStateOf(false) }
-                var seletedDate by remember { mutableStateOf("") }
                 val descriptionText = remember { mutableStateOf(TextFieldValue()) }
                 val montoText = remember { mutableStateOf(TextFieldValue()) }
 
@@ -228,14 +233,17 @@ fun AddTransactionScreen(
                                     )
                                 }
                             },
-                            modifier = modifier
-                                .padding(12.dp)
+                            modifier = modifier.padding(12.dp)
                                 .width(300.dp),
-                            enabled = true,
                             colors = ButtonDefaults.buttonColors(
                                 contentColor = MaterialTheme.colorScheme.onPrimary,
                                 containerColor = MaterialTheme.colorScheme.primary,
                             ),
+                            enabled = if (user != null) {
+                                selectedCategory != "Loading..." && selectedCategory != "Error" && selectedCategory != "" && seletedDate != "" && descriptionText.value.text != "" && montoText.value.text != ""
+                            } else {
+                                false
+                            }
                         ) {
                             Text(
                                 text = "Agregar",
@@ -257,13 +265,7 @@ fun AddTransactionScreen(
             }
         }
         is DataUiState.Error -> {
-            Column(
-                modifier = modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-            ) {
-                Text(text = "Funds")
-            }
+            ErrorScreen(error = (getWalletsState as DataUiState.Error).exception, paddingValues = paddingValues)
         }
     }
 }

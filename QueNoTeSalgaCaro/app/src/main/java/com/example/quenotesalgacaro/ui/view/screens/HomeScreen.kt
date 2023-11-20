@@ -1,9 +1,10 @@
 package com.example.quenotesalgacaro.ui.view.screens
 
-import com.example.quenotesalgacaro.ui.view.vms.WalletViewModel
+import DatePickerWithoutDays
 import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,7 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -37,7 +39,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -45,50 +47,35 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.quenotesalgacaro.R
-import com.example.quenotesalgacaro.data.networking.SimpleDocument
+import com.example.quenotesalgacaro.data.networking.Transaction
+import com.example.quenotesalgacaro.ui.view.composables.ErrorScreen
 import com.example.quenotesalgacaro.ui.view.composables.LoadingScreen
-import com.example.quenotesalgacaro.ui.view.struct.FilaTabla
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
+import com.example.quenotesalgacaro.ui.view.vms.WalletViewModel
+import java.util.Calendar
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    //navController: NavController,
     modifier: Modifier = Modifier,
     viewModel: AuthViewModel = viewModel(),
     walletViewModel: WalletViewModel = viewModel(),
     paddingValues: PaddingValues
 ) {
-
     val context = LocalContext.current
-    val dates = listOf("Ago 2023", "Sep 2023", "Oct 2023", "Nov 2023", "Dic 2023")
-    val wallets: List<SimpleDocument>
-
-    var expandedDate by remember { mutableStateOf(false) }
     var expandedWallet by remember { mutableStateOf(false) }
 
-
-    val saldo = 8430.41
-    val total = 12000.00
-    val progress = (total - saldo)/total
-
-    val elementosTabla = mutableListOf(
-        FilaTabla("1", "Comida", "Q100.00"),
-        FilaTabla("2", "Comida", "Q100.00"),
-        FilaTabla("2","Cine","Q50.00"),
-        FilaTabla("3", "Comida", "Q100.00"),
-        FilaTabla("4", "Comida", "Q100.00"),
-        FilaTabla("5", "Comida", "Q100.00"),
-        FilaTabla("6", "Gasolina", "Q400.00"),
-        FilaTabla("7", "Comida", "Q100.00"),
-        FilaTabla("8", "Comida", "Q100.00"),
-        FilaTabla("9","Super","Q2000.00")
+    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+    val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
+    val months = listOf(
+        "jan", "feb", "mar", "apr", "may", "jun",
+        "jul", "aug", "sep", "oct", "nov", "dec"
     )
-
     val uid = viewModel.loginUiState.value.user?.uid
+
 
     LaunchedEffect(
         key1 = Unit,
@@ -99,67 +86,55 @@ fun HomeScreen(
             }
         }
     )
+
     val walletsState by walletViewModel.walletsFetchState.collectAsState()
+    val transactionState by walletViewModel.fetchTransactionsState.collectAsState()
+
     when(val state = walletsState) {
         is DataUiState.Loading -> {
             LoadingScreen()
         }
         is DataUiState.Success -> {
-            wallets = (state.data)
             if (state.data.isNotEmpty()) {
-                var selectedDate by remember { mutableStateOf(dates[0]) }
-                var selectedWallet by remember { mutableStateOf(wallets[0]) }
+                var selectedDate by remember { mutableStateOf("${months[currentMonth]}.-$currentYear") }
+                var selectedWallet by remember { mutableStateOf(state.data.first().name) }
+
+                LaunchedEffect(selectedWallet, selectedDate) {
+                    if (uid != null) {
+                        walletViewModel.fetchTransactions(uid, selectedWallet, selectedDate)
+
+
+
+                    }
+                }
+
+
                 Column (
                     modifier = modifier
                         .fillMaxWidth()
                         .padding(paddingValues = paddingValues),
                 ) {
-                    ExposedDropdownMenuBox(
-                        expanded = expandedDate,
-                        onExpandedChange = {
-                            expandedDate = !expandedDate
-                        },
+                    Row (
                         modifier = modifier
-                            .padding(12.dp)
-                            .align(alignment = Alignment.CenterHorizontally),
-
-                        ) {
-
-                        TextField(
-                            value = selectedDate,
-                            onValueChange = {},
-                            readOnly = true,
-                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedDate) },
-                            modifier = modifier
-                                .menuAnchor()
-                                .width(180.dp),
-                            label = {
-                                Text(
-                                    text = "Fecha"
-                                )
-                            },
-                            colors = TextFieldDefaults.colors(
-                                focusedContainerColor = MaterialTheme.colorScheme.surface,
-                                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                                disabledContainerColor = MaterialTheme.colorScheme.surface,
-                            )
-                        )
-                        ExposedDropdownMenu(
-                            expanded = expandedDate,
-                            onDismissRequest = { expandedDate = false }
-                        ) {
-                            dates.forEach { item ->
-                                DropdownMenuItem(
-                                    text = { Text(text = item) },
-                                    onClick = {
-                                        selectedDate = item
-                                        expandedDate = false
-                                        Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
-                                    }
-                                )
-                            }
-                        }
+                            .fillMaxWidth()
+                            .padding(0.dp, 4.dp, 0.dp, 0.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ){
+                        Text(text = "Seleccionar fecha:", modifier = modifier.padding(12.dp))
                     }
+                    Row (
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(0.dp, 0.dp, 0.dp, 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ){
+                        DatePickerWithoutDays(onDateSelected = { year, month ->
+                            selectedDate = "${month}.-${year}"
+                        })
+                    }
+
                     Row {
                         Column(
                             modifier = modifier
@@ -178,7 +153,7 @@ fun HomeScreen(
                                 ) {
 
                                 TextField(
-                                    value = selectedWallet.name,
+                                    value = selectedWallet,
                                     onValueChange = {},
                                     readOnly = true,
                                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedWallet) },
@@ -199,13 +174,15 @@ fun HomeScreen(
                                     expanded = expandedWallet,
                                     onDismissRequest = { expandedWallet = false }
                                 ) {
-                                    wallets.forEach { item ->
+                                    state.data.forEach { item ->
                                         DropdownMenuItem(
                                             text = { Text(text = item.name) },
                                             onClick = {
-                                                selectedWallet = item
+                                                selectedWallet = item.name
                                                 expandedWallet = false
-                                                Toast.makeText(context, item.name, Toast.LENGTH_SHORT).show()
+                                                if (uid != null) {
+                                                    walletViewModel.fetchTransactions(uid, selectedWallet, selectedDate)
+                                                }
                                             }
                                         )
                                     }
@@ -219,39 +196,75 @@ fun HomeScreen(
                                     style = MaterialTheme.typography.labelLarge,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
-                                Text(
-                                    text = "Q$saldo",
-                                    style = MaterialTheme.typography.headlineSmall,
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
+                                when(val tState = transactionState) {
+                                    is DataUiState.Loading -> {
+                                        Text(text = "Cargando")
+                                    }
+                                    is DataUiState.Error -> {
+                                        Text(text = "Error")
+                                    }
+                                    is DataUiState.Success -> {
+                                        val saldo = tState.data.filter { it.amount >= 0 }.sumOf { it.amount } + tState.data.filter { it.amount < 0 }.sumOf { it.amount }
+                                        Text(
+                                            text = "Q$saldo",
+                                            style = MaterialTheme.typography.headlineSmall,
+                                            color = MaterialTheme.colorScheme.onSurface
+                                        )
+                                    }
+                                }
+
                             }
                         }
                         Box(
                             modifier = modifier.weight(4f),
                         ) {
-                            CircularProgressIndicator(
-                                progress = { progress.toFloat() },
-                                modifier = modifier
-                                    .width(160.dp)
-                                    .aspectRatio(1f)
-                                    .align(alignment = Alignment.Center)
-                                    .padding(12.dp),
-                                color = when (progress) {
-                                    in 0.0..0.5 -> Color(57, 255, 20)
-                                    in 0.5..0.8 -> Color(255, 255, 0)
-                                    in 0.8..0.99 -> Color(255, 0, 0)
-                                    else -> {
-                                        Color(80, 0, 0)
-                                    }
-                                },
-                                strokeWidth = 16.dp,
-                            )
-                            Text(
-                                text = "${(progress * 100).toInt()}%",
-                                style = MaterialTheme.typography.displaySmall,
-                                color = MaterialTheme.colorScheme.onSurface,
-                                modifier = modifier.align(alignment = Alignment.Center)
-                            )
+                            when(val tState = transactionState) {
+                                is DataUiState.Loading -> {
+                                    CircularProgressIndicator(
+                                        modifier = modifier
+                                            .width(160.dp)
+                                            .aspectRatio(1f)
+                                            .align(alignment = Alignment.Center)
+                                            .padding(12.dp),
+                                        strokeWidth = 16.dp,
+                                    )
+                                }
+                                is DataUiState.Error -> {
+                                    ErrorScreen(
+                                        error = tState.exception,
+                                        paddingValues = paddingValues
+                                    )
+                                }
+                                is DataUiState.Success -> {
+                                    val progress = -tState.data.filter { it.amount < 0 }.sumOf { it.amount }/tState.data.filter { it.amount >= 0 }.sumOf { it.amount }
+
+
+                                    CircularProgressIndicator(
+                                        progress = { progress.toFloat() },
+                                        modifier = modifier
+                                            .width(160.dp)
+                                            .aspectRatio(1f)
+                                            .align(alignment = Alignment.Center)
+                                            .padding(12.dp),
+                                        color = when (progress) {
+                                            in 0.0..0.5 -> Color(57, 255, 20)
+                                            in 0.5..0.8 -> Color(255, 255, 0)
+                                            in 0.8..0.99 -> Color(255, 0, 0)
+                                            else -> {
+                                                Color(80, 0, 0)
+                                            }
+                                        },
+                                        strokeWidth = 16.dp,
+                                    )
+                                    Text(
+                                        text = "${(progress * 100).toInt()}%",
+                                        style = MaterialTheme.typography.displaySmall,
+                                        color = MaterialTheme.colorScheme.onSurface,
+                                        modifier = modifier.align(alignment = Alignment.Center)
+                                    )
+                                }
+                            }
+
                         }
                     }
                     Row {
@@ -275,12 +288,13 @@ fun HomeScreen(
                                 .weight(2f)
                                 .padding(12.dp)
                         )
+                        /*
                         Text(
                             text = "",
                             modifier = modifier
                                 .weight(1f)
                                 .padding(12.dp)
-                        )
+                        )*/
                     }
                     Spacer(modifier = modifier
                         .height(1.dp)
@@ -288,45 +302,99 @@ fun HomeScreen(
                         .padding(20.dp, 0.dp, 20.dp, 0.dp)
                         .background(Color.Gray)
                     )
-                    LazyColumn(
-                        modifier = modifier
-                            .fillMaxWidth()
-                    ) {
-                        items(elementosTabla.size) { index ->
-                            Row {
+                    when(val tState = transactionState) {
+                        is DataUiState.Loading -> {
+                            LoadingScreen(paddingValues = paddingValues)
+                        }
+                        is DataUiState.Error -> {
+                            ErrorScreen(error = tState.exception, paddingValues = paddingValues)
+                        }
+                        is DataUiState.Success -> {
+                            LazyColumn(
+                                modifier = modifier
+                                    .fillMaxWidth()
+                            ) {
+                                if (tState.data.isNotEmpty()) {
 
-                                Text(
-                                    text = elementosTabla[index].dia,
-                                    modifier = modifier
-                                        .weight(1f)
-                                        .padding(12.dp),
-                                    style = MaterialTheme.typography.labelLarge,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                                Text(
-                                    text = elementosTabla[index].categoria,
-                                    modifier = modifier
-                                        .weight(3f)
-                                        .padding(12.dp)
-                                )
-                                Text(
-                                    text = elementosTabla[index].monto,
-                                    modifier = modifier
-                                        .weight(2f)
-                                        .padding(12.dp)
-                                )
-                                IconButton(
-                                    onClick = { /*TODO*/ },
-                                    modifier = modifier
-                                        .weight(1f)
-                                ) {
-                                    Icon(
-                                        painter = painterResource(
-                                            id = R.drawable.option
-                                        ),
-                                        contentDescription = "Opciones",
-                                        tint = MaterialTheme.colorScheme.primary
-                                    )
+                                    items(tState.data.size) { index ->
+                                        if (index < tState.data.size) {
+                                            Row {
+
+                                                Text(
+                                                    text = tState.data.sortedBy { it.day }[index].day.toString(),
+                                                    modifier = modifier
+                                                        .weight(1f)
+                                                        .padding(12.dp),
+                                                    style = MaterialTheme.typography.labelLarge,
+                                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                )
+                                                Text(
+                                                    text = tState.data.sortedBy { it.day }[index].category,
+                                                    modifier = modifier
+                                                        .weight(3f)
+                                                        .padding(12.dp)
+                                                )
+                                                Text(
+                                                    text = tState.data.sortedBy { it.day }[index].amount.toString(),
+                                                    modifier = modifier
+                                                        .weight(2f)
+                                                        .padding(12.dp)
+                                                )
+                                                /*IconButton(
+                                                    onClick = {  },
+                                                    modifier = modifier
+                                                        .weight(1f)
+                                                ) {
+                                                    Icon(
+                                                        painter = painterResource(
+                                                            id = R.drawable.option
+                                                        ),
+                                                        contentDescription = "Opciones",
+                                                        tint = MaterialTheme.colorScheme.primary
+                                                    )
+                                                }*/
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    item {
+                                        Column (
+                                            modifier = modifier
+                                                .fillMaxSize()
+                                                .padding(paddingValues),
+                                            verticalArrangement = Arrangement.Center,
+                                            horizontalAlignment = Alignment.CenterHorizontally
+
+                                        ) {
+                                            Surface (
+
+                                            ) {
+                                                Text(
+                                                    text = "No tienes transacciones en esta fecha",
+                                                    textAlign = TextAlign.Center,
+                                                    modifier = modifier
+                                                        .background(
+                                                            Brush.verticalGradient(
+                                                                colors = listOf(
+                                                                    MaterialTheme.colorScheme.primary,
+                                                                    MaterialTheme.colorScheme.primary
+                                                                )
+                                                            ),
+                                                            MaterialTheme.shapes.large,
+                                                            0.7F
+                                                        )
+                                                        .border(
+                                                            width = 1.dp,
+                                                            color = MaterialTheme.colorScheme.primary,
+                                                            shape = MaterialTheme.shapes.large
+                                                        )
+                                                        .padding(12.dp)
+
+                                                )
+
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -356,7 +424,7 @@ fun HomeScreen(
             
         }
         is DataUiState.Error -> {
-            Text(text = "Error")
+            ErrorScreen(error = state.exception, paddingValues = paddingValues)
         }
     }
 

@@ -62,7 +62,7 @@ fun AccountScreen(
                     onClick = {
                         viewModel.logout()
                         navController.navigate("LoginScreen") {
-                            popUpTo("HomeScreen") { inclusive = true }
+                            popUpTo("NavigationScreen") { inclusive = true }
                         }
                     },
                     modifier = if (viewModel.loginUiState.value.user != null) {modifier
@@ -78,7 +78,7 @@ fun AccountScreen(
                             .padding(20.dp)
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.White,
+                        containerColor = MaterialTheme.colorScheme.surface,
                         contentColor = Color.Red
                     ),
                     enabled = viewModel.loginUiState.value.user != null
@@ -89,7 +89,7 @@ fun AccountScreen(
                     onClick = {
                         viewModel.deleteUser()
                         navController.navigate("LoginScreen") {
-                            popUpTo("HomeScreen") { inclusive = true }
+                            popUpTo("NavigationScreen") { inclusive = true }
                         }
                     },
                     modifier = modifier

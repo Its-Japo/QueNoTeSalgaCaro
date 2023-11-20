@@ -26,6 +26,10 @@ class WalletViewModel(private val firestoreRepository: DataBaseRepository = Fire
     private val _fetchWalletCategoriesState = MutableStateFlow<DataUiState<List<SimpleDocument>>>(DataUiState.Loading)
     val fetchWalletCategoriesState = _fetchWalletCategoriesState.asStateFlow()
 
+    private val _fetchTransactionsState = MutableStateFlow<DataUiState<List<Transaction>>>(DataUiState.Loading)
+    val fetchTransactionsState = _fetchTransactionsState.asStateFlow()
+
+
     fun fetchWallets(userId: String) {
         viewModelScope.launch {
             _walletsFetchState.value = DataUiState.Loading
@@ -97,16 +101,29 @@ class WalletViewModel(private val firestoreRepository: DataBaseRepository = Fire
 
     fun addTransaction(userId: String, walletName: String, category: String, amount: String, concept: String, date: String) {
         viewModelScope.launch {
+            _walletsFetchState.value = DataUiState.Loading
             try {
                 val time = date.split("-")
                 println(time)
                 val day = time[0].toInt()
                 val dateTime = time[1] + "-" + time[2]
-                val transaction = Transaction(amount.toDouble(), category, dateTime, day, concept)
+                val transaction = Transaction(id = "NOID", amount = amount.toDouble(), category = category, date = dateTime, day = day, description = concept)
                 firestoreRepository.addSecondGradeSubcollectionDocumentTransaction(userId, "wallets", walletName, "transactions", transaction)
-
+                fetchWallets(userId)
             } catch (e: Exception) {
-                _addWalletCategoryState.value = DataUiState.Error(e)
+                _walletsFetchState.value = DataUiState.Error(e)
+            }
+        }
+    }
+
+    fun fetchTransactions(userId: String, walletName: String, date: String) {
+        viewModelScope.launch {
+            try {
+                _fetchTransactionsState.value = DataUiState.Loading
+                val transactions = firestoreRepository.fetchTransactions(userId, walletName, date)
+                _fetchTransactionsState.value = DataUiState.Success(transactions.getOrThrow())
+            } catch (e: Exception) {
+                _fetchTransactionsState.value = DataUiState.Error(e)
             }
         }
     }

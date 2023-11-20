@@ -251,6 +251,26 @@ class FirebaseFirestoreRepository: DataBaseRepository {
         }
     }
 
+    override suspend fun fetchTransactions (uid: String?, walletName: String, date: String): Result<List<Transaction>> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val snapshot = firebaseFirestore.collection("users").document(uid ?: "")
+                    .collection("wallets").document(walletName)
+                    .collection("transactions").whereEqualTo("date", date).get().await()
+                val transactions = snapshot.documents.mapNotNull { documentSnapshot ->
+                    val transaction = documentSnapshot.toObject(Transaction::class.java)
+                    if (transaction != null) {
+                        transaction.id = documentSnapshot.id
+                    }
+                    transaction
+                }
+                Result.success(transactions)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+
     override suspend fun updateDocument(uid: String?, collectionName: String, documentId: String, fieldName: String, element: Any): Result<Unit> {
         return withContext(Dispatchers.IO) {
             try {
