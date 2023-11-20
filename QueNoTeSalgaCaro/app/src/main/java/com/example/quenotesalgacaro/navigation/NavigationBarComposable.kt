@@ -3,6 +3,7 @@ package com.example.quenotesalgacaro.navigation
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -15,29 +16,30 @@ import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 
 @Composable
 fun NavigationBarComposable(
-    navController: NavHostController,
+    navHostController: NavHostController,
+    navController: NavController,
     authViewModel: AuthViewModel = viewModel(),
     paddingValues: PaddingValues
 ) {
     NavHost(
-        navController = navController,
+        navController = navHostController,
         startDestination = NavigationBarState.HomeScreen.route
     ) {
 
         composable(NavigationBarState.HomeScreen.route) {
-            HomeScreen(viewModel = authViewModel, paddingValues = paddingValues)
+            HomeScreen(viewModel = authViewModel, paddingValues = paddingValues, navController = navController)
         }
         composable(NavigationBarState.StatsInfoScreen.route) {
             StatsInfoScreen(paddingValues = paddingValues)
         }
         composable(NavigationBarState.AddTransactionScreen.route) {
-            AddTransactionScreen(navController = navController, viewModel = authViewModel, paddingValues = paddingValues)
+            AddTransactionScreen(viewModel = authViewModel, paddingValues = paddingValues)
         }
         composable(NavigationBarState.BudgetInfoScreen.route) {
-            BudgetInfoScreen(paddingValues = paddingValues)
+            BudgetInfoScreen(paddingValues = paddingValues, navController = navController)
         }
         composable(NavigationBarState.FundsInfoScreen.route) {
-            FundsInfoScreen(paddingValues = paddingValues)
+            FundsInfoScreen(paddingValues = paddingValues, navController = navController)
         }
 
     }

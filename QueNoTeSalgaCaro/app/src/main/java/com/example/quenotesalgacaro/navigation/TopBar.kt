@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,10 +23,10 @@ import com.example.quenotesalgacaro.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
+    modifier: Modifier = Modifier,
     title: String,
     navController: NavController,
-    auth: Boolean = false,
-    modifier: Modifier = Modifier
+    auth: Boolean = false
 ) {
     TopAppBar(
         title = {
@@ -36,7 +37,10 @@ fun TopBar(
                 textAlign = TextAlign.Center
             )
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
+        colors = topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+        ),
+
         navigationIcon = {
             if (navController.previousBackStackEntry != null) {
                 IconButton(onClick = { navController.navigateUp() }) {

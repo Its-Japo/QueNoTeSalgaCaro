@@ -49,7 +49,6 @@ import com.example.quenotesalgacaro.ui.view.vms.WalletViewModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @Composable
 fun AddTransactionScreen(
-    navController: NavHostController,
     modifier: Modifier = Modifier,
     viewModel: AuthViewModel = viewModel(),
     walletViewModel: WalletViewModel = viewModel(),

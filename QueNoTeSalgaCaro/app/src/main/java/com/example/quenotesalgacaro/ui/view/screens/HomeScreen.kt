@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -46,6 +48,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.quenotesalgacaro.R
 import com.example.quenotesalgacaro.data.networking.Transaction
 import com.example.quenotesalgacaro.ui.view.composables.ErrorScreen
@@ -61,11 +64,11 @@ import java.util.Calendar
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    navController: NavController,
     viewModel: AuthViewModel = viewModel(),
     walletViewModel: WalletViewModel = viewModel(),
     paddingValues: PaddingValues
 ) {
-    val context = LocalContext.current
     var expandedWallet by remember { mutableStateOf(false) }
 
     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
@@ -415,9 +418,29 @@ fun HomeScreen(
 
                 ) {
                     Text(
-                        text = "No tienes wallets configuradas, agregalas en ajustes",
-                        textAlign = TextAlign.Center
+                        text = "No tienes wallets configuradas",
+                        textAlign = TextAlign.Center,
+                        modifier = modifier.padding(16.dp)
                     )
+                    Button(
+                        onClick = { navController.navigate("WalletsScreen") },
+                        modifier = modifier.background(
+                            color = MaterialTheme.colorScheme.primary,
+                            shape = MaterialTheme.shapes.extraLarge,
+                        )
+                            .border(
+                                width = 1.dp,
+                                color = MaterialTheme.colorScheme.primary,
+                                shape = MaterialTheme.shapes.extraLarge,
+                            )
+                            .padding(4.dp, 2.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                            containerColor = Color.Transparent
+                        )
+                    ) {
+                        Text(text = "Configurar ahora")
+                    }
                 }
             }
             

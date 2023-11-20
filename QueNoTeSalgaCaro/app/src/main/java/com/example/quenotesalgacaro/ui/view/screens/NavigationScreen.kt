@@ -27,7 +27,8 @@ fun NavigationScreen(
 
     ) {
         NavigationBarComposable(
-            navController = navHostController,
+            navHostController = navHostController,
+            navController = navController,
             authViewModel = authViewModel,
             paddingValues = it
         )
