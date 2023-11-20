@@ -8,10 +8,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -22,7 +26,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -41,6 +48,8 @@ fun RegisterScreen(
 
     val usernameState = remember { mutableStateOf(TextFieldValue()) }
     val passwordState = remember { mutableStateOf(TextFieldValue()) }
+
+    val showPassword = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.registerUiState.collectLatest { registerUiState ->
@@ -96,7 +105,20 @@ fun RegisterScreen(
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(20.dp),
-                singleLine = true
+                singleLine = true,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    disabledContainerColor = MaterialTheme.colorScheme.surface,
+                ),
+                leadingIcon = {
+                    Image(
+                        painter = painterResource(id = R.drawable.outline_person_24),
+                        contentDescription = stringResource(id = R.string.email),
+                        modifier = Modifier
+                            .height(30.dp),
+                    )
+                },
             )
             TextField(
                 value = passwordState.value,
@@ -105,7 +127,46 @@ fun RegisterScreen(
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(20.dp),
-                singleLine = true
+                singleLine = true,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    disabledContainerColor = MaterialTheme.colorScheme.surface,
+                ),
+                visualTransformation =  if (!showPassword.value) PasswordVisualTransformation() else VisualTransformation.None,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                leadingIcon = {
+                    Image(
+                        painter = painterResource(id = R.drawable.outline_lock_24),
+                        contentDescription = stringResource(id = R.string.password),
+                        modifier = Modifier
+                            .height(30.dp),
+                    )
+                },
+                trailingIcon = {
+                    if (showPassword.value) {
+                        IconButton(
+                            onClick = { showPassword.value = false },
+                            content = {
+                                Image(
+                                    painter = painterResource(id = R.drawable.outline_visibility_off_24),
+                                    contentDescription = stringResource(id = R.string.password),
+                                )
+                            }
+                        )
+                    } else {
+                        IconButton(
+                            onClick = { showPassword.value = true },
+                            content = {
+                                Image(
+                                    painter = painterResource(id = R.drawable.outline_visibility_24),
+                                    contentDescription = stringResource(id = R.string.password),
+                                )
+                            }
+                        )
+                    }
+                }
+
             )
 
             Button(
