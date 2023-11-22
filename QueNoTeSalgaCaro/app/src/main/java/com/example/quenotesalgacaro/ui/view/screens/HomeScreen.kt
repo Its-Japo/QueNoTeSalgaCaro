@@ -202,7 +202,7 @@ fun HomeScreen(
                                     is DataUiState.Success -> {
                                         val balance = tState.data.filter { it.amount >= 0 }.sumOf { it.amount } + tState.data.filter { it.amount < 0 }.sumOf { it.amount }
                                         Text(
-                                            text = "Q$balance",
+                                            text = "Q${String.format("%,.2f", balance)}",
                                             style = MaterialTheme.typography.headlineSmall,
                                             color = MaterialTheme.colorScheme.onSurface
                                         )
@@ -282,7 +282,8 @@ fun HomeScreen(
                             text = stringResource(id = R.string.Amount),
                             modifier = modifier
                                 .weight(2f)
-                                .padding(12.dp)
+                                .padding(12.dp),
+                            textAlign = TextAlign.Center
                         )
 
                         Text(
@@ -331,10 +332,11 @@ fun HomeScreen(
                                                         .padding(12.dp)
                                                 )
                                                 Text(
-                                                    text = tState.data.sortedBy { it.day }[index].amount.toString(),
+                                                    text = String.format("%,.2f", tState.data.sortedBy { it.day }[index].amount),
                                                     modifier = modifier
                                                         .weight(2f)
-                                                        .padding(12.dp)
+                                                        .padding(12.dp),
+                                                    textAlign = TextAlign.Center
                                                 )
                                                 IconButton(
                                                     onClick = {
