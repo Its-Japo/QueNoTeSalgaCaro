@@ -47,7 +47,7 @@ fun DatePickerWithoutDays(
     )
 
     val date = remember {
-        mutableStateOf("${months[currentMonth]}.-$currentYear")
+        mutableStateOf("${months[currentMonth]}-$currentYear")
     }
 
     Button(onClick = { showDialog = true }) {
@@ -59,7 +59,7 @@ fun DatePickerWithoutDays(
             initialYear = currentYear,
             initialMonth = currentMonth,
             onMonthYearSelected = { year, month ->
-                date.value = "$month.-$year"
+                date.value = "$month-$year"
                 onDateSelected(year, month)
                 showDialog = false
             },

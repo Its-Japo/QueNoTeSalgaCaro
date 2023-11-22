@@ -106,7 +106,7 @@ class WalletViewModel(private val firestoreRepository: DataBaseRepository = Fire
                 val time = date.split("-")
                 println(time)
                 val day = time[0].toInt()
-                val dateTime = time[1] + "-" + time[2]
+                val dateTime = time[1].slice(IntRange(0,2)) + "-" + time[2]
                 val transaction = Transaction(id = "NOID", amount = amount.toDouble(), category = category, date = dateTime, day = day, description = concept)
                 firestoreRepository.addSecondGradeSubcollectionDocumentTransaction(userId, "wallets", walletName, "transactions", transaction)
                 fetchWallets(userId)

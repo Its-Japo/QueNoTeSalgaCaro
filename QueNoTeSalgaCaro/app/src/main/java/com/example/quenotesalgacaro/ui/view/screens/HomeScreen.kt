@@ -93,7 +93,7 @@ fun HomeScreen(
         }
         is DataUiState.Success -> {
             if (state.data.isNotEmpty()) {
-                var selectedDate by remember { mutableStateOf("${months[currentMonth]}.-$currentYear") }
+                var selectedDate by remember { mutableStateOf("${months[currentMonth]}-$currentYear") }
                 var selectedWallet by remember { mutableStateOf(state.data.first().name) }
 
                 LaunchedEffect(selectedWallet, selectedDate) {
@@ -124,7 +124,7 @@ fun HomeScreen(
                         horizontalArrangement = Arrangement.Center
                     ){
                         DatePickerWithoutDays(onDateSelected = { year, month ->
-                            selectedDate = "${month}.-${year}"
+                            selectedDate = "${month}-${year}"
                         })
                     }
 
