@@ -338,7 +338,9 @@ fun HomeScreen(
                                                 )
                                                 IconButton(
                                                     onClick = {
-                                                          /*TODO*/
+                                                        if (uid != null) {
+                                                            walletViewModel.deleteTransaction(uid, selectedWallet, tState.data.sortedBy { it.day }[index].id)
+                                                        }
                                                     },
                                                     modifier = modifier
                                                         .weight(1f)

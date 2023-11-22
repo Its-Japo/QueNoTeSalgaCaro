@@ -29,4 +29,5 @@ interface DataBaseRepository {
     suspend fun deleteFirstGradeSubcollection(uid: String?, subcollection: String, subcollectionName: String) : Result<Unit>
     suspend fun addFundTransaction(uid: String?, fundName: String, transaction: FundTransaction): Result<Unit>
     suspend fun fetchFundTransactions(uid: String, fundName: String): Result<List<FundTransaction>>
+    suspend fun deleteTransaction(uid: String, type: String, name: String, documentId: String): Result<Unit>
 }

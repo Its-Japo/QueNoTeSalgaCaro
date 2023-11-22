@@ -134,4 +134,15 @@ class FundViewModel(private val firestoreRepository: DataBaseRepository = Fireba
             }
         }
     }
+
+    fun deleteFundTransaction(userId: String, fundName: String, documentId: String) {
+        viewModelScope.launch {
+            try {
+                firestoreRepository.deleteTransaction(userId, "funds", fundName, documentId)
+                fetchFundTransactions(userId, fundName)
+            } catch (e: Exception) {
+                _fetchFundTransactionsState.value = DataUiState.Error(e)
+            }
+        }
+    }
 }

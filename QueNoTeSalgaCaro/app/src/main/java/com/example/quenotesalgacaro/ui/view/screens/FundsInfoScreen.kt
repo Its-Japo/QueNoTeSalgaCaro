@@ -319,7 +319,9 @@ fun FundsInfoScreen(
                                             )
                                             IconButton(
                                                     onClick = {
-                                                        /*TODO*/
+                                                        if (uid != null) {
+                                                            fundViewModel.deleteFundTransaction(uid, selectedFund.name, fState.data[index].id)
+                                                        }
                                                     },
                                             modifier = modifier
                                                 .weight(1f)

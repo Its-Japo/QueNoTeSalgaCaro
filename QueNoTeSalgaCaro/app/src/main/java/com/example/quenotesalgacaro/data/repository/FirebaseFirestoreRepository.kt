@@ -368,6 +368,20 @@ class FirebaseFirestoreRepository: DataBaseRepository {
         }
     }
 
+    override suspend fun deleteTransaction(uid: String, type: String, name: String, documentId: String): Result<Unit> {
+        return withContext(Dispatchers.IO) {
+            try {
+                firebaseFirestore.collection("users").document(uid)
+                    .collection(type).document(name)
+                    .collection("transactions").document(documentId)
+                    .delete().await()
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+
 
 
 }
