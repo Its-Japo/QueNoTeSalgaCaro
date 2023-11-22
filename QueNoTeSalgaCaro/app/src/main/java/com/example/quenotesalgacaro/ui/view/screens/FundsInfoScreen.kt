@@ -71,23 +71,13 @@ fun FundsInfoScreen(
     fundViewModel: FundViewModel = viewModel(),
     paddingValues: PaddingValues
 ) {
-    val context = LocalContext.current
-
     var expandedFund by remember { mutableStateOf(false) }
 
     val fundsState by fundViewModel.fundFetchState.collectAsState()
+    val fundTransactionState by fundViewModel.fetchFundTransactionsState.collectAsState()
 
     val uid = viewModel.loginUiState.value.user?.uid
 
-    val meta = 100.0
-    val ahorro = 65.0
-    val progress = (meta - ahorro) / meta
-
-    val aporte: List<String>
-
-    val aportesTabla = listOf(
-        "1", "Aporte inicial", "Q100.00",
-    )
 
     LaunchedEffect(
         key1 = Unit,
@@ -97,33 +87,46 @@ fun FundsInfoScreen(
             }
         }
     )
+    val state = fundsState
+
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(
-                modifier = modifier.offset(x = 0.dp, y = (-100.dp)),
-                onClick = {
-                    navController.navigate("AddFundTransactionScreen/hola")
-                },
-            ) {
-                Text(text = "+", fontSize = 30.sp)
+            when (state) {
+                is DataUiState.Success -> {
+                    if (state.data.isNotEmpty()) {
+                        FloatingActionButton(
+                            modifier = modifier.offset(x = 0.dp, y = (-100.dp)),
+                            onClick = {
+                                navController.navigate("AddFundTransactionScreen/hola")
+                            },
+                        ) {
+                            Text(text = "+", fontSize = 30.sp)
+                        }
+                    }
+                }
+
+                else -> {
+
+                }
             }
         },
         floatingActionButtonPosition = FabPosition.End
     ){
-
-
-
-
-        when(val state = fundsState) {
+        when(state) {
             is DataUiState.Loading -> {
                 LoadingScreen(paddingValues = paddingValues)
             }
             is DataUiState.Success -> {
-                val funds = state.data
-                var selectedFund by remember { mutableStateOf(funds[0]) }
-
-
                 if (state.data.isNotEmpty()) {
+                    val funds = state.data
+                    var selectedFund by remember { mutableStateOf(funds[0]) }
+
+                    LaunchedEffect(key1 = selectedFund) {
+                        if (uid != null) {
+                            fundViewModel.fetchFundTransactions(uid, selectedFund.name)
+                        }
+                    }
+
                     Column(
                         modifier = modifier
                             .fillMaxSize()
@@ -169,133 +172,168 @@ fun FundsInfoScreen(
                                         onClick = {
                                             selectedFund = item
                                             expandedFund = false
-                                            Toast.makeText(context, item.name, Toast.LENGTH_SHORT).show()
                                         }
                                     )
                                 }
                             }
                         }
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            modifier = modifier
-                                .fillMaxWidth()
-                                .padding(0.dp),
-                        ){
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center,
-                                modifier = modifier.padding(12.dp, 12.dp, 0.dp, 12.dp)
-                                    .weight(2f),
-                            ) {
-                                Text(
-                                    text = stringResource(id = R.string.Goal),
-                                    style = MaterialTheme.typography.labelLarge,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                                Text(
-                                    text = "Q${selectedFund.goal}",
-                                    style = MaterialTheme.typography.headlineSmall,
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                                Spacer (
-                                    modifier = modifier
-                                        .height(5.dp)
-                                )
-                                Text(
-                                    text = stringResource(id = R.string.Saving),
-                                    style = MaterialTheme.typography.labelLarge,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                                Text(
-                                    text = "Q$ahorro",
-                                    style = MaterialTheme.typography.headlineSmall,
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                            }
-                            Box(
-                                modifier = modifier.weight(2f),
-                            ) {
-                                CircularProgressIndicator(
-                                    progress = { progress.toFloat() },
-                                    modifier = modifier
-                                        .width(120.dp)
-                                        .aspectRatio(1f)
-                                        .align(alignment = Alignment.Center)
-                                        .padding(12.dp),
-                                    color = when (progress) {
-                                        in 0.0..0.5 -> Color(57, 255, 20)
-                                        in 0.5..0.8 -> Color(255, 255, 0)
-                                        in 0.8..0.99 -> Color(255, 0, 0)
-                                        else -> {
-                                            Color(80, 0, 0)
-                                        }
-                                    },
-                                    strokeWidth = 16.dp,
-                                )
-                                Text(
-                                    text = "${(progress * 100).toInt()}%",
-                                    style = MaterialTheme.typography.displaySmall,
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    modifier = modifier.align(alignment = Alignment.Center)
-                                )
-                            }
-                        }
-                        Spacer(modifier = modifier
-                            .height(1.dp)
-                            .fillMaxWidth()
-                            .padding(20.dp, 0.dp, 20.dp, 0.dp)
-                            .background(Color.Gray)
-                        )
-                        Row(){
-                            Text(
-                                text = stringResource(id = R.string.Date),
-                                modifier = modifier
-                                    .weight(1f)
-                                    .padding(12.dp),
-                                style = MaterialTheme.typography.labelLarge,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            Text(
-                                text = stringResource(id = R.string.Type),
-                                modifier = modifier
-                                    .weight(3f)
-                                    .padding(12.dp)
-                            )
-                            Text(
-                                text = stringResource(id = R.string.Aporte),
-                                modifier = modifier
-                                    .weight(2f)
-                                    .padding(12.dp)
-                            )
-                        }
-                        LazyColumn(
-                            modifier = modifier
-                                .fillMaxWidth()
-                        ) {
-                            items(aportesTabla.size) { index ->
-                                Row {
 
-                                    Text(
-                                        text = aportesTabla[index],
+                        when(val fState = fundTransactionState) {
+                            is DataUiState.Loading -> {
+                                LoadingScreen(paddingValues = paddingValues)
+                            }
+                            is DataUiState.Error -> {
+                                ErrorScreen(error = fState.exception, paddingValues = paddingValues)
+                            }
+                            is DataUiState.Success -> {
+
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    modifier = modifier
+                                        .fillMaxWidth()
+                                        .padding(0.dp),
+                                ){
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        verticalArrangement = Arrangement.Center,
                                         modifier = modifier
-                                            .weight(1f)
-                                            .padding(5.dp),
+                                            .padding(12.dp, 12.dp, 0.dp, 12.dp)
+                                            .weight(2f),
+                                    ) {
+                                        Text(
+                                            text = stringResource(id = R.string.Goal),
+                                            style = MaterialTheme.typography.labelLarge,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                        Text(
+                                            text = "Q${selectedFund.goal}",
+                                            style = MaterialTheme.typography.headlineSmall,
+                                            color = MaterialTheme.colorScheme.onSurface
+                                        )
+                                        Spacer (
+                                            modifier = modifier
+                                                .height(5.dp)
+                                        )
+                                        Text(
+                                            text = stringResource(id = R.string.Saving),
+                                            style = MaterialTheme.typography.labelLarge,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                        Text(
+                                            text = "Q${fState.data.sumOf { it.amount }}",
+                                            style = MaterialTheme.typography.headlineSmall,
+                                            color = MaterialTheme.colorScheme.onSurface
+                                        )
+                                    }
+                                    Box(
+                                        modifier = modifier.weight(2f),
+                                    ) {
+
+                                        CircularProgressIndicator(
+                                            progress = { (fState.data.sumOf { it.amount }/selectedFund.goal).toFloat() },
+                                            modifier = modifier
+                                                .width(120.dp)
+                                                .aspectRatio(1f)
+                                                .align(alignment = Alignment.Center)
+                                                .padding(12.dp),
+                                            color = when ((fState.data.sumOf { it.amount }/selectedFund.goal)) {
+                                                in 0.0..0.5 -> Color(57, 255, 20)
+                                                in 0.5..0.8 -> Color(255, 255, 0)
+                                                in 0.8..0.99 -> Color(255, 0, 0)
+                                                else -> {
+                                                    Color(80, 0, 0)
+                                                }
+                                            },
+                                            strokeWidth = 16.dp,
+                                        )
+                                        Text(
+                                            text = "${(fState.data.sumOf { it.amount }/selectedFund.goal)*100}%",
+                                            style = MaterialTheme.typography.displaySmall,
+                                            color = MaterialTheme.colorScheme.onSurface,
+                                            modifier = modifier.align(alignment = Alignment.Center)
+                                        )
+                                    }
+                                }
+                                Spacer(modifier = modifier
+                                    .height(1.dp)
+                                    .fillMaxWidth()
+                                    .padding(20.dp, 0.dp, 20.dp, 0.dp)
+                                    .background(Color.Gray)
+                                )
+                                Row(){
+                                    Text(
+                                        text = stringResource(id = R.string.Date),
+                                        modifier = modifier
+                                            .weight(2f)
+                                            .padding(12.dp),
                                         style = MaterialTheme.typography.labelLarge,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                     Text(
-                                        text = aportesTabla[index],
+                                        text = stringResource(id = R.string.Type),
                                         modifier = modifier
                                             .weight(3f)
-                                            .padding(5.dp)
+                                            .padding(12.dp)
                                     )
                                     Text(
-                                        text = aportesTabla[index],
+                                        text = stringResource(id = R.string.Aporte),
                                         modifier = modifier
                                             .weight(2f)
-                                            .padding(5.dp)
+                                            .padding(12.dp)
                                     )
+                                    Text(
+                                        text = "",
+                                        modifier = modifier
+                                            .weight(1f)
+                                            .padding(12.dp)
+                                    )
+                                }
+                                LazyColumn(
+                                    modifier = modifier
+                                        .fillMaxWidth()
+                                ) {
+                                    items(fState.data.size) { index ->
+                                        Row {
+
+                                            Text(
+                                                text = fState.data[index].date,
+                                                modifier = modifier
+                                                    .weight(3f)
+                                                    .padding(5.dp),
+                                                style = MaterialTheme.typography.labelLarge,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            )
+                                            Text(
+                                                text = fState.data[index].type,
+                                                modifier = modifier
+                                                    .weight(3f)
+                                                    .padding(5.dp)
+                                            )
+                                            Text(
+                                                text = fState.data[index].amount.toString(),
+                                                modifier = modifier
+                                                    .weight(2f)
+                                                    .padding(5.dp)
+                                            )
+                                            IconButton(
+                                                    onClick = {
+                                                        /*TODO*/
+                                                    },
+                                            modifier = modifier
+                                                .weight(1f)
+                                            ) {
+                                            Icon(
+                                                painter = painterResource(
+                                                    id = R.drawable.outline_delete_24
+                                                ),
+                                                contentDescription = stringResource(id = R.string.Delete),
+                                                tint = Color.Red
+                                            )
+                                        }
+                                        }
+                                    }
                                 }
                             }
                         }

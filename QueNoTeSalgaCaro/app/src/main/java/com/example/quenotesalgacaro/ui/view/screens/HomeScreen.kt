@@ -24,6 +24,8 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -39,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -281,13 +284,13 @@ fun HomeScreen(
                                 .weight(2f)
                                 .padding(12.dp)
                         )
-                        /*
+
                         Text(
                             text = "",
                             modifier = modifier
                                 .weight(1f)
                                 .padding(12.dp)
-                        )*/
+                        )
                     }
                     Spacer(modifier = modifier
                         .height(1.dp)
@@ -333,19 +336,21 @@ fun HomeScreen(
                                                         .weight(2f)
                                                         .padding(12.dp)
                                                 )
-                                                /*IconButton(
-                                                    onClick = {  },
+                                                IconButton(
+                                                    onClick = {
+                                                          /*TODO*/
+                                                    },
                                                     modifier = modifier
                                                         .weight(1f)
                                                 ) {
                                                     Icon(
                                                         painter = painterResource(
-                                                            id = R.drawable.option
+                                                            id = R.drawable.outline_delete_24
                                                         ),
-                                                        contentDescription = "options",
-                                                        tint = MaterialTheme.colorScheme.primary
+                                                        contentDescription = stringResource(id = R.string.Delete),
+                                                        tint = Color.Red
                                                     )
-                                                }*/
+                                                }
                                             }
                                         }
                                     }

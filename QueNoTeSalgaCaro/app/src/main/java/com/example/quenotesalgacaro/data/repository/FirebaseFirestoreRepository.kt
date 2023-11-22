@@ -2,6 +2,7 @@ package com.example.quenotesalgacaro.data.repository
 
 import com.example.quenotesalgacaro.data.networking.BudgetConfiguration
 import com.example.quenotesalgacaro.data.networking.FundData
+import com.example.quenotesalgacaro.data.networking.FundTransaction
 import com.example.quenotesalgacaro.data.networking.SimpleDocument
 import com.example.quenotesalgacaro.data.networking.Transaction
 import com.google.firebase.auth.FirebaseUser
@@ -317,6 +318,50 @@ class FirebaseFirestoreRepository: DataBaseRepository {
                         .collection(subcollection).document(subcollectionName).delete().await()
                 }
                 Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+
+    override suspend fun addFundTransaction(uid: String?, fundName: String, transaction: FundTransaction): Result<Unit> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val documentMap = hashMapOf(
+                    "amount" to transaction.amount,
+                    "date" to transaction.date,
+                    "day" to transaction.day,
+                    "month" to transaction.month,
+                    "type" to transaction.type,
+                    "year" to transaction.year
+                )
+                if (uid != null) {
+                    firebaseFirestore.collection("users").document(uid)
+                        .collection("funds").document(fundName)
+                        .collection("transactions").document()
+                        .set(documentMap).await()
+                }
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+
+    override suspend fun fetchFundTransactions(uid: String, fundName: String): Result<List<FundTransaction>> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val snapshot = firebaseFirestore.collection("users").document(uid)
+                    .collection("funds").document(fundName)
+                    .collection("transactions").get().await()
+                val transactions = snapshot.documents.mapNotNull { documentSnapshot ->
+                    val transaction = documentSnapshot.toObject(FundTransaction::class.java)
+                    if (transaction != null) {
+                        transaction.id = documentSnapshot.id
+                    }
+                    transaction
+                }
+                Result.success(transactions)
             } catch (e: Exception) {
                 Result.failure(e)
             }

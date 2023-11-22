@@ -21,6 +21,7 @@
     <string name="ProfileIcon">Perfil</string>
     <string name="HelpAndFeedback">Ayuda &amp; Comentarios</string>
     <string name="About">Acerca de</string>
+    <string name="Delete">Eliminar</string>
 
     <string name="Income">Ingresos</string>
     <string name="FixedExpenses">Gastos Fijos</string>

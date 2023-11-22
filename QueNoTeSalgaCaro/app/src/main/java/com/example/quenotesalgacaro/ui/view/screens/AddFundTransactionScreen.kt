@@ -59,9 +59,8 @@ fun AddFundTransactionScreen(
     navController: NavController,
     authViewModel: AuthViewModel = viewModel(),
     fundViewModel: FundViewModel = viewModel(),
-    fund: String,
 ){
-    val context = LocalContext.current
+
     val getFundState by fundViewModel.fundFetchState.collectAsState()
     val user = authViewModel.loginUiState.value.user
     val transactionTypes = listOf("Pactado", "Extraordinario")
@@ -120,7 +119,6 @@ fun AddFundTransactionScreen(
                                 {
                                     selectedFund = it
                                     expandedFund = false
-                                    Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
                                 },
                                 uiState = getFundState,
                                 width = 170,
@@ -203,7 +201,18 @@ fun AddFundTransactionScreen(
                         ) {
                             Button(
                                 onClick = {
-
+                                    if (user != null) {
+                                        if (selectedDate != "" && amountText.value.text != "") {
+                                            fundViewModel.addFundTransaction(
+                                                userId = user.uid,
+                                                fundName = selectedFund,
+                                                transactionType = selectedType,
+                                                transactionAmount = amountText.value.text.toDouble(),
+                                                transactionDate = selectedDate
+                                            )
+                                            navController.navigateUp()
+                                        }
+                                    }
                                 },
                                 modifier = modifier
                                     .padding(12.dp)
@@ -212,6 +221,7 @@ fun AddFundTransactionScreen(
                                     contentColor = MaterialTheme.colorScheme.onPrimary,
                                     containerColor = MaterialTheme.colorScheme.primary,
                                 ),
+                                enabled = selectedDate != "" && amountText.value.text != ""
 
                             ) {
                                 Text(

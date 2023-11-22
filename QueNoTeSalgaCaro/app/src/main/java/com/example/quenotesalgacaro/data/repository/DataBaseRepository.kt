@@ -2,6 +2,7 @@ package com.example.quenotesalgacaro.data.repository
 
 import com.example.quenotesalgacaro.data.networking.BudgetConfiguration
 import com.example.quenotesalgacaro.data.networking.FundData
+import com.example.quenotesalgacaro.data.networking.FundTransaction
 import com.example.quenotesalgacaro.data.networking.SimpleDocument
 import com.example.quenotesalgacaro.data.networking.Transaction
 import com.google.firebase.auth.FirebaseUser
@@ -26,4 +27,6 @@ interface DataBaseRepository {
     suspend fun fetchTransactions (uid: String?, walletName: String, date: String): Result<List<Transaction>>
     suspend fun updateDocument(uid: String?, collectionName: String, documentId: String, fieldName: String, element: Any): Result<Unit>
     suspend fun deleteFirstGradeSubcollection(uid: String?, subcollection: String, subcollectionName: String) : Result<Unit>
+    suspend fun addFundTransaction(uid: String?, fundName: String, transaction: FundTransaction): Result<Unit>
+    suspend fun fetchFundTransactions(uid: String, fundName: String): Result<List<FundTransaction>>
 }
