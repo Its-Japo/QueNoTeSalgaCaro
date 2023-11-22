@@ -42,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -71,10 +72,7 @@ fun BudgetInfoScreen(
     val budgetsState by budgetViewModel.budgetsFetchState.collectAsState()
     val budgetDataState by budgetViewModel.budgetConfigurationFetchState.collectAsState()
 
-
     val uid = viewModel.loginUiState.value.user?.uid
-
-
 
     LaunchedEffect(
         key1 = Unit,
@@ -85,8 +83,6 @@ fun BudgetInfoScreen(
             }
         }
     )
-
-
 
     when(val state = budgetsState) {
         is DataUiState.Loading -> {
@@ -102,9 +98,6 @@ fun BudgetInfoScreen(
                         budgetViewModel.fetchBudgetConfiguration(uid, selectedBudget.name)
                     }
                 }
-
-
-
 
                 Column(
                     modifier = modifier
@@ -132,7 +125,7 @@ fun BudgetInfoScreen(
                                 .width(250.dp),
                             label = {
                                 Text(
-                                    text = "Plan Presupuestario",
+                                    text = stringResource(id = R.string.PlanBudget),
                                 )
                             },
                             colors = TextFieldDefaults.colors(
@@ -157,7 +150,6 @@ fun BudgetInfoScreen(
                         }
                     }
 
-
                     when (val state1 = budgetDataState) {
                         is DataUiState.Loading -> {
                             LoadingScreen(paddingValues = paddingValues)
@@ -170,7 +162,6 @@ fun BudgetInfoScreen(
                             val disponibleMensual = state1.data.income.sumOf { it.amount.toDouble() } - state1.data.fixedExpenses.sumOf { it.amount.toDouble() } - state1.data.variableExpenses.sumOf { it.amount.toDouble() }
                             val progress = (state1.data.fixedExpenses.sumOf { it.amount.toDouble() } + state1.data.variableExpenses.sumOf { it.amount.toDouble() }) / state1.data.income.sumOf { it.amount.toDouble() }
 
-
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -179,13 +170,14 @@ fun BudgetInfoScreen(
                                     .padding(0.dp),
                             ){
                                 Column(
-                                    modifier = modifier.padding(12.dp, 12.dp, 0.dp, 12.dp)
+                                    modifier = modifier
+                                        .padding(12.dp, 12.dp, 0.dp, 12.dp)
                                         .weight(2f),
                                     verticalArrangement = Arrangement.Center,
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
                                     Text(
-                                        text = "Disponible Mensual",
+                                        text = stringResource(id = R.string.MonthlyAvailable),
                                         style = MaterialTheme.typography.labelLarge,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
@@ -227,7 +219,7 @@ fun BudgetInfoScreen(
                             LazyColumn() {
                                 item {
                                     Text(
-                                        text = "Ingresos",
+                                        text = stringResource(id = R.string.Income),
                                         style = MaterialTheme.typography.bodyLarge,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         modifier = modifier.padding(12.dp, 12.dp, 0.dp, 12.dp)
@@ -240,13 +232,13 @@ fun BudgetInfoScreen(
                                     )
                                     Row(){
                                         Text(
-                                            text = "Categoria",
+                                            text = stringResource(id = R.string.Category),
                                             modifier = modifier
                                                 .weight(3f)
                                                 .padding(12.dp)
                                         )
                                         Text(
-                                            text = "Monto",
+                                            text = stringResource(id = R.string.Amount),
                                             modifier = modifier
                                                 .weight(2f)
                                                 .padding(12.dp),
@@ -280,7 +272,7 @@ fun BudgetInfoScreen(
                                         .background(Color.Gray)
                                     )
                                     Text(
-                                        text = "Gastos Fijos",
+                                        text = stringResource(id = R.string.FixedExpenses),
                                         style = MaterialTheme.typography.bodyLarge,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         modifier = modifier.padding(12.dp, 12.dp, 0.dp, 12.dp)
@@ -293,13 +285,13 @@ fun BudgetInfoScreen(
                                     )
                                     Row(){
                                         Text(
-                                            text = "Categoria",
+                                            text = stringResource(id = R.string.Category),
                                             modifier = modifier
                                                 .weight(3f)
                                                 .padding(12.dp)
                                         )
                                         Text(
-                                            text = "Monto",
+                                            text = stringResource(id = R.string.Amount),
                                             modifier = modifier
                                                 .weight(2f)
                                                 .padding(12.dp),
@@ -333,7 +325,7 @@ fun BudgetInfoScreen(
                                         .background(Color.Gray)
                                     )
                                     Text(
-                                        text = "Gastos Variables",
+                                        text = stringResource(id = R.string.VariableExpenses),
                                         style = MaterialTheme.typography.bodyLarge,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         modifier = modifier.padding(12.dp, 12.dp, 0.dp, 12.dp)
@@ -346,13 +338,13 @@ fun BudgetInfoScreen(
                                     )
                                     Row(){
                                         Text(
-                                            text = "Categoria",
+                                            text = stringResource(id = R.string.Category),
                                             modifier = modifier
                                                 .weight(3f)
                                                 .padding(12.dp)
                                         )
                                         Text(
-                                            text = "Monto(Rango)",
+                                            text = stringResource(id = R.string.AmountV),
                                             modifier = modifier
                                                 .weight(2f)
                                                 .padding(12.dp),
@@ -377,7 +369,6 @@ fun BudgetInfoScreen(
                                         )
                                     }
                                 }
-
                             }
                         }
 
@@ -394,7 +385,7 @@ fun BudgetInfoScreen(
 
                 ) {
                     Text(
-                        text = "No tienes budgets configurados",
+                        text = stringResource(id = R.string.NoBudgetsConfig),
                         textAlign = TextAlign.Center,
                         modifier = modifier.padding(16.dp)
                     )
@@ -416,13 +407,13 @@ fun BudgetInfoScreen(
                             containerColor = Color.Transparent
                         )
                     ) {
-                        Text(text = "Configurar ahora")
+                        Text(text = stringResource(id = R.string.ConfigureNow))
                     }
                 }
             }
         }
         is DataUiState.Error -> {
-            Text(text = "Error")
+            Text(text = stringResource(id = R.string.Error))
         }
     }
 }

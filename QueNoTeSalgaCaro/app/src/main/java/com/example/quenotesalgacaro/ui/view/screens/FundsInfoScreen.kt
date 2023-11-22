@@ -42,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -125,7 +126,7 @@ fun FundsInfoScreen(
                                 .width(180.dp),
                             label = {
                                 Text(
-                                    text = "Plan"
+                                    text = stringResource(id = R.string.Plan)
                                 )
                             },
                             colors = TextFieldDefaults.colors(
@@ -163,7 +164,7 @@ fun FundsInfoScreen(
                             modifier = modifier.padding(12.dp, 12.dp, 0.dp, 12.dp),
                         ) {
                             Text(
-                                text = "Meta",
+                                text = stringResource(id = R.string.Goal),
                                 style = MaterialTheme.typography.labelLarge,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -173,7 +174,7 @@ fun FundsInfoScreen(
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                             Text(
-                                text = "Ahorro",
+                                text = stringResource(id = R.string.Saving),
                                 style = MaterialTheme.typography.labelLarge,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -219,7 +220,7 @@ fun FundsInfoScreen(
                     )
                     Row(){
                         Text(
-                            text = "Fecha",
+                            text = stringResource(id = R.string.Date),
                             modifier = modifier
                                 .weight(1f)
                                 .padding(12.dp),
@@ -227,13 +228,13 @@ fun FundsInfoScreen(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
-                            text = "Aporte",
+                            text = stringResource(id = R.string.Aporte),
                             modifier = modifier
                                 .weight(3f)
                                 .padding(12.dp)
                         )
                         Text(
-                            text = "Tipo",
+                            text = stringResource(id = R.string.Type),
                             modifier = modifier
                                 .weight(2f)
                                 .padding(12.dp)
@@ -281,7 +282,7 @@ fun FundsInfoScreen(
 
                 ) {
                     Text(
-                        text = "No tienes fondos configurados",
+                        text = stringResource(id = R.string.NoFunds),
                         textAlign = TextAlign.Center,
                         modifier = modifier.padding(16.dp)
                     )
@@ -303,7 +304,7 @@ fun FundsInfoScreen(
                             containerColor = Color.Transparent
                         )
                     ) {
-                        Text(text = "Configurar ahora")
+                        Text(text = stringResource(id = R.string.ConfigureNow))
                     }
                 }
             }

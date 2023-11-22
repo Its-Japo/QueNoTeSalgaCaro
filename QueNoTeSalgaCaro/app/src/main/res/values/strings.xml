@@ -8,6 +8,7 @@
     <string name="SelectYear">Seleccionar año</string>
     <string name="Add">Agregar</string>
     <string name="Amount">Monto</string>
+    <string name="AmountV">Monto (Rango)</string>
     <string name="Category">Categoría</string>
     <string name="Categories">Categorías</string>
     <string name="Concept">Concepto</string>
@@ -73,7 +74,14 @@
 
 
     <string name="Funds">Fondos</string>
-
+    <string name="Date">Fecha</string>
+    <string name="Plan">Plan</string>
+    <string name="Aporte">Aporte</string>
+    <string name="Interest">Interés</string>
+    <string name="Saving">Ahorro</string>
+    <string name="Type">Tipo</string>
+    <string name="NoFunds">No tienes fondos configurados</string>
+    <string name="ConfigureNow">Configurar ahora</string>
 
     <string name="YouHaveNoWalletsConfigured">No tienes carteras configuradas</string>
     <string name="YouHaveNoBudgetsConfigured">No tienes presupuestos configurados</string>
@@ -83,5 +91,11 @@
     <string name="AlreadyHaveAccount">¿Ya tienes cuenta?, Inicia Sesión</string>
     <string name="AnErrorHasOccurred">Ha ocurrido un error</string>
     <string name="UnknownError">Error desconocido</string>
+
+    <string name="PlanBudget">Plan Presupuestario</string>
+    <string name="MonthlyAvailable">Disponible Mensual</string>
+    <string name="NoBudgetsConfig">No tienes budgets configurados</string>
+
+
 
 </resources>
