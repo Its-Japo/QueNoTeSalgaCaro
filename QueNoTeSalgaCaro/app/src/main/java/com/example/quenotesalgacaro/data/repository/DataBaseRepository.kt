@@ -22,6 +22,7 @@ interface DataBaseRepository {
     suspend fun addSecondGradeSubcollectionDocumentBudget(uid: String?, collectionName: String, entity: String, subcollectionName: String, budgetConfiguration: BudgetConfiguration): Result<Unit>
     suspend fun addSecondGradeSubcollectionDocumentWallet(uid: String?, collectionName: String, entity: String, subcollectionName: String, data: SimpleDocument): Result<Unit>
     suspend fun addSecondGradeSubcollectionDocumentTransaction(uid: String?, collectionName: String, entity: String, subcollectionName: String, data: Transaction): Result<Unit>
+    suspend fun fetchTransactionsYear (uid: String?, walletName: String, date: Int): Result<List<Transaction>>
     suspend fun fetchTransactions (uid: String?, walletName: String, date: String): Result<List<Transaction>>
     suspend fun updateDocument(uid: String?, collectionName: String, documentId: String, fieldName: String, element: Any): Result<Unit>
 }

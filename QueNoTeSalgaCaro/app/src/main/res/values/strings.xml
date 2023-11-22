@@ -91,6 +91,9 @@
     <string name="AlreadyHaveAccount">¿Ya tienes cuenta?, Inicia Sesión</string>
     <string name="AnErrorHasOccurred">Ha ocurrido un error</string>
     <string name="UnknownError">Error desconocido</string>
+    <string name="ConsumptionPerCategory">Consumo por Categoría</string>
+    <string name="AnualConsumption">Consumo Anual</string>
+
 
     <string name="PlanBudget">Plan Presupuestario</string>
     <string name="MonthlyAvailable">Disponible Mensual</string>

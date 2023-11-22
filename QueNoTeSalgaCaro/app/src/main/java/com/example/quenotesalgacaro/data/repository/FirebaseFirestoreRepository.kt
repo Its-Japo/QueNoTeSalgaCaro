@@ -237,6 +237,8 @@ class FirebaseFirestoreRepository: DataBaseRepository {
                     "date" to data.date,
                     "day" to data.day,
                     "description" to data.description,
+                    "month" to data.month,
+                    "year" to data.year
                 )
                 if (uid != null) {
                     firebaseFirestore.collection("users").document(uid)
@@ -257,6 +259,26 @@ class FirebaseFirestoreRepository: DataBaseRepository {
                 val snapshot = firebaseFirestore.collection("users").document(uid ?: "")
                     .collection("wallets").document(walletName)
                     .collection("transactions").whereEqualTo("date", date).get().await()
+                val transactions = snapshot.documents.mapNotNull { documentSnapshot ->
+                    val transaction = documentSnapshot.toObject(Transaction::class.java)
+                    if (transaction != null) {
+                        transaction.id = documentSnapshot.id
+                    }
+                    transaction
+                }
+                Result.success(transactions)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+
+    override suspend fun fetchTransactionsYear (uid: String?, walletName: String, date: Int): Result<List<Transaction>> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val snapshot = firebaseFirestore.collection("users").document(uid ?: "")
+                    .collection("wallets").document(walletName)
+                    .collection("transactions").whereEqualTo("year", date).get().await()
                 val transactions = snapshot.documents.mapNotNull { documentSnapshot ->
                     val transaction = documentSnapshot.toObject(Transaction::class.java)
                     if (transaction != null) {

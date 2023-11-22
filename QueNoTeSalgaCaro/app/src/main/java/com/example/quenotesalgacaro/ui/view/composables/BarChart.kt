@@ -26,6 +26,21 @@ import com.example.quenotesalgacaro.ui.theme.gray
 import com.example.quenotesalgacaro.ui.theme.white
 import kotlin.math.roundToInt
 
+private fun getBarChartEntriesWithColors(entries: List<BarChartInput>): List<BarChartInput> {
+    return entries.mapIndexed { index, entry ->
+        if (entry.color == null) {
+            entry.copy(color = generateColorForIndex(index, entries.size))
+        } else {
+            entry
+        }
+    }
+}
+
+private fun generateColorForIndex(index: Int, totalEntries: Int): Color {
+    val hue = (360f / totalEntries) * index
+    val androidColor = android.graphics.Color.HSVToColor(floatArrayOf(hue, 1f, 1f))
+    return Color(androidColor)
+}
 
 @Composable
 fun BarChart(
@@ -33,23 +48,24 @@ fun BarChart(
     modifier: Modifier = Modifier,
     showDescription: Boolean
 ) {
+    val coloredEntries = getBarChartEntriesWithColors(inputList)
+
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.Bottom,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        //sum of chart lines
         val listSum by remember {
             mutableStateOf(inputList.sumOf { it.value })
         }
-        inputList.forEach { input ->
+        coloredEntries.forEach { input ->
             val percentage = input.value / listSum.toFloat()
 
             Bar(
                 modifier = Modifier
                     .height(120.dp * percentage * inputList.size)
                     .width(40.dp),
-                primaryColor = input.color,
+                primaryColor = input.color ?: Color.Unspecified,
                 percentage = percentage,
                 description = input.description,
                 showDescription = showDescription
@@ -77,8 +93,7 @@ fun Bar(
             val width = size.width
             val height = size.height
             val barWidth = width / 5 * 3
-            var barHeight = height / 8 * 7
-            //until here is enough for 2D chart
+            val barHeight = height / 8 * 7
             val barHeight3DPart = height - barHeight
             val barWidth3DPart = (width - barWidth) * (height * 0.002f)
 
@@ -154,9 +169,9 @@ fun Bar(
         }
     }
 }
-//defining model of barchart input
+
 data class BarChartInput(
     val value: Int,
     val description: String,
-    val color: Color
+    val color: Color? = null
 )

@@ -4,22 +4,17 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import com.example.quenotesalgacaro.ui.theme.*
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -45,16 +40,18 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.quenotesalgacaro.R
+import com.example.quenotesalgacaro.ui.theme.*
+import com.example.quenotesalgacaro.ui.view.composables.BarChart
+import com.example.quenotesalgacaro.ui.view.composables.BarChartInput
 import com.example.quenotesalgacaro.ui.view.composables.DatePickerWithoutDays
 import com.example.quenotesalgacaro.ui.view.composables.ErrorScreen
 import com.example.quenotesalgacaro.ui.view.composables.LoadingScreen
+import com.example.quenotesalgacaro.ui.view.composables.PieChart
+import com.example.quenotesalgacaro.ui.view.composables.PieChartEntry
+import com.example.quenotesalgacaro.ui.view.composables.PieChartWithLegend
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 import com.example.quenotesalgacaro.ui.view.vms.WalletViewModel
-import com.example.quenotesalgacaro.ui.view.composables.PieChart
-import com.example.quenotesalgacaro.ui.view.composables.PieChartEntry
-import com.example.quenotesalgacaro.ui.view.composables.BarChart
-import com.example.quenotesalgacaro.ui.view.composables.BarChartInput
 import java.util.Calendar
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
@@ -78,6 +75,7 @@ fun StatsInfoScreen(
     )
     val walletsState by walletViewModel.walletsFetchState.collectAsState()
     val transactionState by walletViewModel.fetchTransactionsState.collectAsState()
+    val trasactionYearState by walletViewModel.fetchTransactionsYearState.collectAsState()
 
     LaunchedEffect(
         key1 = Unit,
@@ -91,247 +89,323 @@ fun StatsInfoScreen(
 
     when(val state = walletsState) {
         is DataUiState.Loading -> {
-            LoadingScreen()
+            LoadingScreen(paddingValues = paddingValues)
         }
         is DataUiState.Success -> {
             if (state.data.isNotEmpty()) {
-                var selectedDate by remember { mutableStateOf("${months[currentMonth]}.-$currentYear") }
+                var selectedDate by remember { mutableStateOf("${months[currentMonth]}-$currentYear") }
                 var selectedWallet by remember { mutableStateOf(state.data.first().name) }
 
                 LaunchedEffect(selectedWallet, selectedDate) {
                     if (uid != null) {
                         walletViewModel.fetchTransactions(uid, selectedWallet, selectedDate)
+                        walletViewModel.fetchTransactionsYear(uid, selectedWallet, selectedDate)
                     }
                 }
 
-                Column (
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(paddingValues = paddingValues),
+                LazyColumn(modifier = modifier
+                    .fillMaxSize()
+                    .padding(paddingValues = paddingValues)
                 ) {
-                    Row (
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .padding(0.dp, 4.dp, 0.dp, 0.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ){
-                        Text(text = stringResource(id = R.string.SelectDate), modifier = modifier.padding(12.dp))
-                    }
-                    Row (
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .padding(0.dp, 0.dp, 0.dp, 8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ){
-                        DatePickerWithoutDays(onDateSelected = { year, month ->
-                            selectedDate = "${month}.-${year}"
-                        })
-                    }
-
-                    Row {
-                        Column(
+                    item {
+                        Column (
                             modifier = modifier
-                                .weight(5f)
-                                .padding(12.dp),
+                                .fillMaxWidth()
                         ) {
-                            ExposedDropdownMenuBox(
-                                expanded = expandedWallet,
-                                onExpandedChange = {
-                                    expandedWallet = !expandedWallet
-                                },
-                                modifier = modifier
-                                    .padding(12.dp)
-                                    .align(alignment = Alignment.CenterHorizontally),
-
-                                ) {
-
-                                TextField(
-                                    value = selectedWallet,
-                                    onValueChange = {},
-                                    readOnly = true,
-                                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedWallet) },
-                                    modifier = modifier
-                                        .menuAnchor(),
-                                    label = {
-                                        Text(
-                                            text = stringResource(id = R.string.Wallet)
-                                        )
-                                    },
-                                    colors = TextFieldDefaults.colors(
-                                        focusedContainerColor = MaterialTheme.colorScheme.surface,
-                                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                                        disabledContainerColor = MaterialTheme.colorScheme.surface,
-                                    )
-                                )
-                                ExposedDropdownMenu(
-                                    expanded = expandedWallet,
-                                    onDismissRequest = { expandedWallet = false }
-                                ) {
-                                    state.data.forEach { item ->
-                                        DropdownMenuItem(
-                                            text = { Text(text = item.name) },
-                                            onClick = {
-                                                selectedWallet = item.name
-                                                expandedWallet = false
-                                                if (uid != null) {
-                                                    walletViewModel.fetchTransactions(uid, selectedWallet, selectedDate)
-                                                }
-                                            }
-                                        )
-                                    }
-                                }
-                            }
-
-                        }
-
-                    }
-
-                    Spacer(modifier = modifier
-                        .height(1.dp)
-                        .fillMaxWidth()
-                        .padding(20.dp, 0.dp, 20.dp, 0.dp)
-                        .background(Color.Gray)
-                    )
-
-                    when(val tState = transactionState) {
-                        is DataUiState.Loading -> {
-                            LoadingScreen(paddingValues = paddingValues)
-                        }
-                        is DataUiState.Error -> {
-                            ErrorScreen(error = tState.exception, paddingValues = paddingValues)
-                        }
-                        is DataUiState.Success -> {
-                            LazyColumn(
+                            Row (
                                 modifier = modifier
                                     .fillMaxWidth()
+                                    .padding(0.dp, 4.dp, 0.dp, 0.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+                            ){
+                                Text(text = stringResource(id = R.string.SelectDate), modifier = modifier.padding(4.dp))
+                            }
+                            Row (
+                                modifier = modifier
+                                    .fillMaxWidth()
+                                    .padding(0.dp, 0.dp, 0.dp, 4.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+                            ){
+                                DatePickerWithoutDays(onDateSelected = { year, month ->
+                                    selectedDate = "${month}-${year}"
+                                })
+                            }
+
+
+                            Column(
+                                modifier = modifier
+                                    .padding(8.dp)
+                                    .fillMaxWidth(),
+                                horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                if (tState.data.isNotEmpty()) {
+                                ExposedDropdownMenuBox(
+                                    expanded = expandedWallet,
+                                    onExpandedChange = {
+                                        expandedWallet = !expandedWallet
+                                    },
+                                    modifier = modifier
+                                        .padding(12.dp)
+                                        .align(alignment = Alignment.CenterHorizontally),
 
-                                    item {
-                                        Column (
-                                            modifier = modifier
-                                                .fillMaxSize()
-                                                .padding(paddingValues),
-                                            verticalArrangement = Arrangement.Center,
-                                            horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
 
-                                        ) {
+                                    TextField(
+                                        value = selectedWallet,
+                                        onValueChange = {},
+                                        readOnly = true,
+                                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedWallet) },
+                                        modifier = modifier
+                                            .menuAnchor(),
+                                        label = {
                                             Text(
-                                                text = "% de consumo por categoría",
-                                                textAlign = TextAlign.Center,
+                                                text = stringResource(id = R.string.Wallet)
+                                            )
+                                        },
+                                        colors = TextFieldDefaults.colors(
+                                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                                            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                                            disabledContainerColor = MaterialTheme.colorScheme.surface,
+                                        )
+                                    )
+                                    ExposedDropdownMenu(
+                                        expanded = expandedWallet,
+                                        onDismissRequest = { expandedWallet = false }
+                                    ) {
+                                        state.data.forEach { item ->
+                                            DropdownMenuItem(
+                                                text = { Text(text = item.name) },
+                                                onClick = {
+                                                    selectedWallet = item.name
+                                                    expandedWallet = false
+                                                    if (uid != null) {
+                                                        walletViewModel.fetchTransactions(uid, selectedWallet, selectedDate)
+                                                    }
+                                                }
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+
+
+
+                            Spacer(modifier = modifier
+                                .height(1.dp)
+                                .fillMaxWidth()
+                                .padding(20.dp, 0.dp, 20.dp, 0.dp)
+                                .background(Color.Gray)
+                            )
+                            Column() {
+                                when(val tState = transactionState) {
+                                    is DataUiState.Loading -> {
+                                        LoadingScreen(paddingValues = paddingValues)
+                                    }
+                                    is DataUiState.Error -> {
+                                        ErrorScreen(error = tState.exception, paddingValues = paddingValues)
+                                    }
+                                    is DataUiState.Success -> {
+
+                                        if (tState.data.isNotEmpty()) {
+                                            Column (
                                                 modifier = modifier
-                                                    .background(
-                                                        Brush.verticalGradient(
-                                                            colors = listOf(
-                                                                MaterialTheme.colorScheme.primary,
-                                                                MaterialTheme.colorScheme.primary
-                                                            )
-                                                        ),
-                                                        MaterialTheme.shapes.large,
-                                                        0.7F
-                                                    )
-                                                    .border(
-                                                        width = 1.dp,
-                                                        color = MaterialTheme.colorScheme.primary,
-                                                        shape = MaterialTheme.shapes.large
-                                                    )
-                                                    .padding(12.dp)
+                                                    .fillMaxWidth()
+                                                    .padding(),
+                                                verticalArrangement = Arrangement.Center,
+                                                horizontalAlignment = Alignment.CenterHorizontally
 
-                                            )
-                                            //grafica de pie
-                                            val por1 = 0.5
-                                            val entries = listOf(
-                                                PieChartEntry(Color.Red, por1.toFloat(), "Mercado"),
-                                                PieChartEntry(Color.Green, 0.2f, "Juguetes"),
-                                                PieChartEntry(blue, 0.3f, "Ropa")
-                                            )
-                                            PieChart(modifier ,entries)
+                                            ) {
+                                                Text(
+                                                    text = stringResource(id = R.string.ConsumptionPerCategory),
+                                                    style = MaterialTheme.typography.bodyLarge,
+                                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                    modifier = modifier.padding(12.dp, 12.dp, 0.dp, 12.dp)
+                                                )
+                                                Spacer(modifier = modifier
+                                                    .height(1.dp)
+                                                    .fillMaxWidth()
+                                                    .padding(20.dp, 0.dp, 20.dp, 0.dp)
+                                                    .background(Color.Gray)
+                                                )
+                                                val total = tState.data.filter { transaction ->
+                                                    transaction.amount < 0
+                                                }.sumOf { transaction ->
+                                                    transaction.amount
+                                                }
 
-                                            Text(
-                                                text = "Gastos totales por año",
-                                                textAlign = TextAlign.Center,
+                                                val entriesPerCategory = tState.data.filter { transaction -> transaction.amount < 0 }
+                                                    .groupBy { transaction ->
+                                                    transaction.category
+                                                }.map { (category, transactions) ->
+                                                    val totalPerCategory = transactions.sumOf { transaction ->
+                                                        transaction.amount
+                                                    }
+                                                    PieChartEntry(totalPerCategory.toFloat() / total.toFloat(), category)
+                                                }
+                                                Column (
+                                                    modifier = modifier
+                                                        .fillMaxWidth()
+                                                        .padding(12.dp),
+                                                    verticalArrangement = Arrangement.Center,
+                                                    horizontalAlignment = Alignment.CenterHorizontally
+                                                ) {
+                                                    PieChartWithLegend(modifier ,entriesPerCategory)
+                                                }
+                                            }
+
+                                        } else {
+
+                                            Column (
                                                 modifier = modifier
-                                                    .background(
-                                                        Brush.verticalGradient(
-                                                            colors = listOf(
-                                                                MaterialTheme.colorScheme.primary,
-                                                                MaterialTheme.colorScheme.primary
-                                                            )
-                                                        ),
-                                                        MaterialTheme.shapes.large,
-                                                        0.7F
-                                                    )
-                                                    .border(
-                                                        width = 1.dp,
-                                                        color = MaterialTheme.colorScheme.primary,
-                                                        shape = MaterialTheme.shapes.large
-                                                    )
-                                                    .padding(12.dp)
+                                                    .fillMaxSize()
+                                                    .padding(),
+                                                verticalArrangement = Arrangement.Center,
+                                                horizontalAlignment = Alignment.CenterHorizontally
 
-                                            )
-                                            //grafica de barras
-                                            val entries2 = listOf(
-                                                BarChartInput(28, "Kotlin", orange),
-                                                BarChartInput(15, "Swift", brightBlue),
-                                                BarChartInput(11, "Ruby", green),
-                                                BarChartInput(10, "C#", redOrange),
-                                            )
-                                            BarChart(entries2, modifier, true)
+                                            ) {
+
+                                                Text(
+                                                    text = stringResource(id = R.string.YouHaveNoTransactionsOnThisDate),
+                                                    textAlign = TextAlign.Center,
+                                                    modifier = modifier
+                                                        .background(
+                                                            Brush.verticalGradient(
+                                                                colors = listOf(
+                                                                    MaterialTheme.colorScheme.primary,
+                                                                    MaterialTheme.colorScheme.primary
+                                                                )
+                                                            ),
+                                                            MaterialTheme.shapes.large,
+                                                            0.7F
+                                                        )
+                                                        .border(
+                                                            width = 1.dp,
+                                                            color = MaterialTheme.colorScheme.primary,
+                                                            shape = MaterialTheme.shapes.large
+                                                        )
+                                                        .padding(12.dp)
+
+                                                )
+                                            }
 
                                         }
                                     }
-                                } else {
-                                    item {
-                                        Column (
-                                            modifier = modifier
-                                                .fillMaxSize()
-                                                .padding(paddingValues),
-                                            verticalArrangement = Arrangement.Center,
-                                            horizontalAlignment = Alignment.CenterHorizontally
-
-                                        ) {
-
-                                            Text(
-                                                text = stringResource(id = R.string.YouHaveNoTransactionsOnThisDate),
-                                                textAlign = TextAlign.Center,
+                                }
+                                when (val tState = trasactionYearState) {
+                                    is DataUiState.Loading -> {
+                                        LoadingScreen(paddingValues = paddingValues)
+                                    }
+                                    is DataUiState.Error -> {
+                                        ErrorScreen(error = tState.exception, paddingValues = paddingValues)
+                                    }
+                                    is DataUiState.Success -> {
+                                        if (tState.data.isNotEmpty()) {
+                                            Column (
                                                 modifier = modifier
-                                                    .background(
-                                                        Brush.verticalGradient(
-                                                            colors = listOf(
-                                                                MaterialTheme.colorScheme.primary,
-                                                                MaterialTheme.colorScheme.primary
-                                                            )
-                                                        ),
-                                                        MaterialTheme.shapes.large,
-                                                        0.7F
-                                                    )
-                                                    .border(
-                                                        width = 1.dp,
-                                                        color = MaterialTheme.colorScheme.primary,
-                                                        shape = MaterialTheme.shapes.large
-                                                    )
-                                                    .padding(12.dp)
+                                                    .fillMaxWidth()
+                                                    .padding(),
+                                                verticalArrangement = Arrangement.Center,
+                                                horizontalAlignment = Alignment.CenterHorizontally
 
-                                            )
+                                            ){
+
+                                                Spacer(modifier = modifier
+                                                    .height(1.dp)
+                                                    .fillMaxWidth()
+                                                    .padding(20.dp, 0.dp, 20.dp, 0.dp)
+                                                    .background(Color.Gray)
+                                                )
+                                                Text(
+                                                    text = stringResource(id = R.string.AnualConsumption),
+                                                    style = MaterialTheme.typography.bodyLarge,
+                                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                    modifier = modifier.padding(12.dp, 12.dp, 0.dp, 12.dp)
+                                                )
+                                                Spacer(modifier = modifier
+                                                    .height(1.dp)
+                                                    .fillMaxWidth()
+                                                    .padding(20.dp, 0.dp, 20.dp, 0.dp)
+                                                    .background(Color.Gray)
+                                                )
+                                                Column(
+                                                    modifier = modifier
+                                                        .fillMaxWidth()
+                                                        .padding(),
+                                                    verticalArrangement = Arrangement.Center,
+                                                    horizontalAlignment = Alignment.CenterHorizontally
+
+                                                ) {
+                                                    val entries = tState.data.filter {
+                                                        tranasction -> tranasction.amount < 0
+                                                    }.groupBy {
+                                                        transaction -> transaction.month
+                                                    }.map { (month, transactions) ->
+                                                        val totalPerMonth = transactions.sumOf { transaction ->
+                                                            transaction.amount
+                                                        }
+                                                        BarChartInput(totalPerMonth.toInt(), month)
+                                                    }
+
+                                                    Column (
+                                                        modifier = modifier
+                                                            .fillMaxWidth()
+                                                            .padding(12.dp, 40.dp, 12.dp, 0.dp),
+                                                        verticalArrangement = Arrangement.Center,
+                                                        horizontalAlignment = Alignment.CenterHorizontally
+                                                    ) {
+                                                        BarChart(entries, modifier, true)
+                                                    }
+                                                }
+                                            }
+
+                                        } else {
+
+                                            Column (
+                                                modifier = modifier
+                                                    .fillMaxWidth()
+                                                    .padding(),
+                                                verticalArrangement = Arrangement.Center,
+                                                horizontalAlignment = Alignment.CenterHorizontally
+
+                                            ) {
+                                                Text(
+                                                    text = stringResource(id = R.string.YouHaveNoTransactionsOnThisDate),
+                                                    textAlign = TextAlign.Center,
+                                                    modifier = modifier
+                                                        .background(
+                                                            Brush.verticalGradient(
+                                                                colors = listOf(
+                                                                    MaterialTheme.colorScheme.primary,
+                                                                    MaterialTheme.colorScheme.primary
+                                                                )
+                                                            ),
+                                                            MaterialTheme.shapes.large,
+                                                            0.7F
+                                                        )
+                                                        .border(
+                                                            width = 1.dp,
+                                                            color = MaterialTheme.colorScheme.primary,
+                                                            shape = MaterialTheme.shapes.large
+                                                        )
+                                                        .padding(12.dp)
+
+                                                )
+                                            }
+
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                    Spacer(
-                        modifier = modifier
-                            .height(61.dp)
-                            .fillMaxWidth()
-                    )
                 }
+
             } else {
                 Column (
                     modifier = modifier
                         .fillMaxSize()
-                        .padding(paddingValues),
+                        .padding(),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
 

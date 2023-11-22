@@ -29,6 +29,9 @@ class WalletViewModel(private val firestoreRepository: DataBaseRepository = Fire
     private val _fetchTransactionsState = MutableStateFlow<DataUiState<List<Transaction>>>(DataUiState.Loading)
     val fetchTransactionsState = _fetchTransactionsState.asStateFlow()
 
+    private val _fetchTransactionsYearState = MutableStateFlow<DataUiState<List<Transaction>>>(DataUiState.Loading)
+    val fetchTransactionsYearState = _fetchTransactionsYearState.asStateFlow()
+
 
     fun fetchWallets(userId: String) {
         viewModelScope.launch {
@@ -107,7 +110,7 @@ class WalletViewModel(private val firestoreRepository: DataBaseRepository = Fire
                 println(time)
                 val day = time[0].toInt()
                 val dateTime = time[1].slice(IntRange(0,2)) + "-" + time[2]
-                val transaction = Transaction(id = "NOID", amount = amount.toDouble(), category = category, date = dateTime, day = day, description = concept)
+                val transaction = Transaction(id = "NOID", amount = amount.toDouble(), category = category, date = dateTime, day = day, description = concept, year = time[2].toInt(), month = time[1].slice(IntRange(0,2)))
                 firestoreRepository.addSecondGradeSubcollectionDocumentTransaction(userId, "wallets", walletName, "transactions", transaction)
                 fetchWallets(userId)
             } catch (e: Exception) {
@@ -124,6 +127,20 @@ class WalletViewModel(private val firestoreRepository: DataBaseRepository = Fire
                 _fetchTransactionsState.value = DataUiState.Success(transactions.getOrThrow())
             } catch (e: Exception) {
                 _fetchTransactionsState.value = DataUiState.Error(e)
+            }
+        }
+    }
+
+    fun fetchTransactionsYear(userId: String, walletName: String, date: String) {
+        viewModelScope.launch {
+            try {
+                val year = date.split("-")[1].toInt()
+                println(year)
+                _fetchTransactionsYearState.value = DataUiState.Loading
+                val transactions = firestoreRepository.fetchTransactionsYear(userId, walletName, year)
+                _fetchTransactionsYearState.value = DataUiState.Success(transactions.getOrThrow())
+            } catch (e: Exception) {
+                _fetchTransactionsYearState.value = DataUiState.Error(e)
             }
         }
     }
