@@ -1,17 +1,11 @@
 package com.example.quenotesalgacaro.ui.view.screens
 
 import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -24,14 +18,10 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
-import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
-import com.example.quenotesalgacaro.ui.view.vms.FundViewModel
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -39,17 +29,22 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.quenotesalgacaro.R
-import com.example.quenotesalgacaro.data.networking.FundData
-import com.example.quenotesalgacaro.data.networking.SimpleDocument
 import com.example.quenotesalgacaro.navigation.TopBar
 import com.example.quenotesalgacaro.ui.view.composables.DatePickerDialogD
 import com.example.quenotesalgacaro.ui.view.composables.ErrorScreen
 import com.example.quenotesalgacaro.ui.view.composables.LoadingDropdownTextField
 import com.example.quenotesalgacaro.ui.view.composables.LoadingScreen
+import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
+import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
+import com.example.quenotesalgacaro.ui.view.vms.FundViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
@@ -74,10 +69,10 @@ fun AddFundTransactionScreen(
         topBar = {
             TopBar(title = stringResource(id = R.string.FundsTransaction), navController = navController)
         },
-    ) {
+    ) { paddingValues ->
         when (val state = getFundState) {
             is DataUiState.Loading -> {
-                LoadingScreen(paddingValues = it)
+                LoadingScreen(paddingValues = paddingValues)
             }
             is DataUiState.Success -> {
                 if(state.data.isNotEmpty()){
@@ -92,7 +87,7 @@ fun AddFundTransactionScreen(
                     Column(
                         modifier = modifier
                             .fillMaxWidth()
-                            .padding(paddingValues = it),
+                            .padding(paddingValues = paddingValues),
                         verticalArrangement = Arrangement.SpaceAround,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ){
@@ -242,7 +237,7 @@ fun AddFundTransactionScreen(
                 }
             }
             is DataUiState.Error -> {
-                ErrorScreen(error = (getFundState as DataUiState.Error).exception, paddingValues = it)
+                ErrorScreen(error = (getFundState as DataUiState.Error).exception, paddingValues = paddingValues)
             }
         }
     }

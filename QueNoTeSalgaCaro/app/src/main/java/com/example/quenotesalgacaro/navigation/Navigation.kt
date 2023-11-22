@@ -141,14 +141,11 @@ fun Navigation(
             }
         }
 
-        composable(NavigationState.AddFundTransactionScreen.route + "/{fund}") { navBackStackEntry ->
-            run {
-                val fund = navBackStackEntry.arguments?.getString("fund")
-                AddFundTransactionScreen(
-                    navController = navController,
-                    authViewModel = authViewModel,
-                )
-            }
+        composable(NavigationState.AddFundTransactionScreen.route) {
+            AddFundTransactionScreen(
+                navController = navController,
+                authViewModel = authViewModel,
+            )
         }
     }
 }

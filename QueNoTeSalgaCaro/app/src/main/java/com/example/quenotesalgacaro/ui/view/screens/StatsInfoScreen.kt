@@ -196,7 +196,7 @@ fun StatsInfoScreen(
                                 .padding(20.dp, 0.dp, 20.dp, 0.dp)
                                 .background(Color.Gray)
                             )
-                            Column() {
+                            Column {
                                 when(val tState = transactionState) {
                                     is DataUiState.Loading -> {
                                         LoadingScreen(paddingValues = paddingValues)
@@ -336,7 +336,7 @@ fun StatsInfoScreen(
 
                                                 ) {
                                                     val entries = tState.data.filter {
-                                                        tranasction -> tranasction.amount < 0
+                                                        transaction -> transaction.amount < 0
                                                     }.groupBy {
                                                         transaction -> transaction.month
                                                     }.map { (month, transactions) ->

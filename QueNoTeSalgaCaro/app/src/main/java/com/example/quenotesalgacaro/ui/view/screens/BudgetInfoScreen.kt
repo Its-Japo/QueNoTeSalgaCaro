@@ -1,7 +1,6 @@
 package com.example.quenotesalgacaro.ui.view.screens
 
 import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -24,8 +23,6 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -40,8 +37,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -51,7 +46,6 @@ import com.example.quenotesalgacaro.R
 import com.example.quenotesalgacaro.data.networking.SimpleDocument
 import com.example.quenotesalgacaro.ui.view.composables.ErrorScreen
 import com.example.quenotesalgacaro.ui.view.composables.LoadingScreen
-import com.example.quenotesalgacaro.ui.view.struct.BudgetConfigurationStruct
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 import com.example.quenotesalgacaro.ui.view.vms.BudgetViewModel
@@ -159,7 +153,7 @@ fun BudgetInfoScreen(
                         }
                         is DataUiState.Success -> {
 
-                            val disponibleMensual = state1.data.income.sumOf { it.amount.toDouble() } - state1.data.fixedExpenses.sumOf { it.amount.toDouble() } - state1.data.variableExpenses.sumOf { it.amount.toDouble() }
+                            val monthlyAvailable = state1.data.income.sumOf { it.amount.toDouble() } - state1.data.fixedExpenses.sumOf { it.amount.toDouble() } - state1.data.variableExpenses.sumOf { it.amount.toDouble() }
                             val progress = (state1.data.fixedExpenses.sumOf { it.amount.toDouble() } + state1.data.variableExpenses.sumOf { it.amount.toDouble() }) / state1.data.income.sumOf { it.amount.toDouble() }
 
                             Row(
@@ -183,7 +177,7 @@ fun BudgetInfoScreen(
                                     )
                                     Text(
 
-                                        text = "Q$disponibleMensual",
+                                        text = "Q$monthlyAvailable",
                                         style = MaterialTheme.typography.headlineSmall,
                                         color = MaterialTheme.colorScheme.onSurface
                                     )
@@ -216,7 +210,7 @@ fun BudgetInfoScreen(
                                     )
                                 }
                             }
-                            LazyColumn() {
+                            LazyColumn {
                                 item {
                                     Text(
                                         text = stringResource(id = R.string.Income),
@@ -230,7 +224,7 @@ fun BudgetInfoScreen(
                                         .padding(20.dp, 0.dp, 20.dp, 0.dp)
                                         .background(Color.Gray)
                                     )
-                                    Row(){
+                                    Row{
                                         Text(
                                             text = stringResource(id = R.string.Category),
                                             modifier = modifier
@@ -283,7 +277,7 @@ fun BudgetInfoScreen(
                                         .padding(20.dp, 0.dp, 20.dp, 0.dp)
                                         .background(Color.Gray)
                                     )
-                                    Row(){
+                                    Row{
                                         Text(
                                             text = stringResource(id = R.string.Category),
                                             modifier = modifier
@@ -336,7 +330,7 @@ fun BudgetInfoScreen(
                                         .padding(20.dp, 0.dp, 20.dp, 0.dp)
                                         .background(Color.Gray)
                                     )
-                                    Row(){
+                                    Row{
                                         Text(
                                             text = stringResource(id = R.string.Category),
                                             modifier = modifier

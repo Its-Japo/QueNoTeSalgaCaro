@@ -1,7 +1,6 @@
 package com.example.quenotesalgacaro.ui.view.screens
 
 import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -44,7 +43,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -53,8 +51,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.quenotesalgacaro.R
-import com.example.quenotesalgacaro.data.networking.FundData
-import com.example.quenotesalgacaro.navigation.TopBar
 import com.example.quenotesalgacaro.ui.view.composables.ErrorScreen
 import com.example.quenotesalgacaro.ui.view.composables.LoadingScreen
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
@@ -95,9 +91,9 @@ fun FundsInfoScreen(
                 is DataUiState.Success -> {
                     if (state.data.isNotEmpty()) {
                         FloatingActionButton(
-                            modifier = modifier.offset(x = 0.dp, y = (-100.dp)),
+                            modifier = modifier.offset(x = 0.dp, y = (-100).dp),
                             onClick = {
-                                navController.navigate("AddFundTransactionScreen/hola")
+                                navController.navigate("AddFundTransactionScreen")
                             },
                         ) {
                             Text(text = "+", fontSize = 30.sp)
@@ -262,7 +258,7 @@ fun FundsInfoScreen(
                                     .padding(20.dp, 0.dp, 20.dp, 0.dp)
                                     .background(Color.Gray)
                                 )
-                                Row(){
+                                Row{
                                     Text(
                                         text = stringResource(id = R.string.Date),
                                         modifier = modifier

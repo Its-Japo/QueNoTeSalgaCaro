@@ -69,11 +69,11 @@ fun CreateScreen(
                 is FundViewModel -> TopBar(title = stringResource(id = R.string.CreateFund), navController = navController)
             }
         }
-    ){
+    ){ paddingValues ->
         Column(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(it)
+                .padding(paddingValues)
         ){
             TextField(
                 value = name.value,

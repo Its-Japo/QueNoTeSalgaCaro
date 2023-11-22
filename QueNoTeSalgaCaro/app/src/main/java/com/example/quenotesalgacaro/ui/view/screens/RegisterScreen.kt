@@ -1,7 +1,6 @@
 package com.example.quenotesalgacaro.ui.view.screens
 
 import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -81,11 +79,11 @@ fun RegisterScreen(
                 )
             }
         }
-    ){
+    ){ paddingValues ->
         Column (
             modifier = modifier
                 .fillMaxWidth()
-                .padding(it),
+                .padding(paddingValues),
         ) {
             Image (
                 painter = painterResource(id = R.drawable.profileicon),

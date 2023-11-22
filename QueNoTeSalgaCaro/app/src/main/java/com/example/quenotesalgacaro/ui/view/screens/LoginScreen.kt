@@ -80,11 +80,11 @@ fun LoginScreen(
                 )
             }
         }
-    ){
+    ){ paddingValues ->
         Column (
             modifier = modifier
                 .fillMaxWidth()
-                .padding(it),
+                .padding(paddingValues),
         ) {
             Image (
                 painter = painterResource(id = R.drawable.profileicon),
