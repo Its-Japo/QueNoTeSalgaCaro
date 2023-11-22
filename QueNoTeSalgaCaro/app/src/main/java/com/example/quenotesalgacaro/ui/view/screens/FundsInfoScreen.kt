@@ -48,6 +48,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.quenotesalgacaro.R
 import com.example.quenotesalgacaro.data.networking.FundData
+import com.example.quenotesalgacaro.ui.view.composables.ErrorScreen
 import com.example.quenotesalgacaro.ui.view.composables.LoadingScreen
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
@@ -92,7 +93,7 @@ fun FundsInfoScreen(
     )
     when(val state = fundsState) {
         is DataUiState.Loading -> {
-            LoadingScreen()
+            LoadingScreen(paddingValues = paddingValues)
         }
         is DataUiState.Success -> {
             funds = state.data
@@ -286,10 +287,11 @@ fun FundsInfoScreen(
                     )
                     Button(
                         onClick = { navController.navigate("FundsScreen") },
-                        modifier = modifier.background(
-                            color = MaterialTheme.colorScheme.primary,
-                            shape = MaterialTheme.shapes.extraLarge,
-                        )
+                        modifier = modifier
+                            .background(
+                                color = MaterialTheme.colorScheme.primary,
+                                shape = MaterialTheme.shapes.extraLarge,
+                            )
                             .border(
                                 width = 1.dp,
                                 color = MaterialTheme.colorScheme.primary,
@@ -307,7 +309,7 @@ fun FundsInfoScreen(
             }
         }
         is DataUiState.Error -> {
-            Text(text = "Error")
+            ErrorScreen(error = state.exception, paddingValues = paddingValues)
         }
     }
 }

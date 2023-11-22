@@ -20,7 +20,6 @@ import com.example.quenotesalgacaro.R
 import com.example.quenotesalgacaro.navigation.TopBar
 import com.example.quenotesalgacaro.ui.view.composables.ButtonBar
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SettingsScreen(
     navController: NavController,
@@ -33,7 +32,7 @@ fun SettingsScreen(
         }
     ) {
        Column (
-           modifier = modifier.padding(0.dp, 60.dp, 0.dp, 0.dp)
+           modifier = modifier.padding(it)
        ){
            ButtonBar(icon =  R.drawable.profileicon, text = stringResource(id = R.string.Account), onClick = { navController.navigate("AccountScreen") })
            ButtonBar(icon =  R.drawable.wallet_icon, text = stringResource(id = R.string.Wallets), onClick = { navController.navigate("WalletsScreen") })

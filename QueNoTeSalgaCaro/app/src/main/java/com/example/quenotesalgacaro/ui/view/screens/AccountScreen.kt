@@ -40,7 +40,7 @@ fun AccountScreen(
         }
     ){
         Column(
-            modifier = modifier.padding(0.dp, 70.dp, 0.dp, 0.dp)
+            modifier = modifier.padding(it)
         ){
             Row (
                 modifier = modifier.padding(20.dp),

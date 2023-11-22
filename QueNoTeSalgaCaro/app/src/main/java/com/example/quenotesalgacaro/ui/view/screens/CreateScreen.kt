@@ -73,7 +73,7 @@ fun CreateScreen(
         Column(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(10.dp, 60.dp, 10.dp, 10.dp)
+                .padding(it)
         ){
             TextField(
                 value = name.value,
