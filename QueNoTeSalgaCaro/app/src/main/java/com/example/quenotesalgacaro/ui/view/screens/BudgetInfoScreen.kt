@@ -179,7 +179,10 @@ fun BudgetInfoScreen(
                                     .padding(0.dp),
                             ){
                                 Column(
-                                    modifier = modifier.padding(12.dp, 12.dp, 0.dp, 12.dp),
+                                    modifier = modifier.padding(12.dp, 12.dp, 0.dp, 12.dp)
+                                        .weight(2f),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
                                     Text(
                                         text = "Disponible Mensual",
@@ -194,7 +197,7 @@ fun BudgetInfoScreen(
                                     )
                                 }
                                 Box(
-                                    modifier = modifier.weight(1f),
+                                    modifier = modifier.weight(2f),
                                 ) {
                                     CircularProgressIndicator(
                                         progress = { progress.toFloat() },
