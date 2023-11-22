@@ -48,6 +48,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.quenotesalgacaro.R
 import com.example.quenotesalgacaro.data.networking.SimpleDocument
+import com.example.quenotesalgacaro.ui.view.composables.ErrorScreen
 import com.example.quenotesalgacaro.ui.view.composables.LoadingScreen
 import com.example.quenotesalgacaro.ui.view.struct.BudgetConfigurationStruct
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
@@ -64,22 +65,16 @@ fun BudgetInfoScreen(
     budgetViewModel: BudgetViewModel = viewModel(),
     paddingValues: PaddingValues
 ) {
-    val context = LocalContext.current
     val budgets :List<SimpleDocument>
     var expandedBudget by remember { mutableStateOf(false) }
+
     val budgetsState by budgetViewModel.budgetsFetchState.collectAsState()
+    val budgetDataState by budgetViewModel.budgetConfigurationFetchState.collectAsState()
 
 
     val uid = viewModel.loginUiState.value.user?.uid
 
-    val ingresosTabla = BudgetConfigurationStruct().income
-    val gastosFijosTabla = BudgetConfigurationStruct().fixedExpenses
-    val gastosVariablesTabla = BudgetConfigurationStruct().variableExpenses
 
-    val presupuestoMensual = 20000.0
-    val gastoMensualesNetos = 5000.0
-    val disponibleMensual = presupuestoMensual - gastoMensualesNetos
-    val progress = (presupuestoMensual - gastoMensualesNetos)/presupuestoMensual
 
     LaunchedEffect(
         key1 = Unit,
@@ -90,6 +85,9 @@ fun BudgetInfoScreen(
             }
         }
     )
+
+
+
     when(val state = budgetsState) {
         is DataUiState.Loading -> {
             LoadingScreen()
@@ -97,7 +95,17 @@ fun BudgetInfoScreen(
         is DataUiState.Success -> {
             budgets = state.data
             if (state.data.isNotEmpty()) {
-                var selectedBudget by remember { mutableStateOf( budgets[0]) }
+                var selectedBudget by remember { mutableStateOf( budgets.first() ) }
+
+                LaunchedEffect(key1 = selectedBudget) {
+                    if (uid != null) {
+                        budgetViewModel.fetchBudgetConfiguration(uid, selectedBudget.name)
+                    }
+                }
+
+
+
+
                 Column(
                     modifier = modifier
                         .fillMaxSize()
@@ -121,7 +129,7 @@ fun BudgetInfoScreen(
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedBudget) },
                             modifier = modifier
                                 .menuAnchor()
-                                .width(180.dp),
+                                .width(250.dp),
                             label = {
                                 Text(
                                     text = "Plan Presupuestario",
@@ -143,307 +151,234 @@ fun BudgetInfoScreen(
                                     onClick = {
                                         selectedBudget = item
                                         expandedBudget = false
-                                        Toast.makeText(context, item.name, Toast.LENGTH_SHORT).show()
                                     }
                                 )
                             }
                         }
                     }
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .padding(0.dp),
-                    ){
-                        Column(
-                            modifier = modifier.padding(12.dp, 12.dp, 0.dp, 12.dp),
-                        ) {
-                            Text(
-                                text = "Disponible Mensual",
-                                style = MaterialTheme.typography.labelLarge,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            Text(
-                                text = "Q$disponibleMensual",
-                                style = MaterialTheme.typography.headlineSmall,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
+
+
+                    when (val state1 = budgetDataState) {
+                        is DataUiState.Loading -> {
+                            LoadingScreen(paddingValues = paddingValues)
                         }
-                        Box(
-                            modifier = modifier.weight(1f),
-                        ) {
-                            CircularProgressIndicator(
-                                progress = { progress.toFloat() },
+                        is DataUiState.Error -> {
+                            ErrorScreen(error = state1.exception, paddingValues = paddingValues)
+                        }
+                        is DataUiState.Success -> {
+
+                            val disponibleMensual = state1.data.income.sumOf { it.amount.toDouble() } - state1.data.fixedExpenses.sumOf { it.amount.toDouble() } - state1.data.variableExpenses.sumOf { it.amount.toDouble() }
+                            val progress = (state1.data.fixedExpenses.sumOf { it.amount.toDouble() } + state1.data.variableExpenses.sumOf { it.amount.toDouble() }) / state1.data.income.sumOf { it.amount.toDouble() }
+
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween,
                                 modifier = modifier
-                                    .width(120.dp)
-                                    .aspectRatio(1f)
-                                    .align(alignment = Alignment.Center)
-                                    .padding(12.dp),
-                                color = when (progress) {
-                                    in 0.0..0.5 -> Color(57, 255, 20)
-                                    in 0.5..0.8 -> Color(255, 255, 0)
-                                    in 0.8..0.99 -> Color(255, 0, 0)
-                                    else -> {
-                                        Color(80, 0, 0)
+                                    .fillMaxWidth()
+                                    .padding(0.dp),
+                            ){
+                                Column(
+                                    modifier = modifier.padding(12.dp, 12.dp, 0.dp, 12.dp),
+                                ) {
+                                    Text(
+                                        text = "Disponible Mensual",
+                                        style = MaterialTheme.typography.labelLarge,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                    Text(
+
+                                        text = "Q$disponibleMensual",
+                                        style = MaterialTheme.typography.headlineSmall,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                }
+                                Box(
+                                    modifier = modifier.weight(1f),
+                                ) {
+                                    CircularProgressIndicator(
+                                        progress = { progress.toFloat() },
+                                        modifier = modifier
+                                            .width(120.dp)
+                                            .aspectRatio(1f)
+                                            .align(alignment = Alignment.Center)
+                                            .padding(12.dp),
+                                        color = when (progress) {
+                                            in 0.0..0.5 -> Color(57, 255, 20)
+                                            in 0.5..0.8 -> Color(255, 255, 0)
+                                            in 0.8..0.99 -> Color(255, 0, 0)
+                                            else -> {
+                                                Color(80, 0, 0)
+                                            }
+                                        },
+                                        strokeWidth = 16.dp,
+                                    )
+                                    Text(
+                                        text = "${(progress * 100).toInt()}%",
+                                        style = MaterialTheme.typography.displaySmall,
+                                        color = MaterialTheme.colorScheme.onSurface,
+                                        modifier = modifier.align(alignment = Alignment.Center)
+                                    )
+                                }
+                            }
+                            LazyColumn() {
+                                item {
+                                    Text(
+                                        text = "Ingresos",
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        modifier = modifier.padding(12.dp, 12.dp, 0.dp, 12.dp)
+                                    )
+                                    Spacer(modifier = modifier
+                                        .height(1.dp)
+                                        .fillMaxWidth()
+                                        .padding(20.dp, 0.dp, 20.dp, 0.dp)
+                                        .background(Color.Gray)
+                                    )
+                                    Row(){
+                                        Text(
+                                            text = "Categoria",
+                                            modifier = modifier
+                                                .weight(3f)
+                                                .padding(12.dp)
+                                        )
+                                        Text(
+                                            text = "Monto",
+                                            modifier = modifier
+                                                .weight(2f)
+                                                .padding(12.dp),
+                                            textAlign = TextAlign.Center
+                                        )
                                     }
-                                },
-                                strokeWidth = 16.dp,
-                            )
-                            Text(
-                                text = "${(progress * 100).toInt()}%",
-                                style = MaterialTheme.typography.displaySmall,
-                                color = MaterialTheme.colorScheme.onSurface,
-                                modifier = modifier.align(alignment = Alignment.Center)
-                            )
-                        }
-                    }
-                    Text(
-                        text = "Ingresos",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = modifier.padding(12.dp, 12.dp, 0.dp, 12.dp)
-                    )
-                    Spacer(modifier = modifier
-                        .height(1.dp)
-                        .fillMaxWidth()
-                        .padding(20.dp, 0.dp, 20.dp, 0.dp)
-                        .background(Color.Gray)
-                    )
-                    Row(){
-                        Text(
-                            text = "Dia",
-                            modifier = modifier
-                                .weight(1f)
-                                .padding(12.dp),
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Text(
-                            text = "Categoria",
-                            modifier = modifier
-                                .weight(3f)
-                                .padding(12.dp)
-                        )
-                        Text(
-                            text = "Monto",
-                            modifier = modifier
-                                .weight(2f)
-                                .padding(12.dp)
-                        )
-                        Text(
-                            text = "",
-                            modifier = modifier
-                                .weight(1f)
-                                .padding(12.dp)
-                        )
-                    }
-                    LazyColumn(
-                        modifier = modifier
-                            .fillMaxWidth()
-                    ) {
-                        items(ingresosTabla.size) { index ->
-                            Row {
-
-                                Text(
-                                    text = ingresosTabla[index].id,
-                                    modifier = modifier
-                                        .weight(1f)
-                                        .padding(5.dp),
-                                    style = MaterialTheme.typography.labelLarge,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                                Text(
-                                    text = ingresosTabla[index].concept,
-                                    modifier = modifier
-                                        .weight(3f)
-                                        .padding(5.dp)
-                                )
-                                Text(
-                                    text = ingresosTabla[index].amount,
-                                    modifier = modifier
-                                        .weight(2f)
-                                        .padding(5.dp)
-                                )
-                                IconButton(
-                                    onClick = { /*TODO*/ },
-                                    modifier = modifier
-                                        .weight(1f)
-                                ) {
-                                    Icon(
-                                        painter = painterResource(
-                                            id = R.drawable.option
-                                        ),
-                                        contentDescription = "Opciones",
-                                        tint = MaterialTheme.colorScheme.primary
-                                    )
                                 }
+                                items(state1.data.income.size) { index ->
+                                    Row {
+
+                                        Text(
+                                            text = state1.data.income[index].concept,
+                                            modifier = modifier
+                                                .weight(3f)
+                                                .padding(5.dp)
+                                        )
+                                        Text(
+                                            text = state1.data.income[index].amount,
+                                            modifier = modifier
+                                                .weight(2f)
+                                                .padding(5.dp),
+                                            textAlign = TextAlign.Center
+                                        )
+                                    }
+                                }
+                                item {
+                                    Spacer(modifier = modifier
+                                        .height(1.dp)
+                                        .fillMaxWidth()
+                                        .padding(20.dp, 0.dp, 20.dp, 0.dp)
+                                        .background(Color.Gray)
+                                    )
+                                    Text(
+                                        text = "Gastos Fijos",
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        modifier = modifier.padding(12.dp, 12.dp, 0.dp, 12.dp)
+                                    )
+                                    Spacer(modifier = modifier
+                                        .height(1.dp)
+                                        .fillMaxWidth()
+                                        .padding(20.dp, 0.dp, 20.dp, 0.dp)
+                                        .background(Color.Gray)
+                                    )
+                                    Row(){
+                                        Text(
+                                            text = "Categoria",
+                                            modifier = modifier
+                                                .weight(3f)
+                                                .padding(12.dp)
+                                        )
+                                        Text(
+                                            text = "Monto",
+                                            modifier = modifier
+                                                .weight(2f)
+                                                .padding(12.dp),
+                                            textAlign = TextAlign.Center
+                                        )
+                                    }
+                                }
+                                items( state1.data.fixedExpenses.size) { index ->
+                                    Row {
+
+                                        Text(
+                                            text = state1.data.fixedExpenses[index].concept,
+                                            modifier = modifier
+                                                .weight(3f)
+                                                .padding(5.dp)
+                                        )
+                                        Text(
+                                            text = state1.data.fixedExpenses[index].amount,
+                                            modifier = modifier
+                                                .weight(2f)
+                                                .padding(5.dp),
+                                            textAlign = TextAlign.Center
+                                        )
+                                    }
+                                }
+                                item{
+                                    Spacer(modifier = modifier
+                                        .height(1.dp)
+                                        .fillMaxWidth()
+                                        .padding(20.dp, 0.dp, 20.dp, 0.dp)
+                                        .background(Color.Gray)
+                                    )
+                                    Text(
+                                        text = "Gastos Variables",
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        modifier = modifier.padding(12.dp, 12.dp, 0.dp, 12.dp)
+                                    )
+                                    Spacer(modifier = modifier
+                                        .height(1.dp)
+                                        .fillMaxWidth()
+                                        .padding(20.dp, 0.dp, 20.dp, 0.dp)
+                                        .background(Color.Gray)
+                                    )
+                                    Row(){
+                                        Text(
+                                            text = "Categoria",
+                                            modifier = modifier
+                                                .weight(3f)
+                                                .padding(12.dp)
+                                        )
+                                        Text(
+                                            text = "Monto(Rango)",
+                                            modifier = modifier
+                                                .weight(2f)
+                                                .padding(12.dp),
+                                            textAlign = TextAlign.Center
+                                        )
+                                    }
+                                }
+                                items(state1.data.variableExpenses.size) { index ->
+                                    Row {
+                                        Text(
+                                            text = state1.data.variableExpenses[index].concept,
+                                            modifier = modifier
+                                                .weight(3f)
+                                                .padding(5.dp)
+                                        )
+                                        Text(
+                                            text = "${state1.data.variableExpenses[index].amount} ± ${state1.data.variableExpenses[index].amount.toFloat()/10}",
+                                            modifier = modifier
+                                                .weight(2f)
+                                                .padding(5.dp),
+                                            textAlign = TextAlign.Center
+                                        )
+                                    }
+                                }
+
                             }
                         }
-                    }
-                    Spacer(modifier = modifier
-                        .height(1.dp)
-                        .fillMaxWidth()
-                        .padding(20.dp, 0.dp, 20.dp, 0.dp)
-                        .background(Color.Gray)
-                    )
-                    Text(
-                        text = "Gastos Fijos",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = modifier.padding(12.dp, 12.dp, 0.dp, 12.dp)
-                    )
-                    Spacer(modifier = modifier
-                        .height(1.dp)
-                        .fillMaxWidth()
-                        .padding(20.dp, 0.dp, 20.dp, 0.dp)
-                        .background(Color.Gray)
-                    )
-                    Row(){
-                        Text(
-                            text = "Dia",
-                            modifier = modifier
-                                .weight(1f)
-                                .padding(12.dp),
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Text(
-                            text = "Categoria",
-                            modifier = modifier
-                                .weight(3f)
-                                .padding(12.dp)
-                        )
-                        Text(
-                            text = "Monto",
-                            modifier = modifier
-                                .weight(2f)
-                                .padding(12.dp)
-                        )
-                        Text(
-                            text = "",
-                            modifier = modifier
-                                .weight(1f)
-                                .padding(12.dp)
-                        )
-                    }
-                    LazyColumn(
-                        modifier = modifier
-                            .fillMaxWidth()
-                    ) {
-                        items( gastosFijosTabla.size) { index ->
-                            Row {
 
-                                Text(
-                                    text = gastosFijosTabla[index].id,
-                                    modifier = modifier
-                                        .weight(1f)
-                                        .padding(5.dp),
-                                    style = MaterialTheme.typography.labelLarge,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                                Text(
-                                    text = gastosFijosTabla[index].concept,
-                                    modifier = modifier
-                                        .weight(3f)
-                                        .padding(5.dp)
-                                )
-                                Text(
-                                    text = gastosFijosTabla[index].amount,
-                                    modifier = modifier
-                                        .weight(2f)
-                                        .padding(5.dp)
-                                )
-                                IconButton(
-                                    onClick = { /*TODO*/ },
-                                    modifier = modifier
-                                        .weight(1f)
-                                ) {
-                                    Icon(
-                                        painter = painterResource(
-                                            id = R.drawable.option
-                                        ),
-                                        contentDescription = "Opciones",
-                                        tint = MaterialTheme.colorScheme.primary
-                                    )
-                                }
-                            }
-                        }
                     }
-                    Spacer(modifier = modifier
-                        .height(1.dp)
-                        .fillMaxWidth()
-                        .padding(20.dp, 0.dp, 20.dp, 0.dp)
-                        .background(Color.Gray)
-                    )
-                    Text(
-                        text = "Gastos Variables",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = modifier.padding(12.dp, 12.dp, 0.dp, 12.dp)
-                    )
-                    Spacer(modifier = modifier
-                        .height(1.dp)
-                        .fillMaxWidth()
-                        .padding(20.dp, 0.dp, 20.dp, 0.dp)
-                        .background(Color.Gray)
-                    )
-                    Row(){
-                        Text(
-                            text = "Categoria",
-                            modifier = modifier
-                                .weight(2f)
-                                .padding(12.dp)
-                        )
-                        Text(
-                            text = "Monto(Rango)",
-                            modifier = modifier
-                                .weight(2f)
-                                .padding(12.dp)
-                        )
-                        Text(
-                            text = "",
-                            modifier = modifier
-                                .weight(1f)
-                                .padding(12.dp)
-                        )
-                    }
-                    LazyColumn(
-                        modifier = modifier
-                            .fillMaxWidth()
-                    ) {
-                        items(gastosVariablesTabla.size) { index ->
-                            Row {
-
-                                Text(
-                                    text = gastosVariablesTabla[index].concept,
-                                    modifier = modifier
-                                        .weight(3f)
-                                        .padding(12.dp)
-                                )
-                                Text(
-                                    text = gastosVariablesTabla[index].amount,
-                                    modifier = modifier
-                                        .weight(2f)
-                                        .padding(12.dp)
-                                )
-                                IconButton(
-                                    onClick = { /*TODO*/ },
-                                    modifier = modifier
-                                        .weight(1f)
-                                ) {
-                                    Icon(
-                                        painter = painterResource(
-                                            id = R.drawable.option
-                                        ),
-                                        contentDescription = "Opciones",
-                                        tint = MaterialTheme.colorScheme.primary
-                                    )
-                                }
-                            }
-                        }
-                    }
-
                 }
             }
             else {
@@ -462,10 +397,11 @@ fun BudgetInfoScreen(
                     )
                     Button(
                         onClick = { navController.navigate("BudgetsScreen") },
-                        modifier = modifier.background(
-                            color = MaterialTheme.colorScheme.primary,
-                            shape = MaterialTheme.shapes.extraLarge,
-                        )
+                        modifier = modifier
+                            .background(
+                                color = MaterialTheme.colorScheme.primary,
+                                shape = MaterialTheme.shapes.extraLarge,
+                            )
                             .border(
                                 width = 1.dp,
                                 color = MaterialTheme.colorScheme.primary,
