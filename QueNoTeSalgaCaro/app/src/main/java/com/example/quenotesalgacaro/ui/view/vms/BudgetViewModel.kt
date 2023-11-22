@@ -113,5 +113,16 @@ class BudgetViewModel(
         }
     }
 
+    fun deleteBudget(userId: String, budgetName: String) {
+        viewModelScope.launch {
+            try {
+                firestoreRepository.deleteFirstGradeSubcollection(userId, "budgets", budgetName)
+                fetchBudgets(userId)
+            } catch (e: Exception) {
+                _addBudgetState.value = DataUiState.Error(e)
+            }
+        }
+    }
+
 
 }

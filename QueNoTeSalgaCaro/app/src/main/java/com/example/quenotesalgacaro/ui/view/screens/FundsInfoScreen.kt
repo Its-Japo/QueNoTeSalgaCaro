@@ -72,7 +72,7 @@ fun FundsInfoScreen(
     paddingValues: PaddingValues
 ) {
     val context = LocalContext.current
-    val funds: List<FundData>
+
     var expandedFund by remember { mutableStateOf(false) }
 
     val fundsState by fundViewModel.fundFetchState.collectAsState()
@@ -92,7 +92,6 @@ fun FundsInfoScreen(
     LaunchedEffect(
         key1 = Unit,
         block = {
-
             if (uid != null) {
                 fundViewModel.fetchFunds(uid)
             }
@@ -111,14 +110,20 @@ fun FundsInfoScreen(
         },
         floatingActionButtonPosition = FabPosition.End
     ){
+
+
+
+
         when(val state = fundsState) {
             is DataUiState.Loading -> {
                 LoadingScreen(paddingValues = paddingValues)
             }
             is DataUiState.Success -> {
                 val funds = state.data
+                var selectedFund by remember { mutableStateOf(funds[0]) }
+
+
                 if (state.data.isNotEmpty()) {
-                    var selectedFund by remember { mutableStateOf( funds[0]) }
                     Column(
                         modifier = modifier
                             .fillMaxSize()
@@ -189,9 +194,13 @@ fun FundsInfoScreen(
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                                 Text(
-                                    text = "Q$meta",
+                                    text = "Q${selectedFund.goal}",
                                     style = MaterialTheme.typography.headlineSmall,
                                     color = MaterialTheme.colorScheme.onSurface
+                                )
+                                Spacer (
+                                    modifier = modifier
+                                        .height(5.dp)
                                 )
                                 Text(
                                     text = stringResource(id = R.string.Saving),
@@ -248,13 +257,13 @@ fun FundsInfoScreen(
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                             Text(
-                                text = stringResource(id = R.string.Aporte),
+                                text = stringResource(id = R.string.Type),
                                 modifier = modifier
                                     .weight(3f)
                                     .padding(12.dp)
                             )
                             Text(
-                                text = stringResource(id = R.string.Type),
+                                text = stringResource(id = R.string.Aporte),
                                 modifier = modifier
                                     .weight(2f)
                                     .padding(12.dp)

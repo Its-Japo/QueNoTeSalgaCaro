@@ -136,7 +136,6 @@ fun AddTransactionScreen(
                             {
                                 selectedWallet = it
                                 expandedWallet = false
-                                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
                             },
                             uiState = getWalletsState,
                             width = 170,
@@ -162,7 +161,6 @@ fun AddTransactionScreen(
                         onItemSelected = {
                             selectedCategory = it
                             expandedCategory = false
-                            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
                         },
                         uiState = walletCategoriesState,
                         width = 250,

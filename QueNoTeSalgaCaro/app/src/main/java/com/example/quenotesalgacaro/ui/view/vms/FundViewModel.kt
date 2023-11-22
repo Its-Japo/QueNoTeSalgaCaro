@@ -67,13 +67,23 @@ class FundViewModel(private val firestoreRepository: DataBaseRepository = Fireba
 
     }
 
-
     fun addFund(userId: String, fundName: String) {
         viewModelScope.launch {
             try {
                 _addFundsState.value = DataUiState.Loading
                 firestoreRepository.addFirstGradeSubcollectionFund(userId, "funds", FundData(id = fundName, name = fundName))
                 _addFundsState.value = DataUiState.Success(Unit)
+                fetchFunds(userId)
+            } catch (e: Exception) {
+                _addFundsState.value = DataUiState.Error(e)
+            }
+        }
+    }
+
+    fun deleteFund(userId: String, fundName: String) {
+        viewModelScope.launch {
+            try {
+                firestoreRepository.deleteFirstGradeSubcollection(userId, "funds", fundName)
                 fetchFunds(userId)
             } catch (e: Exception) {
                 _addFundsState.value = DataUiState.Error(e)

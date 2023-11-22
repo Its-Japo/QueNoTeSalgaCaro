@@ -63,6 +63,17 @@ class WalletViewModel(private val firestoreRepository: DataBaseRepository = Fire
         }
     }
 
+    fun deleteWallet(userId: String, walletName: String) {
+        viewModelScope.launch {
+            try {
+                firestoreRepository.deleteFirstGradeSubcollection(userId, "wallets", walletName)
+                fetchWallets(userId)
+            } catch (e: Exception) {
+                _addWalletState.value = DataUiState.Error(e)
+            }
+        }
+    }
+
     fun addWalletCategory(userId: String, walletName: String, element: String) {
         viewModelScope.launch {
             try {

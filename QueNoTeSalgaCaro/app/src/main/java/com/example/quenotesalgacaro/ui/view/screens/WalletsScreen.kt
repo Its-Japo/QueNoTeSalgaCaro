@@ -62,9 +62,14 @@ fun WalletsScreen(
             is DataUiState.Success -> {
                 LazyColumn(contentPadding = paddingValues) {
                     items(state.data) { wallet ->
-                        InfoBar(text = wallet.name, onClick = {
-                             navController.navigate("WalletConfigurationScreen/${wallet.name}")
-                        })
+                        InfoBar(text = wallet.name,
+                            onClick1 = {
+                                navController.navigate("WalletConfigurationScreen/${wallet.name}")
+                            },
+                            onClick2 = {
+                                walletViewModel.deleteWallet(user!!.uid, wallet.name)
+                            }
+                        )
                     }
                 }
             }

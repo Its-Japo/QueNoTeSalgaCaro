@@ -59,7 +59,11 @@ fun FundsScreen(
             is DataUiState.Success -> {
                 LazyColumn(contentPadding = paddingValues) {
                     items(state.data) { fund ->
-                        InfoBar(text = fund.name, onClick = { navController.navigate("FundConfigurationScreen/${fund.name}") })
+                        InfoBar(
+                            text = fund.name,
+                            onClick1 = { navController.navigate("FundConfigurationScreen/${fund.name}") },
+                            onClick2 = { fundViewModel.deleteFund(user!!.uid, fund.name) }
+                        )
                     }
                 }
             }

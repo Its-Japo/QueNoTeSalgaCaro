@@ -65,9 +65,15 @@ fun BudgetsScreen(
             is DataUiState.Success -> {
                 LazyColumn(contentPadding = paddingValues) {
                     items(state.data) { wallet ->
-                        InfoBar(text = wallet.name) {
-                            navController.navigate("BudgetConfigurationScreen/${wallet.name}")
-                        }
+                        InfoBar(
+                            text = wallet.name,
+                            onClick1 = {
+                                navController.navigate("BudgetConfigurationScreen/${wallet.name}")
+                            },
+                            onClick2 = {
+                                budgetViewModel.deleteBudget(user!!.uid, wallet.name)
+                            }
+                        )
                     }
                 }
             }

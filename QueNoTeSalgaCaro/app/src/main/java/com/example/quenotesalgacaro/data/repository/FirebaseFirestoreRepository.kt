@@ -309,5 +309,20 @@ class FirebaseFirestoreRepository: DataBaseRepository {
 
     }
 
+    override suspend fun deleteFirstGradeSubcollection(uid: String?, subcollection: String, subcollectionName: String) : Result<Unit> {
+        return withContext(Dispatchers.IO) {
+            try {
+                if (uid != null) {
+                    val documents = firebaseFirestore.collection("users").document(uid)
+                        .collection(subcollection).document(subcollectionName).delete().await()
+                }
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+
+
 
 }

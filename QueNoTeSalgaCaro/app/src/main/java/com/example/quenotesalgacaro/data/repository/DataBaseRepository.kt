@@ -25,4 +25,5 @@ interface DataBaseRepository {
     suspend fun fetchTransactionsYear (uid: String?, walletName: String, date: Int): Result<List<Transaction>>
     suspend fun fetchTransactions (uid: String?, walletName: String, date: String): Result<List<Transaction>>
     suspend fun updateDocument(uid: String?, collectionName: String, documentId: String, fieldName: String, element: Any): Result<Unit>
+    suspend fun deleteFirstGradeSubcollection(uid: String?, subcollection: String, subcollectionName: String) : Result<Unit>
 }

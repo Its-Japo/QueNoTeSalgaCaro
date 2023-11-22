@@ -46,7 +46,6 @@ import com.example.quenotesalgacaro.ui.view.composables.BarChartInput
 import com.example.quenotesalgacaro.ui.view.composables.DatePickerWithoutDays
 import com.example.quenotesalgacaro.ui.view.composables.ErrorScreen
 import com.example.quenotesalgacaro.ui.view.composables.LoadingScreen
-import com.example.quenotesalgacaro.ui.view.composables.PieChart
 import com.example.quenotesalgacaro.ui.view.composables.PieChartEntry
 import com.example.quenotesalgacaro.ui.view.composables.PieChartWithLegend
 import com.example.quenotesalgacaro.ui.view.uistates.DataUiState
@@ -75,7 +74,7 @@ fun StatsInfoScreen(
     )
     val walletsState by walletViewModel.walletsFetchState.collectAsState()
     val transactionState by walletViewModel.fetchTransactionsState.collectAsState()
-    val trasactionYearState by walletViewModel.fetchTransactionsYearState.collectAsState()
+    val transactionYearState by walletViewModel.fetchTransactionsYearState.collectAsState()
 
     LaunchedEffect(
         key1 = Unit,
@@ -292,7 +291,7 @@ fun StatsInfoScreen(
                                         }
                                     }
                                 }
-                                when (val tState = trasactionYearState) {
+                                when (val tState = transactionYearState) {
                                     is DataUiState.Loading -> {
                                         LoadingScreen(paddingValues = paddingValues)
                                     }
@@ -389,10 +388,8 @@ fun StatsInfoScreen(
                                                             shape = MaterialTheme.shapes.large
                                                         )
                                                         .padding(12.dp)
-
                                                 )
                                             }
-
                                         }
                                     }
                                 }

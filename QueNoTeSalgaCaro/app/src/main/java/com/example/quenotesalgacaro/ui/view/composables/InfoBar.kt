@@ -24,7 +24,8 @@ import com.example.quenotesalgacaro.R
 fun InfoBar(
     modifier: Modifier = Modifier,
     text: String,
-    onClick: () -> Unit
+    onClick1: () -> Unit,
+    onClick2: () -> Unit
     ) {
     Row(
         modifier = modifier
@@ -36,14 +37,23 @@ fun InfoBar(
     {
         Text(text = text,
             color = MaterialTheme.colorScheme.onSurface,
-            modifier = modifier.weight(3f)
+            modifier = modifier.weight(5f)
                 .padding(12.dp, 0.dp, 0.dp, 0.dp),
 
         )
-
+        IconButton(
+            onClick = onClick2,
+            modifier = modifier.weight(1f)
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.outline_delete_24),
+                contentDescription = null,
+                tint = Color.Red,
+            )
+        }
 
         IconButton(
-            onClick = onClick,
+            onClick = onClick1,
             modifier = modifier.weight(1f)
         ) {
             Icon(
@@ -61,4 +71,10 @@ fun InfoBar(
         .fillMaxWidth()
     )
 
+}
+
+@Preview
+@Composable
+fun InfoBarPreview() {
+    InfoBar(text = "Hola", onClick1 = {}, onClick2 = {})
 }
