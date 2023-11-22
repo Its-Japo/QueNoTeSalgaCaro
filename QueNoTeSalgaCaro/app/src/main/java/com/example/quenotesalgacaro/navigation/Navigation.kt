@@ -21,8 +21,10 @@ import com.example.quenotesalgacaro.ui.view.screens.RegisterScreen
 import com.example.quenotesalgacaro.ui.view.screens.SettingsScreen
 import com.example.quenotesalgacaro.ui.view.screens.WalletConfigurationScreen
 import com.example.quenotesalgacaro.ui.view.screens.WalletsScreen
+import com.example.quenotesalgacaro.ui.view.screens.AddFundTransactionScreen
 import com.example.quenotesalgacaro.ui.view.vms.AuthViewModel
 import com.example.quenotesalgacaro.ui.view.vms.BudgetViewModel
+import androidx.compose.foundation.layout.PaddingValues
 
 
 @Composable
@@ -135,6 +137,17 @@ fun Navigation(
                     navController = navController,
                     authViewModel = authViewModel,
                     fund = fund!!
+                )
+            }
+        }
+
+        composable(NavigationState.AddFundTransactionScreen.route + "/{fund}") { navBackStackEntry ->
+            run {
+                val fund = navBackStackEntry.arguments?.getString("fund")
+                com.example.quenotesalgacaro.ui.view.screens.AddFundTransactionScreen(
+                    navController = navController,
+                    authViewModel = authViewModel,
+                    fund = fund!!,
                 )
             }
         }
